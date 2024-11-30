@@ -7,7 +7,7 @@
   "luisubtitle1": "my name is",
   "jobsubtitle": "I am",
   "jobsubtitlestrong": "Full Stack Developer",
-  "topdescription": "From Rasjasthan, Bhilwara. I'm Experienced Full Stack Developer with a strong background in all phases of the software development lifecycle, including analysis, design, development, and deployment. Proficient in building secure and scalable web applications with a focus on the MEAN stack (MongoDB/MSSQL/MySQL, Express.js, Angular, Node.js). ",
+  "topdescription": "From Rajasthan, Bhilwara. I'm Experienced Full Stack Developer with a strong background in all phases of the software development lifecycle, including analysis, design, development, and deployment. Proficient in building secure and scalable web applications with a focus on the MEAN stack (MongoDB/MSSQL/MySQL, Express.js, Angular, Node.js). ",
   "position": "Full Stack Developer",
   "fasocial": [
     {
@@ -27,7 +27,7 @@
     }
   ],
   "DownloadCVLink": "https://drive.google.com/",
-  "experience": 3,
+  "experience": 5,
   "Completedprojects": 30,
   "servicescontainer": [
     {
@@ -163,6 +163,16 @@
       "skill_des": "Experienced in building cross-platform desktop applications using Electron.js, integrating front-end technologies like Angular and Node.js."
     },
     {
+      "skill_name": "NPM",
+      "skill_value": "100",
+      "skill_des": "Proficient in managing dependencies and scripts using NPM, including creating and publishing custom packages for Node.js applications."
+    },
+    {
+      "skill_name": "Responsive mail design",
+      "skill_value": "90",
+      "skill_des": "Experienced in designing responsive and visually appealing email templates that ensure compatibility across devices and email clients."
+    },
+    {
       "skill_name": "Laravel",
       "skill_value": "50",
       "skill_des": "Proficient in using Laravel for building secure and feature-rich web applications with MVC architecture and seamless database management."
@@ -186,6 +196,11 @@
       "skill_name": "Fixing Top OWASP vulnerabilities",
       "skill_value": "80",
       "skill_des": "Skilled in identifying and mitigating top OWASP vulnerabilities to ensure secure web application development."
+    },
+    {
+      "skill_name": "REST APIs Security Practices",
+      "skill_value": "90",
+      "skill_des": "Authentication, Authorization, Rate Limiting, Data Sanitization, Encryption, Error Handling, Logging and Monitoring, Security Headers, Token Expiry, IP Whitelisting, Secure Dependencies."
     },
     {
       "skill_name": "Inno Script",
@@ -280,70 +295,48 @@
   ],
   "resume_edu": [
     {
-      "title": "CoderHouse Courses",
-      "sub_title": "Backend Programming",
-      "startDate": "2016",
-      "endDate": "2022",
-      "des": ""
+      "title": "BCA - Bachelor of Computer Applications",
+      "sub_title": "Seeta Devi College Bhilwara | Maharshi Dayanand Saraswati University Ajmer, Rajasthan",
+      "startDate": "2018",
+      "endDate": "2021",
+      "des": "Course Web Development and Database Management and Achieved 1ST Division (71.04%)"
     },
     {
-      "title": "CoderHouse Courses",
-      "sub_title": "Backend Programming",
+      "title": "Science Maths (12-Class)",
+      "sub_title": "Govt Sr. Sec. Rajendra Marg, Bhilwara",
       "startDate": "2016",
-      "endDate": "2022",
-      "des": ""
-    },
-    {
-      "title": "CoderHouse Courses",
-      "sub_title": "Backend Programming",
-      "startDate": "2016",
-      "endDate": "2022",
-      "des": ""
-    },
-    {
-      "title": "CoderHouse Courses",
-      "sub_title": "Backend Programming",
-      "startDate": "2016",
-      "endDate": "2022",
-      "des": ""
+      "endDate": "2017",
+      "des": "Achieved 2ST Division (56.50%)"
     }
   ],
   "resume_exp": [
     {
-      "title": "UI Head & Manager",
-      "sub_title": "Soft Tech Inc.",
-      "sub_address": "Company Address: Soft Tech Inc.",
-      "startDate": "2016",
-      "endDate": "2022",
+      "title": "Full Stack Developer",
+      "sub_title": "SecurEyes Techno Services Pvt. Ltd.",
+      "sub_address": "Sigma Tech Park Whitefield, Bengaluru, Karnataka(560066)",
+      "startDate": "Aug 2023",
+      "endDate": "Present",
       "des": ""
     },
     {
-      "title": "UI Head & Manager",
-      "sub_title": "Soft Tech Inc.",
-      "sub_address": "Company Address: Soft Tech Inc.",
-      "startDate": "2016",
-      "endDate": "2022",
+      "title": "Mean Stack Developer",
+      "sub_title": "Aspire Edu-soft Private Limited",
+      "sub_address": "Sector 4, Hiran Magri, Udaipur, Rajasthan(313002)",
+      "startDate": "Apr 2022",
+      "endDate": "Jul 2023",
       "des": ""
     },
     {
-      "title": "UI Head & Manager",
-      "sub_title": "Soft Tech Inc.",
-      "sub_address": "Company Address: Soft Tech Inc.",
-      "startDate": "2016",
-      "endDate": "2022",
-      "des": ""
-    },
-    {
-      "title": "UI Head & Manager",
-      "sub_title": "Soft Tech Inc.",
-      "sub_address": "Company Address: Soft Tech Inc.",
-      "startDate": "2016",
-      "endDate": "2022",
+      "title": "Angular and Flutter Developer",
+      "sub_title": "Rudrohom Comtrade Private Limited",
+      "sub_address": "Shavri Colony, Udaipur, Rajasthan 313001",
+      "startDate": "Jan 2022",
+      "endDate": "Mar 2022",
       "des": ""
     }
   ],
-  "contact_address": "North Tower, Toronto, Canada",
-  "contact_freelance": "Available Right Now",
-  "contact_email": "zoe.miller.com",
-  "contact_phone": "+1 900 _ 900 _ 9000"
+  "contact_address": "Whitefield, Bengaluru, Karnataka(560066)",
+  "contact_freelance": "Not Available Right Now",
+  "contact_email": "sajidinfo783@gmail.com",
+  "contact_phone": "+916367183820"
 }
