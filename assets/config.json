@@ -7,8 +7,8 @@
   "luisubtitle1": "my name is",
   "jobsubtitle": "I am",
   "jobsubtitlestrong": "Full Stack Developer",
-  "topdescription": "From France, Paris. I have rich experience in web design, also I am good at wordpress. I love to talk with you about our unique.",
-  "position": "MEAN Stack Developer",
+  "topdescription": "From Karnataka, Bengaluru. I'm Experienced Full Stack Developer with a strong background in all phases of the software development lifecycle, including analysis, design, development, and deployment. Proficient in building secure and scalable web applications with a focus on the MEAN stack (MongoDB/MSSQL/MySQL, Express.js, Angular, Node.js). ",
+  "position": "Full Stack Developer",
   "fasocial": [
     {
       "title": "twitter",
@@ -28,67 +28,62 @@
   ],
   "DownloadCVLink": "https://drive.google.com/",
   "experience": 5,
-  "Completedprojects": 50,
+  "Completedprojects": 30,
   "servicescontainer": [
-    {
-      "s_title": "Web Development",
-      "s_subtitle": "Web Design & Logo",
-      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
-    },
-    {
-      "s_title": "Web Development1",
-      "s_subtitle": "Web Design & Logo",
-      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
-    },
-    {
-      "s_title": "Web Development2",
-      "s_subtitle": "Web Design & Logo",
-      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
-    },
-    {
-      "s_title": "Web Development3",
-      "s_subtitle": "Web Design & Logo",
-      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
-    },
-    {
-      "s_title": "Web Development4",
-      "s_subtitle": "Web Design & Logo",
-      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
-    },
-    {
-      "s_title": "Web Development5",
-      "s_subtitle": "Web Design & Logo",
-      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
-    },
-    {
-      "s_title": "Web Development6",
-      "s_subtitle": "Web Design & Logo",
-      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
-    }
-  ],
+  {
+    "s_title": "Web Development",
+    "s_subtitle": "Angular Developer",
+    "s_des": "Specialized in developing dynamic and responsive front-end applications using Angular (versions 9 to 16), Angular Material, and Tailwind CSS. Expertise in creating scalable web applications with enhanced user experience."
+  },
+  {
+    "s_title": "Graphic Design",
+    "s_subtitle": "Photoshop and Canva",
+    "s_des": "Creative graphic designer skilled in crafting visually appealing designs, including logos, banners, and social media creatives, using tools like Photoshop and Canva."
+  },
+  {
+    "s_title": "Web Development",
+    "s_subtitle": "NodeJS Developer",
+    "s_des": "Proficient in building server-side applications and APIs with Node.js, Express.js, and MongoDB. Experienced in creating scalable and secure back-end solutions."
+  },
+  {
+    "s_title": "Video Editing",
+    "s_subtitle": "Wondershare Filmora",
+    "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+  },
+  {
+    "s_title": "Web Development",
+    "s_subtitle": "Mean Stack Developer",
+    "s_des": "Experienced in full-cycle development of web applications using the MEAN stack (MongoDB, Express.js, Angular, and Node.js). Skilled in integrating front-end and back-end seamlessly."
+  },
+  {
+    "s_title": "Web Development",
+    "s_subtitle": "Full Stack Developer",
+    "s_des": "Versatile developer proficient in building end-to-end web applications, combining front-end and back-end expertise to deliver robust and scalable solutions."
+  }
+],
   "skills_container": [
     {
-      "skill_name": "JavaScript",
+      "skill_name": "HTML",
       "skill_value": "75",
       "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     },
     {
-      "skill_name": "JavaScript",
+      "skill_name": "CSS",
       "skill_value": "10",
       "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     },
     {
-      "skill_name": "JavaScript",
+      "skill_name": "Bootstrap 5",
       "skill_value": "50",
       "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     },
     {
-      "skill_name": "JavaScript",
+      "skill_name": "Angular Material",
       "skill_value": "90",
       "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     },
     {
-      "skill_name": "JavaScript",
+      "skill_name": "NG - NGX Bootstrap",
       "skill_value": "75",
       "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     },
