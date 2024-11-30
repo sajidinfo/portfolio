@@ -1,0 +1,199 @@
+{
+  "name": "Sajid Mohammad",
+  "LightThemeColor": "",
+  "titlesplitting": "MD",
+  "titlesplitting1": "Sajid",
+  "luisubtitle": "Hello",
+  "luisubtitle1": "my name is",
+  "jobsubtitle": "I am",
+  "jobsubtitlestrong": "Full Stack Developer",
+  "topdescription": "From France, Paris. I have rich experience in web design, also I am good at wordpress. I love to talk with you about our unique.",
+  "position": "MEAN Stack Developer",
+  "fasocial": [
+    {
+      "title": "twitter",
+      "link": "https://twitter.com/",
+      "icon": "fab fa-twitter"
+    },
+    {
+      "title": "dribbble",
+      "link": "https://dribbble.com/",
+      "icon": "fab fa-dribbble"
+    },
+    {
+      "title": "behance",
+      "link": "https://behance.com/",
+      "icon": "fab fa-behance"
+    }
+  ],
+  "DownloadCVLink": "https://drive.google.com/",
+  "experience": 5,
+  "Completedprojects": 50,
+  "servicescontainer": [
+    {
+      "s_title": "Web Development",
+      "s_subtitle": "Web Design & Logo",
+      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+    },
+    {
+      "s_title": "Web Development1",
+      "s_subtitle": "Web Design & Logo",
+      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+    },
+    {
+      "s_title": "Web Development2",
+      "s_subtitle": "Web Design & Logo",
+      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+    },
+    {
+      "s_title": "Web Development3",
+      "s_subtitle": "Web Design & Logo",
+      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+    },
+    {
+      "s_title": "Web Development4",
+      "s_subtitle": "Web Design & Logo",
+      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+    },
+    {
+      "s_title": "Web Development5",
+      "s_subtitle": "Web Design & Logo",
+      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+    },
+    {
+      "s_title": "Web Development6",
+      "s_subtitle": "Web Design & Logo",
+      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+    }
+  ],
+  "skills_container": [
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "75",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "10",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "50",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "90",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "75",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "75",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "75",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "75",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "75",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "75",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "75",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "75",
+      "skill_des": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    }
+  ],
+  "resume_edu": [
+    {
+      "title": "CoderHouse Courses",
+      "sub_title":"Backend Programming",
+      "startDate":"2016",
+      "endDate":"2022",
+      "des":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "title": "CoderHouse Courses",
+      "sub_title":"Backend Programming",
+      "startDate":"2016",
+      "endDate":"2022",
+      "des":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "title": "CoderHouse Courses",
+      "sub_title":"Backend Programming",
+      "startDate":"2016",
+      "endDate":"2022",
+      "des":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "title": "CoderHouse Courses",
+      "sub_title":"Backend Programming",
+      "startDate":"2016",
+      "endDate":"2022",
+      "des":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    }
+  ],
+  "resume_exp": [
+    {
+      "title": "UI Head & Manager",
+      "sub_title":"Soft Tech Inc.",
+      "sub_address":"Company Address: Soft Tech Inc.",
+      "startDate":"2016",
+      "endDate":"2022",
+      "des":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "title": "UI Head & Manager",
+      "sub_title":"Soft Tech Inc.",
+      "sub_address":"Company Address: Soft Tech Inc.",
+      "startDate":"2016",
+      "endDate":"2022",
+      "des":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "title": "UI Head & Manager",
+      "sub_title":"Soft Tech Inc.",
+      "sub_address":"Company Address: Soft Tech Inc.",
+      "startDate":"2016",
+      "endDate":"2022",
+      "des":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      "title": "UI Head & Manager",
+      "sub_title":"Soft Tech Inc.",
+      "sub_address":"Company Address: Soft Tech Inc.",
+      "startDate":"2016",
+      "endDate":"2022",
+      "des":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    }
+  ],
+  "contact_address":"North Tower, Toronto, Canada",
+  "contact_freelance":"Available Right Now",
+  "contact_email":"zoe.miller.com",
+  "contact_phone":"+1 900 _ 900 _ 9000"
+}
