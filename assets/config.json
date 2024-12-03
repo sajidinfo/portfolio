@@ -27,8 +27,8 @@
     }
   ],
   "DownloadCVLink": "",
-  "experience": 5,
-  "Completedprojects": 30,
+  "experience": 3,
+  "Completedprojects": "30+",
   "servicescontainer": [
     {
       "s_title": "Web Development",
@@ -56,13 +56,13 @@
       "s_des": "Experienced in full-cycle development of web applications using the MEAN stack (MongoDB, Express.js, Angular, and Node.js). Skilled in integrating front-end and back-end seamlessly."
     },
     {
-      "s_title": "Web Development",
-      "s_subtitle": "Full Stack Developer",
-      "s_des": "Versatile developer proficient in building end-to-end web applications, combining front-end and back-end expertise to deliver robust and scalable solutions."
+      "s_title": "Testing",
+      "s_subtitle": "Automation Developer with Node.js",
+      "s_des": "Proficient in developing automation scripts and workflows using Node.js to optimize processes and enhance efficiency."
     },
     {
       "s_title": "Web Development",
-      "s_subtitle": "Angular Developer",
+      "s_subtitle": "Angular/React Developer",
       "s_des": "Specialized in developing dynamic and responsive front-end applications using Angular (versions 9 to 16), Angular Material, and Tailwind CSS. Expertise in creating scalable web applications with enhanced user experience."
     }
   ],
@@ -338,5 +338,5 @@
   "contact_address": "Whitefield, Bengaluru, Karnataka(560066)",
   "contact_freelance": "Not Available Right Now",
   "contact_email": "sajidinfo783@gmail.com",
-  "contact_phone": "+916367183820"
+  "contact_phone": ""
 }
