@@ -11,19 +11,14 @@
   "position": "Full Stack Developer",
   "fasocial": [
     {
-      "title": "twitter",
-      "link": "https://twitter.com/",
-      "icon": "fab fa-twitter"
+      "title": "linkedin",
+      "link": "https://www.linkedin.com/in/md-sajid-mohammad",
+      "icon": "fab fa-linkedin"
     },
     {
-      "title": "dribbble",
-      "link": "https://dribbble.com/",
-      "icon": "fab fa-dribbble"
-    },
-    {
-      "title": "behance",
-      "link": "https://behance.com/",
-      "icon": "fab fa-behance"
+      "title": "instagram",
+      "link": "https://www.instagram.com/____md__sajid___",
+      "icon": "fab fa-instagram"
     }
   ],
   "DownloadCVLink": "",
