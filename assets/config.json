@@ -31,24 +31,19 @@
       "s_des": "Versatile developer proficient in building end-to-end web applications, combining front-end and back-end expertise to deliver robust and scalable solutions."
     },
     {
-      "s_title": "Graphic Design",
-      "s_subtitle": "Photoshop and Canva",
-      "s_des": "Creative graphic designer skilled in crafting visually appealing designs, including logos, banners, and social media creatives, using tools like Photoshop and Canva."
+      "s_title": "Web Development",
+      "s_subtitle": "MEAN Stack Developer",
+      "s_des": "Experienced in full-cycle development of web applications using the MEAN stack (MongoDB, Express.js, Angular, and Node.js). Skilled in integrating front-end and back-end seamlessly."
+    },
+    {
+      "s_title": "Web Development",
+      "s_subtitle": "MERN Stack Developer",
+      "s_des": "Experienced in full-cycle development of web applications using the MEAN stack (MongoDB, Express.js, React, and Node.js). Skilled in integrating front-end and back-end seamlessly."
     },
     {
       "s_title": "Web Development",
       "s_subtitle": "NodeJS Developer",
       "s_des": "Proficient in building server-side applications and APIs with Node.js, Express.js, and MongoDB. Experienced in creating scalable and secure back-end solutions."
-    },
-    {
-      "s_title": "Video Editing",
-      "s_subtitle": "Wondershare Filmora",
-      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
-    },
-    {
-      "s_title": "Web Development",
-      "s_subtitle": "Mean Stack Developer",
-      "s_des": "Experienced in full-cycle development of web applications using the MEAN stack (MongoDB, Express.js, Angular, and Node.js). Skilled in integrating front-end and back-end seamlessly."
     },
     {
       "s_title": "Testing",
@@ -59,7 +54,17 @@
       "s_title": "Web Development",
       "s_subtitle": "Angular/React Developer",
       "s_des": "Specialized in developing dynamic and responsive front-end applications using Angular (versions 9 to 16), Angular Material, and Tailwind CSS. Expertise in creating scalable web applications with enhanced user experience."
-    }
+    },
+    {
+      "s_title": "Video Editing",
+      "s_subtitle": "Wondershare Filmora",
+      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+    },
+    {
+      "s_title": "Graphic Design",
+      "s_subtitle": "Photoshop and Canva",
+      "s_des": "Creative graphic designer skilled in crafting visually appealing designs, including logos, banners, and social media creatives, using tools like Photoshop and Canva."
+    },
   ],
   "skills_container": [
     {
@@ -128,14 +133,14 @@
       "skill_des": "Expertise in building scalable and dynamic web applications using Angular versions 9 to 16, leveraging features like Ivy, RxJS, and modular architecture."
     },
     {
-      "skill_name": "Angular Server Side Programming",
+      "skill_name": "Angular SSR Programming",
       "skill_value": "80",
       "skill_des": "Proficient in implementing server-side rendering with Angular Universal to improve SEO and performance for Angular applications."
     },
     {
       "skill_name": "Angular Redux Programming",
       "skill_value": "75",
-      "skill_des": "Skilled in managing state efficiently in Angular applications using Redux and NgRx for scalable and maintainable solutions."
+      "skill_des": "Skilled in managing state efficiently in Angular applications using Redux and NgRx and NgXS for scalable and maintainable solutions."
     },
     {
       "skill_name": "Node.js",
