@@ -499,6 +499,8 @@
 | 475 | [What is module scope in JavaScript?](#what-is-module-scope-in-javascript) |
 | 476 | [What are shadowing and illegal shadowing?](#what-are-shadowing-and-illegal-shadowing) |
 | 477 | [Why is it important to remove event listeners after use?](#why-is-it-important-to-remove-event-listeners-after-use) |
+| 478 | [Array Question?](#Array-Question) |
+| 479 | [Coding Exercise](#Coding-Exercise) |
 <!-- TOC_END -->
 
 <!-- QUESTIONS_START -->
@@ -12708,6 +12710,8 @@ The questions provided in this repository are the summary of frequently asked qu
 Good luck with your interview 😊
 
 ---
+
+###Array Question?
 
 
 ### ✅ 1. Write a Program to reverse a string in JavaScript.
