@@ -1,4 +1,3 @@
-Of course, Sajid! Since you’re experienced in full stack (MEAN) development and want to crack interviews at MNCs, I’ll give you a structured **Interview Preparation Guide** divided into **phases** so you can target every area confidently.
 
 ---
 
@@ -95,10 +94,4 @@ Prepare answers for:
 
 ---
 
-Would you like:
 
-1. A 15-day focused **interview prep plan**?
-2. A list of **Top 50 interview questions with answers**?
-3. A **mock interview** with feedback?
-
-Let me know your priority and I’ll create it 👇

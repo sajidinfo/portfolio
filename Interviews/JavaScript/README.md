@@ -503,6 +503,57 @@
 
 <!-- QUESTIONS_START -->
 
+---
+
+## 📌 What is JavaScript?
+
+**JavaScript** is a **high-level, dynamically typed, just-in-time compiled** programming language that plays a major role in building **interactive web applications**. It is one of the **core technologies of the web**, along with **HTML** and **CSS**.
+
+---
+
+## 🔑 Key Features and Uses of JavaScript:
+
+### 1. 🧠 **Dynamic Content Handling**
+
+JavaScript lets you create **dynamic web pages**, where content can change without reloading the page — like live forms, sliders, or dropdowns reacting to user input.
+
+### 2. 🌐 **Client-Side Scripting**
+
+Traditionally, JavaScript runs in the browser (on the client-side) to improve **user interaction** and **performance**. For example, form validations, animations, etc.
+
+### 3. 🖼️ **Front-End Development**
+
+It works alongside HTML and CSS to **design and control UI/UX**. Modern frameworks like **Angular, React, and Vue** are all based on JavaScript.
+
+### 4. 💻 **Server-Side Development**
+
+With platforms like **Node.js**, JavaScript is also used on the server side to build **REST APIs**, manage databases, and serve full backend logic.
+
+### 5. 🎮 **Versatile Language**
+
+Beyond web, JavaScript is used for:
+
+* ✅ Mobile apps (React Native, Ionic)
+* ✅ Desktop apps (Electron.js)
+* ✅ Game development
+* ✅ IoT & scripting
+
+### 6. ⚙️ **Interpreted & Just-In-Time Compiled**
+
+JavaScript is often interpreted line-by-line by the browser, but also uses **JIT (Just-In-Time)** compilation for speed and efficiency.
+
+### 7. 🧪 **Dynamically Typed**
+
+You don’t need to define variable types explicitly. JS determines the type at **runtime**, offering flexibility but requiring careful handling.
+
+---
+
+## 🛠️ Summary:
+
+> JavaScript is the **language of the web**, used to build everything from simple UI interactions to full-scale applications, both in the browser and on the server.
+
+---
+
 1. ### What are the possible ways to create objects in JavaScript
 
     There are many ways to create objects in javascript as mentioned below:
@@ -680,7 +731,11 @@
 
 2. ### What is a prototype chain
 
+    Prototype Chain is a mechanism in JavaScript by which objects inherit properties and methods from other objects.
+
     The prototype chain is a core concept in JavaScript’s inheritance model. It allows objects to inherit properties and methods from other objects. When you try to access a property or method on an object, JavaScript first looks for it on that object itself. If it’s not found, the engine looks up the object's internal `[[Prototype]]` reference (accessible via `Object.getPrototypeOf(obj)` or the deprecated `__proto__` property) and continues searching up the chain until it finds the property or reaches the end (usually `null`).
+
+    "JavaScript doesn't have classical inheritance like Java or C++. It uses prototype-based inheritance, and the lookup happens through the prototype chain."
 
     For objects created via constructor functions, the prototype chain starts with the instance, then refers to the constructor’s `.prototype` object, and continues from there. For example:
 
@@ -988,6 +1043,59 @@
     {} == {}              // false     (different object references)
     {} === {}             // false
     ```
+
+
+---
+
+### 🔁 **More Tricky `==` vs `===` Examples**
+
+| Expression       | Output              | Explanation                                |
+| ---------------- | ------------------- | ------------------------------------------ |
+| `true == 1`      | `true`              | `true` becomes `1`, so `1 == 1`            |
+| `true === 1`     | `false`             | Different types (`boolean !== number`)     |
+| `false == 0`     | `true`              | `false` becomes `0`, so `0 == 0`           |
+| `false === 0`    | `false`             | `boolean !== number`                       |
+| `null == 0`      | `false`             | Special case – null only == undefined      |
+| `undefined == 0` | `false`             | Same – undefined is not loosely equal to 0 |
+| `[] == 0`        | `true`              | `[] → '' → 0`, so `0 == 0`                 |
+| `[] === 0`       | `false`             | Different types (`object !== number`)      |
+| `'' == 0`        | `true`              | Empty string converts to `0`               |
+| `'' === 0`       | `false`             | `string !== number`                        |
+| `'' == false`    | `true`              | Both convert to `0`                        |
+| `[] == ''`       | `true`              | `[] → ''`, so `'' == ''`                   |
+| `[1] == 1`       | `true`              | `[1] → '1' → 1`                            |
+| `[1] === 1`      | `false`             | `object !== number`                        |
+| `[1,2] == '1,2'` | `true`              | `[1,2].toString() → '1,2'`                 |
+| `{} + []`        | `'[object Object]'` | `{} is treated as a block, +[] → ''`       |
+| `[] + {}`        | `'[object Object]'` | `[] → '', {} → '[object Object]'`          |
+
+---
+
+### 🧠 Tips to Remember:
+
+| Rule                                          | Example                          |
+| --------------------------------------------- | -------------------------------- |
+| 🧪 `==` allows **type coercion**              | `'0' == 0` → `true`              |
+| 🎯 `===` checks **value + type**              | `'0' === 0` → `false`            |
+| 🔄 Array/Object are compared by **reference** | `[] === []` → `false`            |
+| 💥 `NaN !== NaN`                              | Use `Number.isNaN(NaN)` to check |
+
+---
+
+### 📌 Most Common Interview Confusers:
+
+```js
+[] == false      // true
+[] == ![]        // true (crazy JS)
++true            // 1
++false           // 0
++null            // 0
++undefined       // NaN
+```
+
+---
+
+
     **[⬆ Back to Top](#table-of-contents)**
 
 10. ### What are lambda expressions or arrow functions
@@ -1227,6 +1335,94 @@
     In this example, the `counter` inside the `if` block is a separate variable from the one outside. The `let` keyword ensures that both have their own distinct scope.
 
     In summary, you need to use `let` when you want variables to be limited to the block in which they are defined, preventing accidental overwrites and bugs related to variable scope.
+
+
+---
+
+## 🆚 `var` vs `let` vs `const`
+
+| Feature           | `var`                           | `let`                      | `const`                           |
+| ----------------- | ------------------------------- | -------------------------- | --------------------------------- |
+| 🔒 Scope          | **Function scoped**             | **Block scoped** `{ }`     | **Block scoped** `{ }`            |
+| 🔄 Re-declare     | ✅ Allowed (same scope)          | ❌ Not allowed              | ❌ Not allowed                     |
+| 🔁 Re-assign      | ✅ Allowed                       | ✅ Allowed                  | ❌ Not allowed                     |
+| ⏱ Hoisting        | ✅ Hoisted (value = `undefined`) | ✅ Hoisted (but in **TDZ**) | ✅ Hoisted (but in **TDZ**)        |
+| 📦 Initialisation | Optional                        | Optional                   | ✅ **Required**                    |
+| 📌 Use Case       | Old JS / not recommended now    | Recommended for variables  | Recommended for constants (fixed) |
+
+---
+
+## 📘 Scope Example:
+
+```js
+{
+  var a = 10;
+  let b = 20;
+  const c = 30;
+}
+
+console.log(a); // ✅ 10
+console.log(b); // ❌ ReferenceError
+console.log(c); // ❌ ReferenceError
+```
+
+👉 `var` is function-scoped — block ke bahar bhi access ho gaya
+👉 `let` and `const` are block-scoped — sirf `{}` ke andar valid
+
+---
+
+## 🔁 Re-declaration Example:
+
+```js
+var x = 5;
+var x = 10;   // ✅ Allowed
+
+let y = 5;
+// let y = 10; // ❌ Error
+
+const z = 5;
+// const z = 10; // ❌ Error
+```
+
+---
+
+## ⏱ Hoisting Example:
+
+```js
+console.log(a); // undefined (var hoisted)
+var a = 5;
+
+console.log(b); // ❌ ReferenceError (let in TDZ)
+let b = 10;
+```
+
+---
+
+## 🔒 `const` = Read-Only Binding (not value)
+
+```js
+const arr = [1, 2];
+arr.push(3); // ✅ Allowed
+
+arr = [4, 5]; // ❌ Error - const ka reference change nahi ho sakta
+```
+
+---
+
+## 🧠 Summary:
+
+| Use `var` ❌       | Use `let` ✅            | Use `const` ✅                |
+| ----------------- | ---------------------- | ---------------------------- |
+| Avoid if possible | For values that change | For constants / fixed values |
+
+---
+
+## 📌 Interview Tip:
+
+> "`var` is function-scoped and hoisted with undefined, while `let` and `const` are block-scoped and exist in the Temporal Dead Zone (TDZ). `const` requires initialization and can't be reassigned."
+
+---
+
 
     **[⬆ Back to Top](#table-of-contents)**
 
