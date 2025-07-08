@@ -1015,6 +1015,63 @@
 
     **[⬆ Back to Top](#table-of-contents)**
 
+
+
+
+  ---
+
+  #### Summary
+
+| S.No | Function Type                                      | Description (Desi Style)                                        |
+| ---- | -------------------------------------------------- | --------------------------------------------------------------- |
+| 1    | **First-Class Function**                           | JS me function ko variable me store, return, pass kar sakte ho. |
+
+| 2    | **First-Order Function**                           | Jo kisi aur function ko accept/return nahi karta.               |
+
+| 3    | **Higher-Order Function**                          | Jo function ko accept ya return karta hai.                      |
+
+| 4    | **Pure Function**                                  | Har baar same input par same output de, koi side effect na ho.  |
+
+| 5    | **Impure Function**                                | Output change ho sakta hai, ya side effects hote hain.          |
+
+| 6    | **Anonymous Function**                             | Jiska naam nahi hota. Mostly callback me use hota hai.          |
+
+| 7    | **Named Function**                                 | Jiska naam hota hai (e.g., `function greet() {}`)               |
+
+| 8    | **Arrow Function**                                 | Short syntax `()=>{}` wala function.                            |
+
+| 9    | **Callback Function**                              | Jo kisi function ko as argument diya jaata hai.                 |
+
+| 10   | **Constructor Function**                           | Object banane ke liye use hota hai (`new` ke saath).            |
+
+| 11   | **Factory Function**                               | Object return karta hai bina `new` keyword ke.                  |
+
+| 12   | **Immediately Invoked Function Expression (IIFE)** | Function jo turant chal jata hai `(function(){})()`             |
+
+| 13   | **Recursive Function**                             | Jo khud ko call karta hai.                                      |
+
+| 14   | **Currying Function**                              | Ek function jo arguments ko alag-alag step me accept karta hai. |
+
+| 15   | **Closure Function**                               | Apne outer scope ki value yaad rakhta hai.                      |
+
+| 16   | **Unary Function**                                 | Sirf 1 argument leta hai.                                       |
+
+| 17   | **Binary Function**                                | Sirf 2 arguments leta hai.                                      |
+
+| 18   | **Variadic Function**                              | Unknown number of arguments accept karta hai (`...args`).       |
+
+
+  ---
+
+| Type               | Description                                                    |
+| ------------------ | -------------------------------------------------------------- |
+| **Lexical Scope**  | Function apne outer variables ko "lexically" access karta hai. |
+| **Block Scope**    | Let/const ka scope `{}` tak hi hota hai.                       |
+| **Function Scope** | `var` ka scope function tak hota hai.                          |
+
+---
+
+
 11. ### What is a first class function
 
     In JavaScript, **first-class functions(first-class citizens)** mean that functions are treated like any other variable. That means:
