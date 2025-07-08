@@ -1,7 +1,5 @@
 # Sajid Mohammad – Full Stack Developer  
 📍 Bengaluru, Karnataka, India  
-📞 +91 63671 83820  
-📧 sajidinfo782@gmail.com  
 🔗 [LinkedIn](https://www.linkedin.com/in/md-sajidmohammad)
 
 ---
