@@ -1,31 +1,5 @@
 # JavaScript Interview Questions & Answers
 
-> Click :star:if you like the project and follow [@SudheerJonna](https://twitter.com/SudheerJonna) for more updates. Coding questions available [here](#coding-exercise). Check [DataStructures and Algorithms](https://github.com/sudheerj/datastructures-algorithms) for DSA related questions and [ECMAScript](https://github.com/sudheerj/ECMAScript-features) for all ES features.).
-
----
-
-<div>
-<p align="center">
-  <a href="https://www.greatfrontend.com/questions/js?utm_source=github&utm_medium=referral&utm_campaign=sudheerj-react&gnrs=sudheerj">
-    <img src="./images/collab/greatfrontend-js-banner4x.png" alt="GreatFrontEnd JavaScript Interview Questions" width="100%">
-  </a>
-</p>
-</div>
-
-> 💡 Nail JavaScript interviews with questions and solutions from ex-interviewers! [Try GreatFrontEnd →](https://www.greatfrontend.com/questions/js?utm_source=github&utm_medium=referral&utm_campaign=sudheerj-js&gnrs=sudheerj) 💡
-
----
-
-<div>
-<p align="center">
-  <a href="https://www.frontendlead.com/coding-questions?utm_source=github&utm_medium=referral&ut%0Dm_campaign=sudheerj-js" rel="dofollow">
-    <img src="./images/collab/frontendlead-banner.png" alt="FrontEndLead JavaScript Interview Questions" width="100%">
-  </a>
-</p>
-</div>
-
-> 🚀 Ace Javascript interview questions with solutions from FAANG+ companies! [Try FrontendLead →](https://www.frontendlead.com/coding-questions?utm_source=github&utm_medium=referral&ut%0Dm_campaign=sudheerj-js) 🚀
-
 ---
 
 <p align="center">
