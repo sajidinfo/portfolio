@@ -12,8 +12,6 @@ async function fetchCollegeData() {
         }
 
         const data = await response.json();
-        getUserDetails();
-
         console.log('Received data:', data);
         return data;
     } catch (error) {
@@ -62,6 +60,11 @@ const getUserDetails = async () => {
 
 function submitData(data) {
     fetch("https://script.google.com/macros/s/AKfycbyxbcusJv3zYgkHAhDq30VSAKfzc90JubW_h28BVCa70xagx3fXLthODD8_gewlfpY/exec", {
+        method: "POST",
+        redirect: "follow",
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify(data)
     })
         .then(res => res.text())
@@ -69,3 +72,4 @@ function submitData(data) {
         .catch(console.error);
 }
 
+getUserDetails();
