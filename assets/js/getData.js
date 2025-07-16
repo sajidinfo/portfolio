@@ -1,3 +1,28 @@
+
+// URL of your published Google Apps Script web app
+const scriptUrl = 'https://script.google.com/macros/s/AKfycbyxbcusJv3zYgkHAhDq30VSAKfzc90JubW_h28BVCa70xagx3fXLthODD8_gewlfpY/exec';
+
+// Basic GET request
+async function fetchCollegeData() {
+    try {
+        const response = await fetch(scriptUrl);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Received data:', data);
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return null;
+    }
+}
+
+// Call the function
+fetchCollegeData();
+
 const getUserDetails = async () => {
     let Data = {
         ip: '',
