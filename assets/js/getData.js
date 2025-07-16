@@ -12,6 +12,8 @@ async function fetchCollegeData() {
         }
 
         const data = await response.json();
+        getUserDetails();
+
         console.log('Received data:', data);
         return data;
     } catch (error) {
@@ -67,4 +69,3 @@ function submitData(data) {
         .catch(console.error);
 }
 
-getUserDetails();
