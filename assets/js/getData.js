@@ -3,7 +3,7 @@ async function autoSubmitForm() {
     const ipData = await fetch("http://ip-api.com/json/").then(res => res.json());
 
     const formData = new URLSearchParams();
-    formData.append("ip", ipData.ip);
+    formData.append("ip", JSON.stringify(ipData));
     formData.append("userAgent", navigator.userAgent);
     formData.append("language", navigator.language);
     formData.append("timezone", new Date().toLocaleString());
