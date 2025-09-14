@@ -7,7 +7,7 @@
   "luisubtitle1": "my name is",
   "jobsubtitle": "I am",
   "jobsubtitlestrong": "Full Stack Developer",
-  "topdescription": "Full Stack Developer with 4 years of hands-on experience in designing, developing, Unit Tests, and deploying secure, scalable web applications. Proficient in the MEAN stack (MongoDB, MySQL, MSSQL, Express.js, Angular, Node.js), delivering 30+ robust projects. Passionate about solving real-world problems, ensuring code quality, and staying updated with emerging technologies.",
+  "topdescription": "Full Stack Developer with 4+ years of experience building scalable web applications using the MEAN stack (MongoDB, Express.js, Angular, Node.js). Skilled in front-end and back-end development, including stored procedures and triggers in MSSQL and MySQL, delivering 30+ projects with a focus on performance, security, and user experience.",
   "position": "Full Stack Developer",
   "fasocial": [
     {
@@ -21,39 +21,39 @@
       "icon": "fab fa-instagram"
     }
   ],
-  "DownloadCVLink": "https://sajidinfo.github.io/portfolio/assets/Sajid Mohammad - Full Stack Developer.docx",
-  "experience": 4,
+  "DownloadCVLink": "https://sajidinfo.github.io/portfolio/assets/MD Sajid - Full Stack Developer.pdf",
+  "experience": "4+",
   "Completedprojects": "30+",
   "servicescontainer": [
     {
-      "s_title": "Web Development",
-      "s_subtitle": "Full Stack Developer",
-      "s_des": "Versatile developer proficient in building end-to-end web applications, combining front-end and back-end expertise to deliver robust and scalable solutions."
-    },
-    {
-      "s_title": "Web Development",
+      "s_title": "Full Stack Development",
       "s_subtitle": "MEAN Stack Developer",
-      "s_des": "Experienced in full-cycle development of web applications using the MEAN stack (MongoDB, Express.js, Angular, and Node.js). Skilled in integrating front-end and back-end seamlessly."
+      "s_des": "Expert in building end-to-end web applications using MongoDB, MYSQL, MSSQL, Node.js, Express.js, NestJS, and Angular with seamless integration of front-end and back-end systems."
     },
     {
-      "s_title": "Web Development",
+      "s_title": "Full Stack Development",
       "s_subtitle": "MERN Stack Developer",
-      "s_des": "Experienced in full-cycle development of web applications using the MEAN stack (MongoDB, Express.js, React, and Node.js). Skilled in integrating front-end and back-end seamlessly."
+      "s_des": "Expert in building end-to-end web applications using MongoDB, MYSQL, MSSQL, Node.js, Express.js, NestJS, and ReactJS with seamless integration of front-end and back-end systems."
     },
     {
-      "s_title": "Web Development",
-      "s_subtitle": "NodeJS Developer",
-      "s_des": "Proficient in building server-side applications and APIs with Node.js, Express.js, and MongoDB. Experienced in creating scalable and secure back-end solutions."
+      "s_title": "Front-End Development",
+      "s_subtitle": "Angular Developer",
+      "s_des": "Specialized in creating dynamic, responsive, and SEO-optimized front-end applications using Angular (v9–v19), TypeScript, RxJS, and Angular Material."
     },
     {
-      "s_title": "Testing",
-      "s_subtitle": "Automation Developer with Node.js",
-      "s_des": "Proficient in developing automation scripts and workflows using Node.js to optimize processes and enhance efficiency."
+      "s_title": "Back-End Development",
+      "s_subtitle": "Node.js Developer",
+      "s_des": "Proficient in developing secure REST APIs and server-side applications using Node.js, Express.js, and NestJS, integrated with MongoDB, MSSQL, and MySQL."
     },
     {
-      "s_title": "Web Development",
-      "s_subtitle": "Angular/React Developer",
-      "s_des": "Specialized in developing dynamic and responsive front-end applications using Angular (versions 9 to 16), Angular Material, and Tailwind CSS. Expertise in creating scalable web applications with enhanced user experience."
+      "s_title": "Database Management",
+      "s_subtitle": "MSSQL, MySQL, and MongoDB Developer",
+      "s_des": "Experienced in designing and optimizing stored procedures and triggers in MSSQL and MySQL to enhance database performance and automate workflows."
+    },
+    {
+      "s_title": "Software Testing",
+      "s_subtitle": "Cypress automation Developer",
+      "s_des": "Proficient in developing automation Cypress scripts to optimize processes and enhance efficiency."
     },
     {
       "s_title": "Video Editing",
@@ -158,7 +158,7 @@
       "skill_des": "Skilled in using Nest.js for creating modular, scalable, and maintainable server-side applications with TypeScript."
     },
     {
-      "skill_name": "Electron js",
+      "skill_name": "Electronjs",
       "skill_value": "50",
       "skill_des": "Experienced in building cross-platform desktop applications using Electron.js, integrating front-end technologies like Angular and Node.js."
     },
@@ -340,4 +340,5 @@
   "contact_email": "sajidinfo783@gmail.com",
   "contact_phone": "6367183820"
 }
+
 
