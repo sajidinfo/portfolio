@@ -17,12 +17,12 @@
     },
     {
       "title": "instagram",
-      "link": "https://www.instagram.com/____md__sajid___",
+      "link": "",
       "icon": "fab fa-instagram"
     }
   ],
   "DownloadCVLink": "https://sajidinfo.github.io/portfolio/assets/MD Sajid - MEAN Stack Developer.pdf",
-  "experience": "4+",
+  "experience": "4",
   "Completedprojects": "30+",
   "servicescontainer": [
     {
@@ -265,6 +265,7 @@
   "contact_email": "sajidinfo783@gmail.com",
   "contact_phone": "+916367183820"
 }
+
 
 
 
