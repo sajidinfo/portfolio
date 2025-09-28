@@ -241,7 +241,7 @@
       "sub_address": "Whitefield, Bengaluru, Karnataka (560066)",
       "startDate": "Aug 2023",
       "endDate": "Present",
-      "des": "Developed SE-TP Trac, a multi-tenant risk platform using MongoDB, Express.js, Angular, and Node.js, with stored procedures and triggers in MSSQL for optimized data handling. Built secure REST APIs and responsive UIs, reducing vulnerabilities by 40% and improving performance by 30%."
+      "des": "Project is SE-TPTrac is a Third-Party Governance, Risk & Compliance Management platform. A multi-tenant risk platform using SQL Server, Express.js, Angular, and Node.js, with stored procedures and triggers in MSSQL for optimized data handling. Built secure REST APIs and responsive UIs, reducing 90% vulnerabilities and improving performance by 80%."
     },
     {
       "title": "MEAN Stack Developer",
@@ -249,7 +249,7 @@
       "sub_address": "Udaipur, Rajasthan (313002)",
       "startDate": "Apr 2022",
       "endDate": "Jul 2023",
-      "des": "Led 15+ MEAN stack projects, integrating MongoDB and MySQL with stored procedures for efficient data operations. Developed Angular UIs and Node.js APIs, improving user experience by 25% and query performance by 20%."
+      "des": "Led 25+ MEAN stack projects, integrating MongoDB and MySQL with stored procedures for efficient data operations. Developed Angular UIs and Node.js APIs, improving user experience by 70% and query performance by 80%."
     },
     {
       "title": "Junior Web Developer",
@@ -265,6 +265,7 @@
   "contact_email": "sajidinfo783@gmail.com",
   "contact_phone": "+916367183820"
 }
+
 
 
 
