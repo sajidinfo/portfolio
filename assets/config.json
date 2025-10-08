@@ -1,0 +1,342 @@
+{
+  "name": "Sajid Mohammad",
+  "LightThemeColor": "",
+  "titlesplitting": "MD",
+  "titlesplitting1": "Sajid",
+  "luisubtitle": "Hello",
+  "luisubtitle1": "my name is",
+  "jobsubtitle": "I am",
+  "jobsubtitlestrong": "Full Stack Developer",
+  "topdescription": "Full Stack Developer with 4 years of hands-on experience in designing, developing, Unit Tests, and deploying secure, scalable web applications. Proficient in the MEAN stack (MongoDB, MySQL, MSSQL, Express.js, Angular, Node.js), delivering 30+ robust projects. Passionate about solving real-world problems, ensuring code quality, and staying updated with emerging technologies.",
+  "position": "Full Stack Developer",
+  "fasocial": [
+    {
+      "title": "linkedin",
+      "link": "https://www.linkedin.com/in/md-sajid-mohammad",
+      "icon": "fab fa-linkedin"
+    },
+    {
+      "title": "instagram",
+      "link": "https://www.instagram.com/____md__sajid___",
+      "icon": "fab fa-instagram"
+    }
+  ],
+  "DownloadCVLink": "https://sajidinfo.github.io/portfolio/assets/Sajid_Mohammad_Resume(2025).docx",
+  "experience": 4,
+  "Completedprojects": "30+",
+  "servicescontainer": [
+    {
+      "s_title": "Web Development",
+      "s_subtitle": "Full Stack Developer",
+      "s_des": "Versatile developer proficient in building end-to-end web applications, combining front-end and back-end expertise to deliver robust and scalable solutions."
+    },
+    {
+      "s_title": "Web Development",
+      "s_subtitle": "MEAN Stack Developer",
+      "s_des": "Experienced in full-cycle development of web applications using the MEAN stack (MongoDB, Express.js, Angular, and Node.js). Skilled in integrating front-end and back-end seamlessly."
+    },
+    {
+      "s_title": "Web Development",
+      "s_subtitle": "MERN Stack Developer",
+      "s_des": "Experienced in full-cycle development of web applications using the MEAN stack (MongoDB, Express.js, React, and Node.js). Skilled in integrating front-end and back-end seamlessly."
+    },
+    {
+      "s_title": "Web Development",
+      "s_subtitle": "NodeJS Developer",
+      "s_des": "Proficient in building server-side applications and APIs with Node.js, Express.js, and MongoDB. Experienced in creating scalable and secure back-end solutions."
+    },
+    {
+      "s_title": "Testing",
+      "s_subtitle": "Automation Developer with Node.js",
+      "s_des": "Proficient in developing automation scripts and workflows using Node.js to optimize processes and enhance efficiency."
+    },
+    {
+      "s_title": "Web Development",
+      "s_subtitle": "Angular/React Developer",
+      "s_des": "Specialized in developing dynamic and responsive front-end applications using Angular (versions 9 to 16), Angular Material, and Tailwind CSS. Expertise in creating scalable web applications with enhanced user experience."
+    },
+    {
+      "s_title": "Video Editing",
+      "s_subtitle": "Wondershare Filmora",
+      "s_des": "Web designers craft the overall vision & plan for a website layout. Professional logo development: Business, Company, or Personal."
+    },
+    {
+      "s_title": "Graphic Design",
+      "s_subtitle": "Photoshop and Canva",
+      "s_des": "Creative graphic designer skilled in crafting visually appealing designs, including logos, banners, and social media creatives, using tools like Photoshop and Canva."
+    }
+  ],
+  "skills_container": [
+    {
+      "skill_name": "HTML",
+      "skill_value": "100",
+      "skill_des": "Strong foundation in creating structured and semantic web pages using HTML. Skilled in building responsive layouts and integrating multimedia elements."
+    },
+    {
+      "skill_name": "CSS",
+      "skill_value": "50",
+      "skill_des": "Basic understanding of styling web pages with CSS, including layout, colors, and typography."
+    },
+    {
+      "skill_name": "Bootstrap 5",
+      "skill_value": "80",
+      "skill_des": "Proficient in using Bootstrap 5 for creating responsive and mobile-first web designs with prebuilt components."
+    },
+    {
+      "skill_name": "Angular Material",
+      "skill_value": "90",
+      "skill_des": "Expert in implementing Angular Material for building modern and user-friendly UI components with a focus on material design principles."
+    },
+    {
+      "skill_name": "NG - NGX Bootstrap",
+      "skill_value": "90",
+      "skill_des": "Experienced in integrating NG and NGX Bootstrap to enhance Angular applications with pre-designed components."
+    },
+    {
+      "skill_name": "JavaScript",
+      "skill_value": "100",
+      "skill_des": "Solid understanding of JavaScript, including DOM manipulation, asynchronous programming, and modern ES features."
+    },
+    {
+      "skill_name": "TypeScript",
+      "skill_value": "100",
+      "skill_des": "Skilled in TypeScript for building scalable and maintainable applications with strong typing and object-oriented programming concepts."
+    },
+    {
+      "skill_name": "ECMA Script(ES6-ES21)",
+      "skill_value": "80",
+      "skill_des": "Experienced in leveraging modern JavaScript features introduced in ES6 to ES21, including modules, promises, and async/await."
+    },
+    {
+      "skill_name": "Socket.IO",
+      "skill_value": "75",
+      "skill_des": "Proficient in real-time, bidirectional communication using Socket.IO for chat applications, live updates, and collaborative tools."
+    },
+    {
+      "skill_name": "HighchartJS",
+      "skill_value": "80",
+      "skill_des": "Skilled in using HighchartJS to create interactive and dynamic charts for data visualization in web applications."
+    },
+    {
+      "skill_name": "ChartJS",
+      "skill_value": "65",
+      "skill_des": "Experienced in creating visually appealing and responsive charts using ChartJS to present data effectively."
+    },
+    {
+      "skill_name": "jQuery",
+      "skill_value": "85",
+      "skill_des": "Proficient in using jQuery for simplifying DOM manipulation, event handling, and creating dynamic web content."
+    },
+    {
+      "skill_name": "Angular (9 to 16 version)",
+      "skill_value": "100",
+      "skill_des": "Expertise in building scalable and dynamic web applications using Angular versions 9 to 16, leveraging features like Ivy, RxJS, and modular architecture."
+    },
+    {
+      "skill_name": "Angular SSR Programming",
+      "skill_value": "80",
+      "skill_des": "Proficient in implementing server-side rendering with Angular Universal to improve SEO and performance for Angular applications."
+    },
+    {
+      "skill_name": "Angular Redux Programming",
+      "skill_value": "75",
+      "skill_des": "Skilled in managing state efficiently in Angular applications using Redux and NgRx and NgXS for scalable and maintainable solutions."
+    },
+    {
+      "skill_name": "Node.js",
+      "skill_value": "100",
+      "skill_des": "Experienced in building high-performance, event-driven server-side applications using Node.js and its rich ecosystem."
+    },
+    {
+      "skill_name": "Express.js",
+      "skill_value": "100",
+      "skill_des": "Proficient in developing RESTful APIs and server-side applications using Express.js with middleware integration for robust solutions."
+    },
+    {
+      "skill_name": "Nest.js",
+      "skill_value": "65",
+      "skill_des": "Skilled in using Nest.js for creating modular, scalable, and maintainable server-side applications with TypeScript."
+    },
+    {
+      "skill_name": "Electron js",
+      "skill_value": "50",
+      "skill_des": "Experienced in building cross-platform desktop applications using Electron.js, integrating front-end technologies like Angular and Node.js."
+    },
+    {
+      "skill_name": "NPM",
+      "skill_value": "100",
+      "skill_des": "Proficient in managing dependencies and scripts using NPM, including creating and publishing custom packages for Node.js applications."
+    },
+    {
+      "skill_name": "Responsive mail design",
+      "skill_value": "90",
+      "skill_des": "Experienced in designing responsive and visually appealing email templates that ensure compatibility across devices and email clients."
+    },
+    {
+      "skill_name": "Laravel",
+      "skill_value": "50",
+      "skill_des": "Proficient in using Laravel for building secure and feature-rich web applications with MVC architecture and seamless database management."
+    },
+    {
+      "skill_name": "MSSQL",
+      "skill_value": "60",
+      "skill_des": "Skilled in managing and querying large-scale databases with MSSQL, including stored procedures, triggers, and performance optimization."
+    },
+    {
+      "skill_name": "MySQL",
+      "skill_value": "70",
+      "skill_des": "Proficient in designing, maintaining, and optimizing relational databases using MySQL for scalable and efficient data storage solutions."
+    },
+    {
+      "skill_name": "SQL with optimizing stored procedures",
+      "skill_value": "50",
+      "skill_des": "Expert in writing and optimizing SQL queries and stored procedures to enhance database performance and efficiency."
+    },
+    {
+      "skill_name": "Fixing Top OWASP vulnerabilities",
+      "skill_value": "80",
+      "skill_des": "Skilled in identifying and mitigating top OWASP vulnerabilities to ensure secure web application development."
+    },
+    {
+      "skill_name": "REST APIs Security Practices",
+      "skill_value": "90",
+      "skill_des": "Authentication, Authorization, Rate Limiting, Data Sanitization, Encryption, Error Handling, Logging and Monitoring, Security Headers, Token Expiry, IP Whitelisting, Secure Dependencies."
+    },
+    {
+      "skill_name": "Inno Script",
+      "skill_value": "75",
+      "skill_des": "Experienced in using Inno Setup Script for creating robust and customizable .exe installers for Windows applications."
+    },
+    {
+      "skill_name": "Git & GitHub",
+      "skill_value": "100",
+      "skill_des": "Proficient in version control using Git and GitHub, including branching, merging, and repository management."
+    },
+    {
+      "skill_name": "SVN tortoise",
+      "skill_value": "100",
+      "skill_des": "Skilled in using SVN Tortoise for managing version control in collaborative projects and maintaining code integrity."
+    },
+    {
+      "skill_name": "AWS",
+      "skill_value": "60",
+      "skill_des": "Experienced in leveraging AWS services like EC2, S3, and RDS for scalable cloud-based applications and deployments."
+    },
+    {
+      "skill_name": "Jenkins",
+      "skill_value": "60",
+      "skill_des": "Proficient in configuring Jenkins for continuous integration and deployment pipelines to automate development workflows."
+    },
+    {
+      "skill_name": "Ansible",
+      "skill_value": "60",
+      "skill_des": "Experienced in using Ansible for automating application deployment, configuration management, and orchestration."
+    },
+    {
+      "skill_name": "Puppet",
+      "skill_value": "60",
+      "skill_des": "Skilled in using Puppet for managing infrastructure as code and automating system configurations across environments."
+    },
+    {
+      "skill_name": "Docker",
+      "skill_value": "60",
+      "skill_des": "Proficient in containerizing applications using Docker to ensure consistency across development and production environments."
+    },
+    {
+      "skill_name": "Kubernetes",
+      "skill_value": "60",
+      "skill_des": "Experienced in deploying and managing containerized applications with Kubernetes for scalable and reliable solutions."
+    },
+    {
+      "skill_name": "Jira Tool",
+      "skill_value": "80",
+      "skill_des": "Skilled in using Jira for agile project management, issue tracking, and workflow customization to improve team productivity."
+    },
+    {
+      "skill_name": "Project Management",
+      "skill_value": "60",
+      "skill_des": "Skilled in managing projects to ensure timely completion with high-quality standards."
+    },
+    {
+      "skill_name": "Team Leadership",
+      "skill_value": "80",
+      "skill_des": "Proven ability to lead and mentor teams effectively, fostering collaboration and productivity."
+    },
+    {
+      "skill_name": "Problem-Solving",
+      "skill_value": "100",
+      "skill_des": "Strong analytical skills to identify and resolve complex technical issues efficiently."
+    },
+    {
+      "skill_name": "Time Management",
+      "skill_value": "100",
+      "skill_des": "Capable of meeting tight deadlines while maintaining focus on project goals."
+    },
+    {
+      "skill_name": "Adaptability",
+      "skill_value": "100",
+      "skill_des": "Proficient in adapting to new technologies and methodologies to deliver optimal results."
+    },
+    {
+      "skill_name": "Communication",
+      "skill_value": "50",
+      "skill_des": "Basic communication skills to coordinate with cross-functional teams."
+    },
+    {
+      "skill_name": "Technical Expertise",
+      "skill_value": "80",
+      "skill_des": "Hands-on experience in developing scalable and secure applications using the MEAN stack ,Full Stack and other modern tools."
+    },
+    {
+      "skill_name": "Attention to Detail",
+      "skill_value": "100",
+      "skill_des": "Thorough in code reviews, ensuring quality and adherence to best practices."
+    }
+  ],
+  "resume_edu": [
+    {
+      "title": "BCA - Bachelor of Computer Applications",
+      "sub_title": "Seeta Devi College Bhilwara | Maharshi Dayanand Saraswati University Ajmer, Rajasthan",
+      "startDate": "2018",
+      "endDate": "2021",
+      "des": "Course Web Development and Database Management and Achieved 1ST Division (71.04%)"
+    },
+    {
+      "title": "Science Maths (12-Class)",
+      "sub_title": "Govt Sr. Sec. Rajendra Marg, Bhilwara",
+      "startDate": "2016",
+      "endDate": "2017",
+      "des": "Achieved 2ST Division (56.50%)"
+    }
+  ],
+  "resume_exp": [
+    {
+      "title": "Full Stack Developer",
+      "sub_title": "SecurEyes Techno Services Pvt. Ltd.",
+      "sub_address": "Sigma Tech Park Whitefield, Bengaluru, Karnataka(560066)",
+      "startDate": "Aug 2023",
+      "endDate": "Present",
+      "des": ""
+    },
+    {
+      "title": "Mean Stack Developer",
+      "sub_title": "Aspire Edu-soft Private Limited",
+      "sub_address": "Sector 4, Hiran Magri, Udaipur, Rajasthan(313002)",
+      "startDate": "Apr 2022",
+      "endDate": "Jul 2023",
+      "des": ""
+    },
+    {
+      "title": "Angular and Flutter Developer",
+      "sub_title": "Rudrohom Comtrade Private Limited",
+      "sub_address": "Shavri Colony, Udaipur, Rajasthan 313001",
+      "startDate": "Jan 2022",
+      "endDate": "Mar 2022",
+      "des": ""
+    }
+  ],
+  "contact_address": "Whitefield, Bengaluru, Karnataka(560066)",
+  "contact_freelance": "Available Right Now",
+  "contact_email": "sajidinfo783@gmail.com",
+  "contact_phone": "6367183820"
+}
