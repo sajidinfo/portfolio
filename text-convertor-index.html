@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Case Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #252535;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #00d4ff;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .header p {
+            color: #a0a0b0;
+            font-size: 0.95rem;
+        }
+
+        .textarea-section {
+            margin-bottom: 25px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 15px;
+            background: #2d2d44;
+            color: #e0e0e0;
+            border: 2px solid #3d3d50;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        textarea::placeholder {
+            color: #606070;
+        }
+
+        .buttons-section {
+            margin-bottom: 25px;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #3d3d50 0%, #2d2d44 100%);
+            color: #e0e0e0;
+            border: 2px solid #4d4d60;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #4d4d60 0%, #3d3d50 100%);
+            border-color: #00d4ff;
+            color: #00d4ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 212, 255, 0.1);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        button.action {
+            background: linear-gradient(135deg, #2d5a3d 0%, #1f3d2d 100%);
+            border-color: #3d7a4d;
+        }
+
+        button.action:hover {
+            background: linear-gradient(135deg, #3d7a4d 0%, #2d5a3d 100%);
+            border-color: #00ff88;
+            color: #00ff88;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #5a2d2d 0%, #3d1f1f 100%);
+            border-color: #7a3d3d;
+        }
+
+        button.danger:hover {
+            background: linear-gradient(135deg, #7a3d3d 0%, #5a2d2d 100%);
+            border-color: #ff4444;
+            color: #ff4444;
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.2);
+        }
+
+        .stats-section {
+            background: #2d2d44;
+            border-left: 4px solid #00d4ff;
+            padding: 15px 20px;
+            border-radius: 6px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            text-align: center;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #a0a0b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            textarea {
+                height: 150px;
+                font-size: 0.9rem;
+            }
+
+            .buttons-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 10px;
+            }
+
+            button {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 12px 15px;
+            }
+
+            .stat-label {
+                font-size: 0.7rem;
+            }
+
+            .stat-value {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+                border-radius: 8px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+
+            .header p {
+                font-size: 0.85rem;
+            }
+
+            textarea {
+                height: 120px;
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+
+            .buttons-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            button {
+                padding: 8px 10px;
+                font-size: 0.7rem;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                padding: 10px 12px;
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+            }
+
+            .stat-value {
+                font-size: 1rem;
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2d5a3d;
+            color: #00ff88;
+            padding: 12px 20px;
+            border-radius: 6px;
+            border-left: 4px solid #00ff88;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .notification.fadeOut {
+            animation: slideOut 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Text Case Converter of MD Sajid</h1>
+            <p>Transform your text with powerful case conversion tools</p>
+        </div>
+
+        <!-- Textarea Section -->
+        <div class="textarea-section">
+            <textarea id="textInput" placeholder="Type or paste your content here..."></textarea>
+        </div>
+
+        <!-- Buttons Section -->
+        <div class="buttons-section">
+            <div class="buttons-grid">
+                <button onclick="convertToSentenceCase()">Sentence Case</button>
+                <button onclick="convertToLowerCase()">lower case</button>
+                <button onclick="convertToUpperCase()">UPPER CASE</button>
+                <button onclick="convertToCapitalized()">Capitalized Case</button>
+                <button onclick="convertToAlternating()">aLtErNaTiNg</button>
+                <button onclick="convertToTitleCase()">Title Case</button>
+                <button onclick="convertToInverseCase()">InVeRsE CaSe</button>
+                <button onclick="convertToSentenceUnderscore()">Sentence Under Score</button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action" onclick="downloadText()">📥 Download Text</button>
+                <button class="action" onclick="copyToClipboard()">📋 Copy</button>
+                <button class="danger" onclick="clearText()">🗑️ Clear</button>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <div class="stat-item">
+                <span class="stat-label">Characters</span>
+                <span class="stat-value" id="charCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Words</span>
+                <span class="stat-value" id="wordCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Sentences</span>
+                <span class="stat-value" id="sentenceCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Lines</span>
+                <span class="stat-value" id="lineCount">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // DOM Elements
+        // ============================================
+        const textInput = document.getElementById('textInput');
+        const charCountEl = document.getElementById('charCount');
+        const wordCountEl = document.getElementById('wordCount');
+        const sentenceCountEl = document.getElementById('sentenceCount');
+        const lineCountEl = document.getElementById('lineCount');
+
+        // ============================================
+        // Case Conversion Functions
+        // ============================================
+
+        /**
+         * Convert to Sentence Case
+         * First letter of each sentence uppercase, rest lowercase
+         */
+        function convertToSentenceCase() {
+            let text = textInput.value;
+            // Split by sentence delimiters and capitalize first letter of each
+            text = text.toLowerCase().replace(/([.!?]\s*|^)(.)/g, (match, separator, letter) => {
+                return separator + letter.toUpperCase();
+            });
+            textInput.value = text;
+            updateStats();
+        }
+
+        /**
+         * Convert to Lower Case
+         */
+        function convertToLowerCase() {
+            textInput.value = textInput.value.toLowerCase();
+            updateStats();
+        }
+
+        /**
+         * Convert to Upper Case
+         */
+        function convertToUpperCase() {
+            textInput.value = textInput.value.toUpperCase();
+            updateStats();
+        }
+
+        /**
+         * Convert to Capitalized Case
+         * First letter of each word uppercase
+         */
+        function convertToCapitalized() {
+            let text = textInput.value;
+            text = text.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+            textInput.value = text;
+            updateStats();
+        }
+
+        /**
+         * Convert to Alternating Case
+         * Alternate between uppercase and lowercase characters
+         */
+        function convertToAlternating() {
+            let text = textInput.value;
+            let result = '';
+            let isUpper = true;
+            
+            for (let char of text) {
+                if (/[a-zA-Z]/.test(char)) {
+                    result += isUpper ? char.toUpperCase() : char.toLowerCase();
+                    isUpper = !isUpper;
+                } else {
+                    result += char;
+                }
+            }
+            
+            textInput.value = result;
+            updateStats();
+        }
+
+        /**
+         * Convert to Title Case
+         * Capitalize major words, ignore small words like "and", "the", "of", etc.
+         */
+        function convertToTitleCase() {
+            let text = textInput.value;
+            const smallWords = ['a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 
+                              'from', 'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 
+                              'or', 'that', 'the', 'to', 'was', 'will', 'with'];
+            
+            text = text.toLowerCase().replace(/\b\w+\b/g, (word, index) => {
+                if (index === 0 || !smallWords.includes(word)) {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                }
+                return word;
+            });
+            
+            textInput.value = text;
+            updateStats();
+        }
+
+        /**
+         * Convert to Inverse Case
+         * Reverse casing of each character (uppercase becomes lowercase and vice versa)
+         */
+        function convertToInverseCase() {
+            let text = textInput.value;
+            let result = '';
+            
+            for (let char of text) {
+                if (char === char.toUpperCase()) {
+                    result += char.toLowerCase();
+                } else if (char === char.toLowerCase()) {
+                    result += char.toUpperCase();
+                } else {
+                    result += char;
+                }
+            }
+            
+            textInput.value = result;
+            updateStats();
+        }
+
+        /**
+         * Convert to snake_case (Sentence Underscore)
+         * Convert to lowercase and replace spaces with underscores
+         * Example: "Sajid Khan" -> "sajid_khan"
+         */
+        function convertToSentenceUnderscore() {
+            let text = textInput.value;
+            
+            // Convert to lowercase and replace spaces/special chars with underscores
+            text = text
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, '_')  // Replace spaces with underscores
+                .replace(/[^\w_]/g, ''); // Remove special characters except underscores
+            
+            textInput.value = text;
+            updateStats();
+            showNotification('Converted to snake_case!');
+        }
+
+        // ============================================
+        // Utility Functions
+        // ============================================
+
+        /**
+         * Update Live Statistics
+         */
+        function updateStats() {
+            const text = textInput.value;
+
+            // Character Count (includes spaces)
+            const charCount = text.length;
+            charCountEl.textContent = charCount;
+
+            // Word Count (split by whitespace)
+            const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            wordCountEl.textContent = wordCount;
+
+            // Sentence Count (based on ., !, ?)
+            const sentenceCount = (text.match(/[.!?]/g) || []).length;
+            sentenceCountEl.textContent = sentenceCount;
+
+            // Line Count (based on newlines)
+            const lineCount = text === '' ? 0 : text.split('\n').length;
+            lineCountEl.textContent = lineCount;
+        }
+
+        /**
+         * Download Text as .txt file
+         */
+        function downloadText() {
+            const text = textInput.value;
+            
+            if (text.trim() === '') {
+                showNotification('Nothing to download!', 'warning');
+                return;
+            }
+
+            // Create a Blob from the text
+            const blob = new Blob([text], { type: 'text/plain' });
+            
+            // Create a temporary download link
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `text-${new Date().toISOString().slice(0, 10)}.txt`;
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up
+            URL.revokeObjectURL(url);
+            
+            showNotification('Text downloaded successfully!');
+        }
+
+        /**
+         * Copy Text to Clipboard
+         */
+        function copyToClipboard() {
+            const text = textInput.value;
+            
+            if (text.trim() === '') {
+                showNotification('Nothing to copy!', 'warning');
+                return;
+            }
+
+            // Use modern Clipboard API
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('Copied to clipboard!');
+            });
+        }
+
+        /**
+         * Clear Textarea
+         */
+        function clearText() {
+            if (textInput.value.trim() !== '') {
+                if (confirm('Are you sure you want to clear all text?')) {
+                    textInput.value = '';
+                    updateStats();
+                    showNotification('Text cleared!');
+                }
+            } else {
+                showNotification('Textarea is already empty!', 'info');
+            }
+        }
+
+        /**
+         * Show Notification
+         */
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('fadeOut');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // ============================================
+        // Event Listeners
+        // ============================================
+
+        // Update stats on input
+        textInput.addEventListener('input', updateStats);
+
+        // Initialize stats on page load
+        window.addEventListener('load', updateStats);
+    </script>
+</body>
+</html>
