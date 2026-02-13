@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Text Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        #inputText {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            outline: none;
+            min-height: 100px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        #inputText:focus {
+            border-color: #667eea;
+        }
+
+        .output-section {
+            margin-top: 30px;
+        }
+
+        .output-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #outputText {
+            width: 100%;
+            padding: 12px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            min-height: 100px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .clear-btn {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .clear-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .emoji-guide {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .emoji-guide h3 {
+            font-size: 13px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .emoji-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .emoji-tag {
+            background: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #667eea;
+            color: #667eea;
+        }
+
+        .success-message {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Emoji Text Generator</h1>
+            <p>Add emojis to your text based on keywords</p>
+        </div>
+
+        <div class="form-group">
+            <label for="inputText">Enter Your Text:</label>
+            <textarea id="inputText" placeholder="Type your bio, description, or any text... Emojis will be added automatically!"></textarea>
+        </div>
+
+        <div class="output-section">
+            <div class="output-label">
+                <span>Result with Emojis:</span>
+                <span id="charCount" style="color: #999; font-size: 12px;"></span>
+            </div>
+            <div id="outputText">Your emoji text will appear here...</div>
+        </div>
+
+        <div class="button-group">
+            <button class="copy-btn" onclick="copyToClipboard()">📋 Copy</button>
+            <button class="clear-btn" onclick="clearAll()">🗑️ Clear</button>
+        </div>
+
+        <div class="success-message" id="successMessage">✓ Copied to clipboard!</div>
+
+        <div class="emoji-guide">
+            <h3>📝 Supported Keywords:</h3>
+            <div class="emoji-keywords">
+                <span class="emoji-tag">🚀 SDE/Developer</span>
+                <span class="emoji-tag">💻 Node.js</span>
+                <span class="emoji-tag">⚙️ Express</span>
+                <span class="emoji-tag">🅰️ Angular</span>
+                <span class="emoji-tag">🗄️ SQL/Database</span>
+                <span class="emoji-tag">🎯 Problem Solver</span>
+                <span class="emoji-tag">🤖 AI/ML</span>
+                <span class="emoji-tag">🔗 Open Source</span>
+                <span class="emoji-tag">💪 Fitness/Health</span>
+                <span class="emoji-tag">📚 Learning</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Emoji mapping for keywords
+        const emojiMap = {
+            // Professional roles & skills
+            'SDE': '🚀',
+            'developer': '💻',
+            'developer': '👨‍💻',
+            'full stack': '🔄',
+            'node': '💚',
+            'node.js': '💚',
+            'express': '⚙️',
+            'angular': '🅰️',
+            'react': '⚛️',
+            'vue': '💚',
+            'backend': '🔧',
+            'frontend': '🎨',
+            'javascript': '⚡',
+            'typescript': '📘',
+            'python': '🐍',
+            'java': '☕',
+            'git': '🌳',
+            'github': '🐙',
+            
+            // Database & Data
+            'sql': '🗄️',
+            'nosql': '🗄️',
+            'mongodb': '🍃',
+            'mysql': '🐬',
+            'database': '📊',
+            'data': '📈',
+            
+            // Concepts & Skills
+            'api': '🔌',
+            'rest': '🌐',
+            'problem solver': '🎯',
+            'problem': '🔍',
+            'solver': '✅',
+            'ml': '🤖',
+            'ai': '🤖',
+            'machine learning': '🤖',
+            'deep learning': '🧠',
+            'algorithm': '⚡',
+            
+            // Community & Learning
+            'open source': '🔗',
+            'opensource': '🔗',
+            'contributor': '🤝',
+            'learning': '📚',
+            'enthusiast': '❤️',
+            'passion': '🔥',
+            'coding': '💻',
+            
+            // Lifestyle
+            'fitness': '💪',
+            'gym': '🏋️',
+            'health': '❤️',
+            'sport': '⚽',
+            'travel': '✈️',
+            'music': '🎵',
+            'reading': '📖',
+            'photography': '📸',
+            'creative': '🎨'
+        };
+
+        // Get DOM elements
+        const inputText = document.getElementById('inputText');
+        const outputText = document.getElementById('outputText');
+        const charCount = document.getElementById('charCount');
+
+        // Add event listener for real-time emoji generation
+        inputText.addEventListener('input', function() {
+            generateEmojiText();
+        });
+
+        function generateEmojiText() {
+            let text = inputText.value;
+            let result = text;
+
+            // Convert to lowercase for matching but preserve original case in output
+            const lowerText = text.toLowerCase();
+
+            // Sort keywords by length (longest first) to match longer phrases first
+            const sortedKeywords = Object.keys(emojiMap).sort((a, b) => b.length - a.length);
+
+            // Replace keywords with keyword + emoji
+            sortedKeywords.forEach(keyword => {
+                // Create regex to match whole words or phrases
+                const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+                result = result.replace(regex, (match) => `${match} ${emojiMap[keyword]}`);
+            });
+
+            // Update output
+            outputText.textContent = result;
+            
+            // Update character count
+            charCount.textContent = `${result.length} characters`;
+
+            // Add line breaks in output for better readability
+            outputText.style.whiteSpace = 'pre-wrap';
+        }
+
+        function copyToClipboard() {
+            const text = outputText.textContent;
+            
+            if (text === 'Your emoji text will appear here...') {
+                alert('Please enter some text first!');
+                return;
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                // Show success message
+                const successMsg = document.getElementById('successMessage');
+                successMsg.classList.add('show');
+                
+                setTimeout(() => {
+                    successMsg.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy. Please try again.');
+            });
+        }
+
+        function clearAll() {
+            inputText.value = '';
+            outputText.textContent = 'Your emoji text will appear here...';
+            charCount.textContent = '';
+        }
+
+        // Focus on input when page loads
+        inputText.focus();
+    </script>
+</body>
+</html>

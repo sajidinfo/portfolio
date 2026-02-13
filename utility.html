@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧰 Utility Apps Collection</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        button.secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            word-break: break-all;
+        }
+
+        .result-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .result-value {
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .password-char {
+            padding: 8px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .password-char:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .qr-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #qrCode {
+            display: inline-block;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            color: #667eea;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .stopwatch-display {
+            font-size: 56px;
+            font-weight: bold;
+            text-align: center;
+            color: #667eea;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .clock-display {
+            font-size: 64px;
+            font-weight: bold;
+            text-align: center;
+            color: #667eea;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .calculator-result {
+            background: #e3f2fd;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .calculator-result h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .calculator-result p {
+            color: #555;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .timer-display {
+                font-size: 36px;
+            }
+
+            .stopwatch-display {
+                font-size: 42px;
+            }
+
+            .clock-display {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧰 Utility Apps Collection</h1>
+            <p>All-in-one tools for everyday tasks</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('password')">🔐 Password</button>
+            <button class="tab-button" onclick="switchTab('qr')">📱 QR Code</button>
+            <button class="tab-button" onclick="switchTab('unit')">📏 Unit Converter</button>
+            <button class="tab-button" onclick="switchTab('age')">🎂 Age Calculator</button>
+            <button class="tab-button" onclick="switchTab('bmi')">⚖️ BMI Calculator</button>
+            <button class="tab-button" onclick="switchTab('currency')">💱 Currency</button>
+            <button class="tab-button" onclick="switchTab('countdown')">⏰ Countdown</button>
+            <button class="tab-button" onclick="switchTab('stopwatch')">⏱️ Stopwatch</button>
+            <button class="tab-button" onclick="switchTab('clock')">🕐 Digital Clock</button>
+        </div>
+
+        <div class="content">
+            <!-- Password Generator -->
+            <div id="password" class="tab-content active">
+                <h2>🔐 Password Generator</h2>
+                <div class="form-group">
+                    <label for="passLength">Password Length:</label>
+                    <input type="number" id="passLength" value="16" min="1" max="50">
+                </div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="passUpper" checked> Uppercase</label>
+                    <label><input type="checkbox" id="passLower" checked> Lowercase</label>
+                    <label><input type="checkbox" id="passNumbers" checked> Numbers</label>
+                    <label><input type="checkbox" id="passSymbols" checked> Symbols</label>
+                </div>
+                <button onclick="generatePassword()">Generate Password</button>
+                <button class="secondary" onclick="copyPassword()">📋 Copy</button>
+                <div class="result-box" id="passwordResult" style="display: none;">
+                    <div class="result-label">Generated Password</div>
+                    <div class="result-value" id="passwordOutput"></div>
+                </div>
+            </div>
+
+            <!-- QR Code Generator -->
+            <div id="qr" class="tab-content">
+                <h2>📱 QR Code Generator</h2>
+                <div class="form-group">
+                    <label for="qrText">Enter Text/URL:</label>
+                    <textarea id="qrText" placeholder="Enter text or URL to generate QR code..."></textarea>
+                </div>
+                <button onclick="generateQR()">Generate QR Code</button>
+                <button class="secondary" onclick="downloadQR()">⬇️ Download</button>
+                <div class="qr-container">
+                    <div id="qrCode"></div>
+                </div>
+            </div>
+
+            <!-- Unit Converter -->
+            <div id="unit" class="tab-content">
+                <h2>📏 Unit Converter</h2>
+                <div class="grid-2">
+                    <div>
+                        <label for="unitType">Select Type:</label>
+                        <select id="unitType" onchange="updateUnitOptions()">
+                            <option value="length">Length</option>
+                            <option value="weight">Weight</option>
+                            <option value="temperature">Temperature</option>
+                        </select>
+                    </div>
+                    <div></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="unitFrom">From:</label>
+                        <select id="unitFrom">
+                            <option value="m">Meter (m)</option>
+                            <option value="km">Kilometer (km)</option>
+                            <option value="cm">Centimeter (cm)</option>
+                            <option value="mm">Millimeter (mm)</option>
+                            <option value="mi">Mile (mi)</option>
+                            <option value="yd">Yard (yd)</option>
+                            <option value="ft">Feet (ft)</option>
+                            <option value="in">Inch (in)</option>
+                        </select>
+                        <input type="number" id="unitFromValue" placeholder="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="unitTo">To:</label>
+                        <select id="unitTo">
+                            <option value="km">Kilometer (km)</option>
+                            <option value="m">Meter (m)</option>
+                            <option value="cm">Centimeter (cm)</option>
+                            <option value="mm">Millimeter (mm)</option>
+                            <option value="mi">Mile (mi)</option>
+                            <option value="yd">Yard (yd)</option>
+                            <option value="ft">Feet (ft)</option>
+                            <option value="in">Inch (in)</option>
+                        </select>
+                        <div class="result-value" id="unitResult" style="margin-top: 15px;">0</div>
+                    </div>
+                </div>
+                <button onclick="convertUnits()">Convert</button>
+            </div>
+
+            <!-- Age Calculator -->
+            <div id="age" class="tab-content">
+                <h2>🎂 Age Calculator</h2>
+                <div class="form-group">
+                    <label for="birthDate">Date of Birth:</label>
+                    <input type="date" id="birthDate">
+                </div>
+                <button onclick="calculateAge()">Calculate Age</button>
+                <div id="ageResult" class="calculator-result" style="display: none;">
+                    <h3>Your Age</h3>
+                    <p>Years: <strong id="ageYears">0</strong></p>
+                    <p>Months: <strong id="ageMonths">0</strong></p>
+                    <p>Days: <strong id="ageDays">0</strong></p>
+                    <p>Total Days: <strong id="ageTotalDays">0</strong></p>
+                    <p>Next Birthday in: <strong id="ageDaysUntil">0</strong> days</p>
+                </div>
+            </div>
+
+            <!-- BMI Calculator -->
+            <div id="bmi" class="tab-content">
+                <h2>⚖️ BMI Calculator</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="bmiHeight">Height (cm):</label>
+                        <input type="number" id="bmiHeight" placeholder="170" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="bmiWeight">Weight (kg):</label>
+                        <input type="number" id="bmiWeight" placeholder="70" step="0.1">
+                    </div>
+                </div>
+                <button onclick="calculateBMI()">Calculate BMI</button>
+                <div id="bmiResult" class="calculator-result" style="display: none;">
+                    <h3>BMI Results</h3>
+                    <p>BMI: <strong id="bmiValue">0</strong></p>
+                    <p>Category: <strong id="bmiCategory">-</strong></p>
+                    <p>Status: <strong id="bmiStatus">-</strong></p>
+                </div>
+            </div>
+
+            <!-- Currency Converter -->
+            <div id="currency" class="tab-content">
+                <h2>💱 Currency Converter</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="currencyFrom">From:</label>
+                        <select id="currencyFrom">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="AUD">AUD (A$)</option>
+                            <option value="CAD">CAD (C$)</option>
+                            <option value="SGD">SGD (S$)</option>
+                        </select>
+                        <input type="number" id="currencyFromValue" placeholder="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="currencyTo">To:</label>
+                        <select id="currencyTo">
+                            <option value="EUR">EUR (€)</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="AUD">AUD (A$)</option>
+                            <option value="CAD">CAD (C$)</option>
+                            <option value="SGD">SGD (S$)</option>
+                        </select>
+                        <div class="result-value" id="currencyResult" style="margin-top: 15px;">0</div>
+                    </div>
+                </div>
+                <button onclick="convertCurrency()">Convert</button>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div id="countdown" class="tab-content">
+                <h2>⏰ Countdown Timer</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="countdownMinutes">Minutes:</label>
+                        <input type="number" id="countdownMinutes" value="5" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="countdownSeconds">Seconds:</label>
+                        <input type="number" id="countdownSeconds" value="0" min="0" max="59">
+                    </div>
+                </div>
+                <button onclick="startCountdown()" id="countdownStart">⏱️ Start</button>
+                <button class="secondary" onclick="resetCountdown()">Reset</button>
+                <div class="timer-display" id="countdownDisplay">05:00</div>
+            </div>
+
+            <!-- Stopwatch -->
+            <div id="stopwatch" class="tab-content">
+                <h2>⏱️ Stopwatch</h2>
+                <div class="stopwatch-display" id="stopwatchDisplay">00:00:00</div>
+                <button onclick="startStopwatch()" id="stopwatchStart">Start</button>
+                <button class="secondary" onclick="stopStopwatch()" id="stopwatchStop" style="display: none;">Stop</button>
+                <button class="secondary" onclick="resetStopwatch()">Reset</button>
+                <button class="secondary" onclick="lapStopwatch()" id="stopwatchLap" style="display: none;">Lap</button>
+                <div id="lapsList" style="margin-top: 20px;"></div>
+            </div>
+
+            <!-- Digital Clock -->
+            <div id="clock" class="tab-content">
+                <h2>🕐 Digital Clock</h2>
+                <div class="clock-display" id="clockDisplay">00:00:00</div>
+                <div class="result-box">
+                    <div class="result-label">Current Date</div>
+                    <div class="result-value" id="clockDate">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Initialize specific content
+            if (tabName === 'clock') updateClock();
+            if (tabName === 'stopwatch') updateStopwatch();
+            if (tabName === 'countdown') updateCountdownDisplay();
+        }
+
+        // Password Generator
+        function generatePassword() {
+            const length = parseInt(document.getElementById('passLength').value);
+            const upper = document.getElementById('passUpper').checked ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : '';
+            const lower = document.getElementById('passLower').checked ? 'abcdefghijklmnopqrstuvwxyz' : '';
+            const numbers = document.getElementById('passNumbers').checked ? '0123456789' : '';
+            const symbols = document.getElementById('passSymbols').checked ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : '';
+
+            const chars = upper + lower + numbers + symbols;
+            let password = '';
+
+            if (chars === '') {
+                alert('Select at least one character type!');
+                return;
+            }
+
+            for (let i = 0; i < length; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+
+            document.getElementById('passwordOutput').textContent = password;
+            document.getElementById('passwordResult').style.display = 'block';
+        }
+
+        function copyPassword() {
+            const text = document.getElementById('passwordOutput').textContent;
+            navigator.clipboard.writeText(text);
+            alert('Password copied to clipboard!');
+        }
+
+        // QR Code Generator
+        let qrCodeInstance = null;
+        function generateQR() {
+            const text = document.getElementById('qrText').value;
+            if (!text) {
+                alert('Please enter text or URL');
+                return;
+            }
+
+            document.getElementById('qrCode').innerHTML = '';
+            qrCodeInstance = new QRCode(document.getElementById('qrCode'), {
+                text: text,
+                width: 250,
+                height: 250,
+                colorDark: '#667eea',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function downloadQR() {
+            const canvas = document.querySelector('#qrCode canvas');
+            if (!canvas) {
+                alert('Generate QR Code first!');
+                return;
+            }
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL();
+            link.download = 'qrcode.png';
+            link.click();
+        }
+
+        // Unit Converter
+        const unitConversions = {
+            length: {
+                m: 1,
+                km: 0.001,
+                cm: 100,
+                mm: 1000,
+                mi: 0.000621371,
+                yd: 1.09361,
+                ft: 3.28084,
+                in: 39.3701
+            },
+            weight: {
+                kg: 1,
+                g: 1000,
+                mg: 1000000,
+                lb: 2.20462,
+                oz: 35.274
+            },
+            temperature: {}
+        };
+
+        function updateUnitOptions() {
+            const type = document.getElementById('unitType').value;
+            let options = '';
+
+            if (type === 'length') {
+                options = '<option value="m">Meter (m)</option><option value="km">Kilometer (km)</option><option value="cm">Centimeter (cm)</option><option value="mm">Millimeter (mm)</option><option value="mi">Mile (mi)</option><option value="yd">Yard (yd)</option><option value="ft">Feet (ft)</option><option value="in">Inch (in)</option>';
+            } else if (type === 'weight') {
+                options = '<option value="kg">Kilogram (kg)</option><option value="g">Gram (g)</option><option value="mg">Milligram (mg)</option><option value="lb">Pound (lb)</option><option value="oz">Ounce (oz)</option>';
+            } else if (type === 'temperature') {
+                options = '<option value="C">Celsius (°C)</option><option value="F">Fahrenheit (°F)</option><option value="K">Kelvin (K)</option>';
+            }
+
+            document.getElementById('unitFrom').innerHTML = options;
+            document.getElementById('unitTo').innerHTML = options;
+        }
+
+        function convertUnits() {
+            const type = document.getElementById('unitType').value;
+            const from = document.getElementById('unitFrom').value;
+            const to = document.getElementById('unitTo').value;
+            const value = parseFloat(document.getElementById('unitFromValue').value);
+
+            if (isNaN(value)) {
+                alert('Please enter a valid number');
+                return;
+            }
+
+            let result;
+            if (type === 'temperature') {
+                result = convertTemperature(value, from, to);
+            } else {
+                const conversions = unitConversions[type];
+                result = value * conversions[to] / conversions[from];
+            }
+
+            document.getElementById('unitResult').textContent = result.toFixed(4);
+        }
+
+        function convertTemperature(value, from, to) {
+            let celsius;
+            if (from === 'C') celsius = value;
+            else if (from === 'F') celsius = (value - 32) * 5/9;
+            else celsius = value - 273.15;
+
+            if (to === 'C') return celsius;
+            else if (to === 'F') return celsius * 9/5 + 32;
+            else return celsius + 273.15;
+        }
+
+        // Age Calculator
+        function calculateAge() {
+            const birthDate = new Date(document.getElementById('birthDate').value);
+            if (!document.getElementById('birthDate').value) {
+                alert('Please select a date');
+                return;
+            }
+
+            const today = new Date();
+            let years = today.getFullYear() - birthDate.getFullYear();
+            let months = today.getMonth() - birthDate.getMonth();
+            let days = today.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            const totalDays = Math.floor((today - birthDate) / (1000 * 60 * 60 * 24));
+            
+            const nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+            if (nextBirthday < today) nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+            const daysUntilBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+
+            document.getElementById('ageYears').textContent = years;
+            document.getElementById('ageMonths').textContent = months;
+            document.getElementById('ageDays').textContent = days;
+            document.getElementById('ageTotalDays').textContent = totalDays;
+            document.getElementById('ageDaysUntil').textContent = daysUntilBirthday;
+            document.getElementById('ageResult').style.display = 'block';
+        }
+
+        // BMI Calculator
+        function calculateBMI() {
+            const height = parseFloat(document.getElementById('bmiHeight').value) / 100;
+            const weight = parseFloat(document.getElementById('bmiWeight').value);
+
+            if (!height || !weight) {
+                alert('Please enter valid values');
+                return;
+            }
+
+            const bmi = weight / (height * height);
+            let category, status;
+
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                status = '⚠️ You are underweight';
+            } else if (bmi < 25) {
+                category = 'Normal weight';
+                status = '✅ Perfect! You have a healthy weight';
+            } else if (bmi < 30) {
+                category = 'Overweight';
+                status = '⚠️ You are overweight';
+            } else {
+                category = 'Obese';
+                status = '❌ You are obese';
+            }
+
+            document.getElementById('bmiValue').textContent = bmi.toFixed(2);
+            document.getElementById('bmiCategory').textContent = category;
+            document.getElementById('bmiStatus').textContent = status;
+            document.getElementById('bmiResult').style.display = 'block';
+        }
+
+        // Currency Converter
+        const exchangeRates = {
+            USD: 1,
+            EUR: 0.92,
+            GBP: 0.79,
+            INR: 83.12,
+            JPY: 149.50,
+            AUD: 1.53,
+            CAD: 1.36,
+            SGD: 1.34
+        };
+
+        function convertCurrency() {
+            const from = document.getElementById('currencyFrom').value;
+            const to = document.getElementById('currencyTo').value;
+            const value = parseFloat(document.getElementById('currencyFromValue').value);
+
+            if (isNaN(value)) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            const result = value * exchangeRates[to] / exchangeRates[from];
+            document.getElementById('currencyResult').textContent = result.toFixed(2);
+        }
+
+        // Countdown Timer
+        let countdownInterval;
+        function startCountdown() {
+            const minutes = parseInt(document.getElementById('countdownMinutes').value);
+            const seconds = parseInt(document.getElementById('countdownSeconds').value);
+            let totalSeconds = minutes * 60 + seconds;
+
+            if (totalSeconds <= 0) {
+                alert('Please enter a valid time');
+                return;
+            }
+
+            document.getElementById('countdownStart').disabled = true;
+
+            countdownInterval = setInterval(() => {
+                totalSeconds--;
+                updateCountdownDisplay();
+
+                if (totalSeconds <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('countdownStart').disabled = false;
+                    alert('⏰ Time is up!');
+                }
+
+                document.getElementById('countdownMinutes').value = Math.floor(totalSeconds / 60);
+                document.getElementById('countdownSeconds').value = totalSeconds % 60;
+            }, 1000);
+        }
+
+        function resetCountdown() {
+            clearInterval(countdownInterval);
+            document.getElementById('countdownMinutes').value = 5;
+            document.getElementById('countdownSeconds').value = 0;
+            document.getElementById('countdownStart').disabled = false;
+            updateCountdownDisplay();
+        }
+
+        function updateCountdownDisplay() {
+            const minutes = String(document.getElementById('countdownMinutes').value).padStart(2, '0');
+            const seconds = String(document.getElementById('countdownSeconds').value).padStart(2, '0');
+            document.getElementById('countdownDisplay').textContent = `${minutes}:${seconds}`;
+        }
+
+        // Stopwatch
+        let stopwatchInterval;
+        let stopwatchTime = 0;
+        let laps = [];
+
+        function startStopwatch() {
+            document.getElementById('stopwatchStart').style.display = 'none';
+            document.getElementById('stopwatchStop').style.display = 'inline-block';
+            document.getElementById('stopwatchLap').style.display = 'inline-block';
+
+            stopwatchInterval = setInterval(() => {
+                stopwatchTime++;
+                updateStopwatch();
+            }, 10);
+        }
+
+        function stopStopwatch() {
+            clearInterval(stopwatchInterval);
+            document.getElementById('stopwatchStart').style.display = 'inline-block';
+            document.getElementById('stopwatchStop').style.display = 'none';
+        }
+
+        function resetStopwatch() {
+            clearInterval(stopwatchInterval);
+            stopwatchTime = 0;
+            laps = [];
+            document.getElementById('stopwatchStart').style.display = 'inline-block';
+            document.getElementById('stopwatchStop').style.display = 'none';
+            document.getElementById('stopwatchLap').style.display = 'none';
+            document.getElementById('lapsList').innerHTML = '';
+            updateStopwatch();
+        }
+
+        function lapStopwatch() {
+            const time = formatStopwatchTime();
+            laps.push(time);
+            document.getElementById('lapsList').innerHTML = laps.map((lap, i) => `<div>Lap ${i+1}: ${lap}</div>`).join('');
+        }
+
+        function updateStopwatch() {
+            document.getElementById('stopwatchDisplay').textContent = formatStopwatchTime();
+        }
+
+        function formatStopwatchTime() {
+            const ms = stopwatchTime * 10;
+            const hours = Math.floor(ms / 3600000);
+            const minutes = Math.floor((ms % 3600000) / 60000);
+            const seconds = Math.floor((ms % 60000) / 1000);
+
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Digital Clock
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            document.getElementById('clockDisplay').textContent = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('clockDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            setInterval(updateClock, 1000);
+        }
+
+        // Real-time unit conversion
+        document.addEventListener('input', () => {
+            if (document.getElementById('unitFromValue') === document.activeElement) {
+                convertUnits();
+            }
+            if (document.getElementById('currencyFromValue') === document.activeElement) {
+                convertCurrency();
+            }
+        });
+    </script>
+</body>
+</html>

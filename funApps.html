@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Fun Games Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            min-width: 110px;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* General Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Tic-Tac-Toe */
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 20px auto;
+        }
+
+        .cell {
+            width: 90px;
+            height: 90px;
+            background: #f0f0f0;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+        }
+
+        .cell:hover {
+            background: #e8eaf6;
+        }
+
+        .status {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        /* Memory Game */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .memory-card {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: transparent;
+        }
+
+        .memory-card.flipped {
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .memory-card.matched {
+            background: #4caf50;
+            cursor: default;
+        }
+
+        /* Snake Game */
+        .snake-canvas {
+            border: 3px solid #667eea;
+            background: black;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+        }
+
+        .snake-controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Quiz */
+        .quiz-question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .quiz-question h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            padding: 12px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #f0f7ff;
+        }
+
+        .quiz-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .quiz-option.correct {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .quiz-option.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        /* Typing Speed */
+        .typing-text {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            min-height: 80px;
+        }
+
+        .typing-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .typing-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Name Picker */
+        .name-picker-input {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .selected-name {
+            font-size: 48px;
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            margin: 40px 0;
+            min-height: 60px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        /* Dice Roller */
+        .dice-display {
+            font-size: 64px;
+            text-align: center;
+            color: #667eea;
+            margin: 40px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dice-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Truth/Dare */
+        .truth-dare-display {
+            font-size: 18px;
+            font-weight: bold;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Soundboard */
+        .soundboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .sound-btn {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 60px;
+        }
+
+        .sound-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .sound-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Spin the Wheel */
+        .wheel-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .wheel {
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            border-radius: 50%;
+            border: 5px solid #667eea;
+            background: conic-gradient(from 0deg, #FF6B6B 0deg, #4ECDC4 120deg, #FFE66D 240deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            transition: transform 0.5s ease-out;
+        }
+
+        .wheel-pointer {
+            position: relative;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #667eea;
+            margin: 0 auto 20px;
+        }
+
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .typing-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .soundboard {
+                grid-template-columns: 1fr;
+            }
+
+            .dice-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .game-info {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Fun Games Collection</h1>
+            <p>Play & enjoy various games and fun apps</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('tictactoe')">🎯 Tic-Tac-Toe</button>
+            <button class="tab-button" onclick="switchTab('memory')">🧠 Memory Game</button>
+            <button class="tab-button" onclick="switchTab('snake')">🐍 Snake</button>
+            <button class="tab-button" onclick="switchTab('quiz')">❓ Quiz</button>
+            <button class="tab-button" onclick="switchTab('typing')">⌨️ Typing Speed</button>
+            <button class="tab-button" onclick="switchTab('namepicker')">📝 Name Picker</button>
+            <button class="tab-button" onclick="switchTab('dice')">🎲 Dice Roller</button>
+            <button class="tab-button" onclick="switchTab('truthdare')">😈 Truth/Dare</button>
+            <button class="tab-button" onclick="switchTab('soundboard')">🔊 Soundboard</button>
+            <button class="tab-button" onclick="switchTab('wheel')">🎡 Spin Wheel</button>
+        </div>
+
+        <div class="content">
+            <!-- Tic-Tac-Toe -->
+            <div id="tictactoe" class="tab-content active">
+                <h2>🎯 Tic-Tac-Toe</h2>
+                <div class="status" id="tttStatus">You (X) vs AI (O)</div>
+                <div class="game-board" id="tttBoard"></div>
+                <div style="text-align: center;">
+                    <button onclick="resetTTT()">New Game</button>
+                </div>
+            </div>
+
+            <!-- Memory Game -->
+            <div id="memory" class="tab-content">
+                <h2>🧠 Memory Card Game</h2>
+                <div style="text-align: center; margin: 15px 0;">
+                    Moves: <strong id="memoryMoves">0</strong>
+                </div>
+                <div class="memory-grid" id="memoryGrid"></div>
+                <div style="text-align: center;">
+                    <button onclick="resetMemory()">New Game</button>
+                </div>
+            </div>
+
+            <!-- Snake Game -->
+            <div id="snake" class="tab-content">
+                <h2>🐍 Snake Game</h2>
+                <div style="text-align: center;">
+                    Score: <strong id="snakeScore">0</strong>
+                </div>
+                <canvas id="snakeCanvas" class="snake-canvas" width="400" height="400"></canvas>
+                <div class="snake-controls">
+                    <button id="snakeStart" onclick="startSnakeGame()">Start Game</button>
+                    <button class="secondary" id="snakePause" onclick="pauseSnakeGame()" style="display: none;">Pause</button>
+                </div>
+            </div>
+
+            <!-- Quiz App -->
+            <div id="quiz" class="tab-content">
+                <h2>❓ Quiz App</h2>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    Question <strong id="quizCurrent">1</strong> of <strong id="quizTotal">5</strong>
+                </div>
+                <div id="quizContainer"></div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button id="quizNext" onclick="nextQuizQuestion()" style="display: none;">Next Question</button>
+                    <button id="quizRestart" onclick="startQuiz()">Start Quiz</button>
+                </div>
+            </div>
+
+            <!-- Typing Speed Tester -->
+            <div id="typing" class="tab-content">
+                <h2>⌨️ Typing Speed Tester</h2>
+                <div class="typing-text" id="typingText">The quick brown fox jumps over the lazy dog. This is a typing test to measure your speed and accuracy.</div>
+                <textarea class="typing-input" id="typingInput" placeholder="Start typing here..." disabled></textarea>
+                <button onclick="startTypingTest()">Start Test</button>
+                <button onclick="resetTypingTest()" class="secondary">Reset</button>
+                <div class="typing-stats" id="typingStats" style="display: none;">
+                    <div class="stat-box">
+                        <div class="stat-label">WPM</div>
+                        <div class="stat-value" id="wpm">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Accuracy</div>
+                        <div class="stat-value" id="accuracy">0%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Time</div>
+                        <div class="stat-value" id="typingTime">0s</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Name Picker -->
+            <div id="namepicker" class="tab-content">
+                <h2>📝 Random Name Picker</h2>
+                <div class="form-group">
+                    <label>Enter names (one per line):</label>
+                    <textarea id="nameList" placeholder="John&#10;Jane&#10;Bob&#10;Alice&#10;Charlie" style="min-height: 150px;"></textarea>
+                </div>
+                <button onclick="pickRandomName()">Pick Random Name</button>
+                <div class="selected-name" id="pickedName" style="display: none;"></div>
+            </div>
+
+            <!-- Dice Roller -->
+            <div id="dice" class="tab-content">
+                <h2>🎲 Dice Roller</h2>
+                <div class="dice-options">
+                    <button onclick="rollDice(1)">Roll 1 Dice</button>
+                    <button onclick="rollDice(2)">Roll 2 Dice</button>
+                    <button onclick="rollDice(3)">Roll 3 Dice</button>
+                    <button onclick="rollDice(4)">Roll 4 Dice</button>
+                    <button onclick="rollDice(5)">Roll 5 Dice</button>
+                    <button onclick="rollDice(6)">Roll 6 Dice</button>
+                </div>
+                <div class="dice-display" id="diceDisplay">🎲</div>
+            </div>
+
+            <!-- Truth or Dare -->
+            <div id="truthdare" class="tab-content">
+                <h2>😈 Truth or Dare Generator</h2>
+                <div style="text-align: center; margin: 20px 0;">
+                    <button onclick="getTruth()">🔵 Get Truth</button>
+                    <button onclick="getDare()">🔴 Get Dare</button>
+                </div>
+                <div class="truth-dare-display" id="truthDareDisplay">Click a button to get started!</div>
+            </div>
+
+            <!-- Soundboard -->
+            <div id="soundboard" class="tab-content">
+                <h2>🔊 Soundboard</h2>
+                <div class="soundboard">
+                    <button class="sound-btn" onclick="playSound('laugh')">😂 Laugh</button>
+                    <button class="sound-btn" onclick="playSound('applause')">👏 Applause</button>
+                    <button class="sound-btn" onclick="playSound('boo')">👻 Boo</button>
+                    <button class="sound-btn" onclick="playSound('tada')">🎉 Tada</button>
+                    <button class="sound-btn" onclick="playSound('wow')">😮 Wow</button>
+                    <button class="sound-btn" onclick="playSound('fail')">❌ Fail</button>
+                    <button class="sound-btn" onclick="playSound('success')">✅ Success</button>
+                    <button class="sound-btn" onclick="playSound('coin')">💰 Coin</button>
+                </div>
+            </div>
+
+            <!-- Spin the Wheel -->
+            <div id="wheel" class="tab-content">
+                <h2>🎡 Spin the Wheel</h2>
+                <div class="form-group">
+                    <label>Enter wheel options (one per line):</label>
+                    <textarea id="wheelOptions" placeholder="Option 1&#10;Option 2&#10;Option 3&#10;Option 4&#10;Option 5" style="min-height: 120px;"></textarea>
+                </div>
+                <button onclick="setupWheel()">Setup Wheel</button>
+                <div class="wheel-container">
+                    <div class="wheel-pointer"></div>
+                    <div class="wheel" id="wheel-canvas"></div>
+                    <div class="result" id="wheelResult"></div>
+                </div>
+                <div style="text-align: center;">
+                    <button id="spinBtn" onclick="spinWheel()" disabled>🎡 Spin the Wheel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ==================== TIC-TAC-TOE ====================
+        let tttBoard = ['', '', '', '', '', '', '', '', ''];
+        let tttGameOver = false;
+
+        function initTTT() {
+            const board = document.getElementById('tttBoard');
+            board.innerHTML = '';
+            tttBoard = ['', '', '', '', '', '', '', '', ''];
+            tttGameOver = false;
+            updateTTTStatus("You (X) vs AI (O)");
+
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.onclick = () => playTTT(i);
+                board.appendChild(cell);
+            }
+        }
+
+        function playTTT(index) {
+            if (tttBoard[index] || tttGameOver) return;
+            tttBoard[index] = 'X';
+            updateTTTBoard();
+            
+            if (checkTTTWinner('X')) {
+                updateTTTStatus("🎉 You Won!");
+                tttGameOver = true;
+                return;
+            }
+
+            if (tttBoard.every(cell => cell)) {
+                updateTTTStatus("🤝 Draw!");
+                tttGameOver = true;
+                return;
+            }
+
+            setTimeout(() => aiTTT(), 500);
+        }
+
+        function aiTTT() {
+            const empty = tttBoard.map((cell, i) => cell === '' ? i : null).filter(i => i !== null);
+            const index = empty[Math.floor(Math.random() * empty.length)];
+            tttBoard[index] = 'O';
+            updateTTTBoard();
+
+            if (checkTTTWinner('O')) {
+                updateTTTStatus("😢 AI Won!");
+                tttGameOver = true;
+                return;
+            }
+
+            if (tttBoard.every(cell => cell)) {
+                updateTTTStatus("🤝 Draw!");
+                tttGameOver = true;
+            }
+        }
+
+        function checkTTTWinner(player) {
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            return wins.some(w => w.every(i => tttBoard[i] === player));
+        }
+
+        function updateTTTBoard() {
+            const cells = document.querySelectorAll('.cell');
+            tttBoard.forEach((cell, i) => {
+                cells[i].textContent = cell;
+            });
+        }
+
+        function updateTTTStatus(text) {
+            document.getElementById('tttStatus').textContent = text;
+        }
+
+        function resetTTT() {
+            initTTT();
+        }
+
+        initTTT();
+
+        // ==================== MEMORY GAME ====================
+        let memoryCards = [];
+        let flipped = [];
+        let matched = 0;
+        let moves = 0;
+
+        function initMemory() {
+            const emojis = ['🎨', '🎯', '🎲', '🎪', '🎬', '🎤', '🎧', '🎸'];
+            memoryCards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+            flipped = [];
+            matched = 0;
+            moves = 0;
+            document.getElementById('memoryMoves').textContent = 0;
+
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+
+            memoryCards.forEach((emoji, i) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.textContent = emoji;
+                card.onclick = () => flipMemoryCard(i, card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipMemoryCard(index, element) {
+            if (flipped.length === 2 || flipped.includes(index)) return;
+
+            element.classList.add('flipped');
+            flipped.push(index);
+
+            if (flipped.length === 2) {
+                moves++;
+                document.getElementById('memoryMoves').textContent = moves;
+
+                if (memoryCards[flipped[0]] === memoryCards[flipped[1]]) {
+                    matched += 2;
+                    document.querySelectorAll('.memory-card').forEach((card, i) => {
+                        if (flipped.includes(i)) card.classList.add('matched');
+                    });
+                    flipped = [];
+
+                    if (matched === memoryCards.length) {
+                        setTimeout(() => alert(`🎉 You Won! Moves: ${moves}`), 300);
+                    }
+                } else {
+                    setTimeout(() => {
+                        document.querySelectorAll('.memory-card').forEach((card, i) => {
+                            if (flipped.includes(i)) card.classList.remove('flipped');
+                        });
+                        flipped = [];
+                    }, 1000);
+                }
+            }
+        }
+
+        function resetMemory() {
+            initMemory();
+        }
+
+        initMemory();
+
+        // ==================== SNAKE GAME ====================
+        const canvas = document.getElementById('snakeCanvas');
+        const ctx = canvas.getContext('2d');
+        let snake = [{x: 200, y: 200}];
+        let food = {x: 100, y: 100};
+        let dx = 10, dy = 0;
+        let snakeGameRunning = false;
+        let snakeScore = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -10; }
+            if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = 10; }
+            if (e.key === 'ArrowLeft' && dx === 0) { dx = -10; dy = 0; }
+            if (e.key === 'ArrowRight' && dx === 0) { dx = 10; dy = 0; }
+        });
+
+        function drawSnakeGame() {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            snake.forEach((segment, i) => {
+                ctx.fillStyle = i === 0 ? '#4caf50' : '#8bc34a';
+                ctx.fillRect(segment.x, segment.y, 10, 10);
+                ctx.strokeStyle = '#333';
+                ctx.strokeRect(segment.x, segment.y, 10, 10);
+            });
+
+            ctx.fillStyle = '#ff5722';
+            ctx.beginPath();
+            ctx.arc(food.x + 5, food.y + 5, 5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function updateSnakeGame() {
+            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height ||
+                snake.some(s => s.x === head.x && s.y === head.y)) {
+                snakeGameRunning = false;
+                document.getElementById('snakeStart').style.display = 'inline-block';
+                document.getElementById('snakePause').style.display = 'none';
+                alert(`Game Over! Score: ${snakeScore}`);
+                return;
+            }
+
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                snakeScore++;
+                document.getElementById('snakeScore').textContent = snakeScore;
+                food = {x: Math.floor(Math.random() * 40) * 10, y: Math.floor(Math.random() * 40) * 10};
+            } else {
+                snake.pop();
+            }
+
+            drawSnakeGame();
+        }
+
+        function startSnakeGame() {
+            snakeGameRunning = true;
+            snakeScore = 0;
+            snake = [{x: 200, y: 200}];
+            dx = 10; dy = 0;
+            document.getElementById('snakeScore').textContent = 0;
+            document.getElementById('snakeStart').style.display = 'none';
+            document.getElementById('snakePause').style.display = 'inline-block';
+
+            const gameLoop = setInterval(() => {
+                if (!snakeGameRunning) {
+                    clearInterval(gameLoop);
+                } else {
+                    updateSnakeGame();
+                }
+            }, 100);
+        }
+
+        function pauseSnakeGame() {
+            snakeGameRunning = false;
+        }
+
+        drawSnakeGame();
+
+        // ==================== QUIZ ====================
+        const quizData = [
+            {q: "What is 5 + 5?", options: ["8", "10", "12", "15"], answer: 1},
+            {q: "What is the capital of France?", options: ["London", "Berlin", "Paris", "Rome"], answer: 2},
+            {q: "Which planet is closest to the sun?", options: ["Venus", "Mercury", "Earth", "Mars"], answer: 1},
+            {q: "What is 10 × 10?", options: ["50", "100", "150", "200"], answer: 1},
+            {q: "Who wrote 'Romeo and Juliet'?", options: ["Mark Twain", "Shakespeare", "Dickens", "Austen"], answer: 1}
+        ];
+
+        let quizIndex = 0;
+        let quizScore = 0;
+        let quizAnswered = false;
+
+        function startQuiz() {
+            quizIndex = 0;
+            quizScore = 0;
+            quizAnswered = false;
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            const container = document.getElementById('quizContainer');
+            const q = quizData[quizIndex];
+
+            let html = `<div class="quiz-question">
+                <h3>${q.q}</h3>
+                <div class="quiz-options">`;
+
+            q.options.forEach((opt, i) => {
+                html += `<div class="quiz-option" onclick="answerQuiz(${i})">${opt}</div>`;
+            });
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+
+            document.getElementById('quizCurrent').textContent = quizIndex + 1;
+            document.getElementById('quizTotal').textContent = quizData.length;
+            document.getElementById('quizNext').style.display = 'none';
+            quizAnswered = false;
+        }
+
+        function answerQuiz(index) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const q = quizData[quizIndex];
+            const options = document.querySelectorAll('.quiz-option');
+
+            options[index].classList.add(index === q.answer ? 'correct' : 'incorrect');
+            options[q.answer].classList.add('correct');
+
+            if (index === q.answer) quizScore++;
+
+            if (quizIndex < quizData.length - 1) {
+                document.getElementById('quizNext').style.display = 'inline-block';
+            } else {
+                setTimeout(() => alert(`Quiz Complete! Score: ${quizScore}/${quizData.length}`), 500);
+            }
+        }
+
+        function nextQuizQuestion() {
+            quizIndex++;
+            if (quizIndex < quizData.length) {
+                showQuizQuestion();
+            }
+        }
+
+        // ==================== TYPING SPEED ====================
+        let typingStartTime = 0;
+        let typingRunning = false;
+
+        function startTypingTest() {
+            typingStartTime = Date.now();
+            typingRunning = true;
+            document.getElementById('typingInput').disabled = false;
+            document.getElementById('typingInput').focus();
+            document.getElementById('typingInput').value = '';
+        }
+
+        function updateTypingStats() {
+            if (!typingRunning) return;
+
+            const typed = document.getElementById('typingInput').value;
+            const original = document.getElementById('typingText').textContent;
+            const time = (Date.now() - typingStartTime) / 1000 / 60;
+            const words = typed.trim().split(/\s+/).length;
+            const wpm = Math.round(words / time) || 0;
+
+            let correct = 0;
+            for (let i = 0; i < typed.length; i++) {
+                if (typed[i] === original[i]) correct++;
+            }
+            const accuracy = Math.round((correct / original.length) * 100);
+
+            document.getElementById('wpm').textContent = wpm;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            document.getElementById('typingTime').textContent = Math.round((Date.now() - typingStartTime) / 1000) + 's';
+            document.getElementById('typingStats').style.display = 'grid';
+
+            if (document.getElementById('typingInput').value.length >= document.getElementById('typingText').textContent.length) {
+                typingRunning = false;
+                document.getElementById('typingInput').disabled = true;
+            }
+        }
+
+        document.getElementById('typingInput').addEventListener('input', updateTypingStats);
+
+        function resetTypingTest() {
+            typingRunning = false;
+            document.getElementById('typingInput').disabled = true;
+            document.getElementById('typingInput').value = '';
+            document.getElementById('typingStats').style.display = 'none';
+        }
+
+        // ==================== NAME PICKER ====================
+        function pickRandomName() {
+            const text = document.getElementById('nameList').value;
+            if (!text.trim()) {
+                alert('Please enter some names');
+                return;
+            }
+
+            const names = text.split('\n').filter(n => n.trim());
+            const picked = names[Math.floor(Math.random() * names.length)];
+
+            const display = document.getElementById('pickedName');
+            display.textContent = picked;
+            display.style.display = 'block';
+        }
+
+        // ==================== DICE ROLLER ====================
+        function rollDice(count) {
+            const dice = [];
+            for (let i = 0; i < count; i++) {
+                dice.push(Math.floor(Math.random() * 6) + 1);
+            }
+
+            const display = dice.join(' + ');
+            const total = dice.reduce((a, b) => a + b, 0);
+
+            document.getElementById('diceDisplay').textContent = `${display} = ${total}`;
+        }
+
+        // ==================== TRUTH OR DARE ====================
+        const truths = [
+            "What's your biggest fear?",
+            "Have you ever lied to your best friend?",
+            "What's your biggest secret?",
+            "Who do you have a crush on?",
+            "What's the most embarrassing thing you've done?",
+            "Have you ever cheated on a test?",
+            "What's your worst habit?",
+            "Do you believe in ghosts?"
+        ];
+
+        const dares = [
+            "Do 10 push-ups",
+            "Sing a song out loud",
+            "Dance for 30 seconds",
+            "Imitate a celebrity",
+            "Speak in an accent for the next round",
+            "Do a handstand",
+            "Call a friend and tell them a joke",
+            "Eat a spoon of hot sauce"
+        ];
+
+        function getTruth() {
+            const truth = truths[Math.floor(Math.random() * truths.length)];
+            document.getElementById('truthDareDisplay').textContent = `🔵 ${truth}`;
+        }
+
+        function getDare() {
+            const dare = dares[Math.floor(Math.random() * dares.length)];
+            document.getElementById('truthDareDisplay').textContent = `🔴 ${dare}`;
+        }
+
+        // ==================== SOUNDBOARD ====================
+        function playSound(sound) {
+            const sounds = {
+                laugh: "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
+                applause: "https://assets.mixkit.co/active_storage/sfx/574/574-preview.mp3",
+                boo: "https://assets.mixkit.co/active_storage/sfx/2867/2867-preview.mp3",
+                tada: "https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3",
+                wow: "https://assets.mixkit.co/active_storage/sfx/1653/1653-preview.mp3",
+                fail: "https://assets.mixkit.co/active_storage/sfx/1098/1098-preview.mp3",
+                success: "https://assets.mixkit.co/active_storage/sfx/1676/1676-preview.mp3",
+                coin: "https://assets.mixkit.co/active_storage/sfx/1487/1487-preview.mp3"
+            };
+
+            const audio = new Audio(sounds[sound]);
+            audio.play();
+        }
+
+        // ==================== SPIN THE WHEEL ====================
+        let wheelOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'];
+        let spinning = false;
+
+        function setupWheel() {
+            const text = document.getElementById('wheelOptions').value;
+            if (!text.trim()) {
+                alert('Please enter wheel options');
+                return;
+            }
+
+            wheelOptions = text.split('\n').filter(o => o.trim());
+            drawWheel();
+            document.getElementById('spinBtn').disabled = false;
+        }
+
+        function drawWheel() {
+            const wheelCanvas = document.getElementById('wheel-canvas');
+            wheelCanvas.innerHTML = '';
+
+            const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#F38181'];
+            const angle = 360 / wheelOptions.length;
+
+            wheelOptions.forEach((option, i) => {
+                const segment = document.createElement('div');
+                segment.style.position = 'absolute';
+                segment.style.width = '100%';
+                segment.style.height = '100%';
+                segment.style.display = 'flex';
+                segment.style.alignItems = 'center';
+                segment.style.justifyContent = 'center';
+                segment.style.transform = `rotate(${angle * i}deg)`;
+                segment.textContent = option;
+                segment.style.color = 'white';
+                segment.style.fontWeight = 'bold';
+                segment.style.fontSize = '12px';
+                segment.style.textShadow = '1px 1px 2px rgba(0,0,0,0.5)';
+                wheelCanvas.appendChild(segment);
+            });
+
+            // Create actual gradient
+            const wheel = document.getElementById('wheel-canvas');
+            wheel.style.background = wheelOptions.map((_, i) => colors[i % colors.length]).reduce((acc, color, i) => {
+                const angle = 360 / wheelOptions.length;
+                if (i === 0) return `conic-gradient(from 0deg, ${color} 0deg`;
+                return acc + `, ${color} ${angle * i}deg`;
+            }, '') + ')';
+        }
+
+        function spinWheel() {
+            if (spinning) return;
+            spinning = true;
+            document.getElementById('spinBtn').disabled = true;
+
+            const wheel = document.getElementById('wheel-canvas');
+            const spins = 5 + wheelOptions.length;
+            const rotation = spins * 360 + Math.random() * 360;
+
+            wheel.style.transition = 'transform 2s ease-out';
+            wheel.style.transform = `rotate(${rotation}deg)`;
+
+            setTimeout(() => {
+                const finalRotation = rotation % 360;
+                const angle = 360 / wheelOptions.length;
+                const selectedIndex = Math.floor((wheelOptions.length - Math.floor(finalRotation / angle)) % wheelOptions.length);
+
+                document.getElementById('wheelResult').textContent = `🎉 ${wheelOptions[selectedIndex]}`;
+                spinning = false;
+                document.getElementById('spinBtn').disabled = false;
+            }, 2000);
+        }
+
+        drawWheel();
+    </script>
+</body>
+</html>
