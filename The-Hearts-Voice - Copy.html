@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dil Ki Baat — The Heart's Voice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --desk: #3b2a20;
+            --desk-dark: #1c130d;
+            --paper: #fbf6ea;
+            --paper-edge: #e4d8bd;
+            --ink: #2d2620;
+            --muted: #8a7b68;
+            --accent: #a8322d;
+            --spine: rgba(0, 0, 0, 0.16);
+            --font-size: 18px;
+        }
+
+        :root[data-theme="night"] {
+            --paper: #1f1d1a;
+            --paper-edge: #12100e;
+            --ink: #e6dccb;
+            --muted: #9a8f7e;
+            --accent: #e0827b;
+            --spine: rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Lora', Georgia, serif;
+            color: var(--ink);
+            background: radial-gradient(ellipse at center, var(--desk) 0%, var(--desk-dark) 100%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* ===== Stage & book ===== */
+        .stage {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .book {
+            position: relative;
+            width: min(1180px, 100%, calc((100vh - 110px) * 1.45));
+            width: min(1180px, 100%, calc((100dvh - 110px) * 1.45));
+            aspect-ratio: 1.45;
+            background: var(--paper);
+            border-radius: 6px;
+            box-shadow:
+                0 1px 0 var(--paper-edge),
+                0 3px 0 -1px var(--paper),
+                0 4px 0 -1px var(--paper-edge),
+                0 6px 0 -2px var(--paper),
+                0 7px 0 -2px var(--paper-edge),
+                0 30px 60px rgba(0, 0, 0, 0.55);
+            user-select: text;
+        }
+
+        .book.spread {
+            background:
+                linear-gradient(90deg, rgba(0,0,0,0.07), transparent 5%, transparent 95%, rgba(0,0,0,0.07)),
+                var(--paper);
+        }
+
+        .book.spread::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 70px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, transparent, var(--spine) 42%, rgba(0,0,0,0.3) 50%, var(--spine) 58%, transparent);
+            pointer-events: none;
+        }
+
+        .viewport {
+            position: absolute;
+            top: 52px;
+            bottom: 58px;
+            left: 60px;
+            right: 60px;
+            overflow: hidden;
+        }
+
+        .folio {
+            position: absolute;
+            bottom: 22px;
+            width: 50%;
+            text-align: center;
+            font-size: 13px;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+        }
+
+        .folio.left { left: 0; }
+        .folio.right { right: 0; }
+
+        .running-head {
+            position: absolute;
+            top: 22px;
+            right: 0;
+            width: 50%;
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .running-head.left-head {
+            left: 0;
+            right: auto;
+        }
+
+        /* ===== Story text ===== */
+        .flow {
+            font-size: var(--font-size);
+            line-height: 1.7;
+            text-align: justify;
+            hyphens: auto;
+            column-fill: auto;
+            orphans: 2;
+            widows: 2;
+        }
+
+        .flow p {
+            margin: 0 0 0.55em;
+        }
+
+        .flow p.line {
+            text-align: left;
+        }
+
+        .speaker {
+            font-variant: small-caps;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.03em;
+            margin-right: 0.2em;
+        }
+
+        .flow p.first::first-letter {
+            float: left;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.4em;
+            line-height: 0.85;
+            padding: 0.06em 0.1em 0 0;
+            color: var(--accent);
+        }
+
+        .chapter {
+            break-before: column;
+            break-after: avoid;
+            text-align: center;
+            font-weight: normal;
+            margin: 1.8em 0 1.3em;
+        }
+
+        .ch-num {
+            display: block;
+            font-size: 0.72em;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .ch-title {
+            display: block;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.55em;
+            line-height: 1.25;
+            margin-top: 0.3em;
+        }
+
+        .chapter::after {
+            content: '❦';
+            display: block;
+            color: var(--accent);
+            font-size: 0.9em;
+            margin-top: 0.5em;
+        }
+
+        .flow blockquote {
+            font-style: italic;
+            margin: 0.8em 0.6em;
+            padding: 0.6em 1em;
+            border-left: 3px solid var(--accent);
+            background: rgba(168, 50, 45, 0.07);
+            break-inside: avoid;
+            text-align: left;
+        }
+
+        .book-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 800;
+            text-align: center;
+            font-size: 2.6em;
+            line-height: 1.2;
+            padding-top: 4.5em;
+        }
+
+        .book-subtitle {
+            text-align: center !important;
+            font-style: italic;
+            color: var(--muted);
+            font-size: 1.2em;
+        }
+
+        .book-subtitle::after {
+            content: '❦';
+            display: block;
+            margin-top: 1em;
+            color: var(--accent);
+            font-style: normal;
+        }
+
+        .the-end {
+            text-align: center !important;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.8em;
+            margin-top: 1.5em !important;
+        }
+
+        /* ===== Cover ===== */
+        .cover {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1800px;
+            background: radial-gradient(ellipse at center, var(--desk) 0%, var(--desk-dark) 100%);
+            z-index: 5;
+        }
+
+        .cover.hidden {
+            display: none;
+        }
+
+        .cover-book {
+            position: relative;
+            height: min(600px, calc(100% - 40px));
+            aspect-ratio: 2 / 3;
+            max-width: calc(100% - 32px);
+            background: linear-gradient(135deg, #8a242a 0%, #5a1218 60%, #3d0a0f 100%);
+            border-radius: 4px 12px 12px 4px;
+            box-shadow: inset 10px 0 18px rgba(0,0,0,0.45), 0 30px 60px rgba(0,0,0,0.6);
+            color: #f0d58a;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 28px;
+            transform-origin: left center;
+            transition: transform 0.8s cubic-bezier(.5,.1,.3,1), opacity 0.8s;
+        }
+
+        .cover-book::before {
+            content: '';
+            position: absolute;
+            inset: 16px;
+            border: 2px solid rgba(240, 213, 138, 0.55);
+            border-radius: 4px 8px 8px 4px;
+            pointer-events: none;
+        }
+
+        .cover.opening .cover-book {
+            transform: rotateY(-105deg);
+            opacity: 0;
+        }
+
+        .cover-orn {
+            font-size: 28px;
+            opacity: 0.8;
+        }
+
+        .cover-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 800;
+            font-size: clamp(36px, 7vh, 54px);
+            line-height: 1.1;
+            margin: 18px 0 6px;
+        }
+
+        .cover-heart {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .cover-sub {
+            font-style: italic;
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .cover-meta {
+            margin-top: 22px;
+            font-size: 13px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .cover-actions {
+            margin-top: 34px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-actions button {
+            padding: 12px 30px;
+            border-radius: 30px;
+            border: 1px solid #f0d58a;
+            background: #f0d58a;
+            color: #4a0f14;
+            font-size: 15px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .cover-actions button.ghost {
+            background: transparent;
+            color: #f0d58a;
+        }
+
+        .cover-actions button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ===== Control bar ===== */
+        .bar {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 16px 14px;
+            color: #f3e7d3;
+        }
+
+        body.cover-open .bar {
+            visibility: hidden;
+        }
+
+        .bar button {
+            min-width: 40px;
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(243, 231, 211, 0.3);
+            background: rgba(255, 255, 255, 0.06);
+            color: #f3e7d3;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+
+        .bar button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .bar button:disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+
+        .bar .turn {
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: min(360px, 40vw);
+        }
+
+        .progress input {
+            flex: 1;
+            accent-color: #d9a65a;
+        }
+
+        .page-label {
+            font-size: 13px;
+            white-space: nowrap;
+            min-width: 76px;
+            text-align: center;
+            opacity: 0.85;
+        }
+
+        /* ===== Contents panel ===== */
+        .toc {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            padding: 16px;
+        }
+
+        .toc.open {
+            display: flex;
+        }
+
+        .toc-panel {
+            width: min(460px, 100%);
+            max-height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: var(--paper);
+            color: var(--ink);
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .toc-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px 10px;
+            border-bottom: 1px solid var(--paper-edge);
+        }
+
+        .toc-head h3 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 24px;
+        }
+
+        .toc-head button {
+            border: none;
+            background: none;
+            font-size: 26px;
+            color: var(--muted);
+            line-height: 1;
+        }
+
+        .toc-list {
+            list-style: none;
+            overflow-y: auto;
+            padding: 8px 10px 14px;
+        }
+
+        .toc-list button {
+            width: 100%;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 9px 12px;
+            border: none;
+            background: none;
+            color: var(--ink);
+            text-align: left;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .toc-list button:hover,
+        .toc-list button.current {
+            background: rgba(168, 50, 45, 0.09);
+        }
+
+        .toc-list .n {
+            color: var(--muted);
+            font-size: 12px;
+            min-width: 22px;
+        }
+
+        .toc-list .t {
+            flex: 1;
+        }
+
+        .toc-list .p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* ===== Mobile: single page ===== */
+        @media (max-width: 899px) {
+            .stage {
+                padding: 8px;
+            }
+
+            .book {
+                width: 100%;
+                height: 100%;
+                aspect-ratio: auto;
+                border-radius: 4px;
+            }
+
+            .viewport {
+                top: 40px;
+                bottom: 44px;
+                left: 22px;
+                right: 22px;
+            }
+
+            .folio.left {
+                width: 100%;
+                bottom: 16px;
+            }
+
+            .folio.right,
+            .running-head.left-head {
+                display: none;
+            }
+
+            .running-head {
+                width: 100%;
+                top: 15px;
+            }
+
+            .bar {
+                gap: 6px;
+                padding: 0 8px 8px;
+            }
+
+            .bar button {
+                min-width: 38px;
+                height: 38px;
+                padding: 0 10px;
+            }
+
+            .progress {
+                flex: 1;
+                width: auto;
+            }
+
+            .progress input {
+                display: none;
+            }
+
+            .hide-sm {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="cover-open">
+    <div class="stage">
+        <div class="book" id="book">
+            <div class="running-head left-head">Dil Ki Baat</div>
+            <div class="running-head" id="runningHead"></div>
+            <div class="viewport" id="viewport">
+                <div class="flow" id="flow"></div>
+            </div>
+            <div class="folio left" id="folioL"></div>
+            <div class="folio right" id="folioR"></div>
+        </div>
+
+        <div class="cover" id="cover">
+            <div class="cover-book">
+                <div class="cover-orn">❦</div>
+                <h1 class="cover-title">Dil Ki Baat</h1>
+                <div class="cover-heart">💖</div>
+                <div class="cover-sub">The Heart's Voice</div>
+                <div class="cover-meta">A family story · 20 chapters</div>
+                <div class="cover-actions">
+                    <button id="startBtn">Start Reading</button>
+                    <button class="ghost" id="continueBtn" hidden>Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bar" aria-label="Book controls">
+        <button id="tocBtn" aria-label="Contents">☰<span class="hide-sm">&nbsp; Contents</span></button>
+        <button class="turn" id="prev" aria-label="Previous page">‹</button>
+        <div class="progress">
+            <input type="range" id="range" min="0" max="0" value="0" aria-label="Go to page">
+            <span class="page-label" id="pageLabel"></span>
+        </div>
+        <button class="turn" id="next" aria-label="Next page">›</button>
+        <button id="smaller" aria-label="Smaller text">A−</button>
+        <button id="bigger" aria-label="Bigger text">A+</button>
+        <button id="themeBtn" aria-label="Night mode">🌙</button>
+        <button id="coverBtn" class="hide-sm" aria-label="Back to cover">📕</button>
+    </nav>
+
+    <div class="toc" id="toc">
+        <div class="toc-panel">
+            <div class="toc-head">
+                <h3>Contents</h3>
+                <button id="tocClose" aria-label="Close">×</button>
+            </div>
+            <ol class="toc-list" id="tocList"></ol>
+        </div>
+    </div>
+
+    <script type="text/plain" id="story">
+# Dil Ki Baat 💖
+## (The Heart's Voice)
+
+---
+
+## Chapter 1: The Happy Family 😊
+
+Sajid is a writer and a software engineer. He is 26 years old. He lives in Bhilwara, a beautiful city in Rajasthan, India. He writes books. He also works for a software company. He is very happy with his life.
+
+Sajid wakes up every morning at 6 o'clock. He prays Fajr namaz. He reads the Quran. Then he goes for a morning walk. He loves the fresh air of Bhilwara. He loves the sound of birds. He loves the peace of the morning. 🌅
+
+After his walk, he comes home. He takes a shower. He eats breakfast with his family. Then he starts his work. He works from home. He writes code for his company. He also writes stories for his books. He is a busy man. But he is a happy man. 😊
+
+Gulista is Sajid's wife. She is 26 years old. She is a cybersecurity engineer. She works for a big company. She protects computers from bad people. She is very smart. She is very kind. She is very beautiful. ❤️
+
+Gulista wakes up at 6:30 in the morning. She prays Fajr namaz. She reads the Quran. Then she makes breakfast for the family. She loves cooking. She loves taking care of her family. She is a wonderful wife. She is a wonderful mother. 😊
+
+Sajid and Gulista have a son. His name is Sultan. He is 5 years old. He goes to school. He loves to play. He loves to read. He loves his parents. He is a happy child. He is a smart child. He is a loving child. 😊
+
+Sultan wakes up at 7 o'clock. He prays with his parents. He eats breakfast. Then he goes to school. He loves school. He loves his teacher. He loves his friends. He loves learning new things. 📚
+
+The family lives in a small but beautiful house in Bhilwara. 🏡
+
+The house has three bedrooms. It has a living room. It has a kitchen. It has a small garden. In the garden, there are flowers. There are mango trees. There is a small swing for Sultan. He loves to play on the swing. He loves to run in the garden. He loves to smell the flowers. 🌸
+
+Sajid loves his house. He loves his family. He loves his life. He is a happy man. 😊
+
+But Sajid misses someone. He misses his big brother. His name is Azad. Azad is 28 years old. He is also a software engineer. He lives in a big city. He lives far away from Bhilwara. 🏙️
+
+Azad is married to Simran. Simran is 28 years old. She is a homemaker. She takes care of the house. She takes care of her family. She is a wonderful wife. She is a wonderful mother. 😊
+
+Azad and Simran have a daughter. Her name is Halima. She is 6 years old. She goes to school. She loves to play. She loves to read. She loves her parents. She is a happy child. She is a smart child. She is a loving child. 😊
+
+One day, Sajid says to Gulista:
+
+**Sajid:** Gulista, I miss my brother. I miss his family. I want them to come here. 🥺
+
+**Gulista:** I know, Sajid. I miss them too. Halima is so sweet. Sultan loves her. 💕
+
+**Sajid:** Yes. Sultan always asks about Halima. He wants to play with her. 👫
+
+**Gulista:** Then call Azad. Ask him to come. 📞
+
+**Sajid:** Okay. I will call him. 😊
+
+Sajid calls Azad. But Azad does not answer. Sajid is sad. He thinks, "Maybe he is busy." 😔
+
+He calls again. No answer. He calls again. No answer. 😟
+
+**Sajid:** Gulista, Azad is not answering. 😟
+
+**Gulista:** Maybe he is busy. Try again later. 😊
+
+**Sajid:** Okay. I will try later. 😔
+
+Sajid tries later. Azad does not answer. Sajid tries the next day. Azad does not answer. Sajid is worried. 😟
+
+**Sajid:** Gulista, something is wrong. Azad always answers my calls. 😟
+
+**Gulista:** Don't worry, Sajid. Maybe his phone is broken. Maybe he is travelling. 😊
+
+**Sajid:** Maybe. But I have a bad feeling. 😔
+
+**Gulista:** Don't worry, Sajid. Everything will be okay. InshaAllah. 🕌
+
+**Sajid:** InshaAllah. 🙏
+
+But Sajid does not know. Something is wrong. Something is very wrong. 😟
+
+---
+
+## Chapter 2: The Phone Call 📞
+
+The next day, Sajid's phone rings. 📱
+
+Sajid looks at the phone. It is Azad. He smiles. He picks up the phone. 😊
+
+**Sajid:** Hello?
+
+**Azad:** Sajid! How are you, brother? 😊
+
+**Sajid:** Azad! I am fine! I missed you so much! 🥺
+
+**Azad:** I missed you too, Sajid. How is Gulista? How is Sultan? 💕
+
+**Sajid:** They are fine. Sultan is growing fast. He always asks about Halima. 👫
+
+**Azad:** That is so sweet. Halima asks about Sultan too. 😊
+
+**Sajid:** Azad, I want to ask you something. 🤔
+
+**Azad:** What is it?
+
+**Sajid:** Come to Bhilwara. Come with Simran and Halima. Stay with us. 🏡
+
+Azad is quiet for a moment. Sajid waits. Then Azad says:
+
+**Azad:** Okay, Sajid. We will come. 😊
+
+**Sajid:** Really? That is great news! When will you come? 🎉
+
+**Azad:** Tomorrow. We will come tomorrow. 🚗
+
+**Sajid:** Perfect! I will tell Gulista and Sultan. They will be so happy! 😊
+
+**Azad:** Okay, Sajid. See you tomorrow. 👋
+
+**Sajid:** See you tomorrow, brother. ❤️
+
+Sajid puts down the phone. He is very happy. He runs to Gulista. 🏃‍♂️
+
+**Sajid:** Gulista! Gulista! Azad is coming! Simran is coming! Halima is coming! 🎉
+
+**Gulista:** Really? That is wonderful news! 😊
+
+**Sajid:** Yes! They will come tomorrow! 🚗
+
+**Gulista:** I will clean the house. I will cook good food. 🍲
+
+**Sajid:** I will tell Sultan. He will be so happy! 😊
+
+Sajid goes to Sultan's room. Sultan is playing with his toys. 🧸
+
+**Sajid:** Sultan! Guess what? 🤗
+
+**Sultan:** What, Abbu? 😊
+
+**Sajid:** Your uncle Azad is coming. Your aunt Simran is coming. And Halima is coming! 🎉
+
+**Sultan:** Halima is coming?! Yay! 🥳
+
+Sultan jumps with joy. He loves Halima. She is his best friend. 👫
+
+**Sultan:** When are they coming, Abbu? 🤔
+
+**Sajid:** Tomorrow, my son. Tomorrow. 😊
+
+**Sultan:** I will make a drawing for Halima! 🎨
+
+**Sajid:** That is a great idea, Sultan. She will love it. ❤️
+
+Sultan runs to his table. He takes out his colours. He starts drawing. He draws a house. He draws a sun. He draws two children playing. He writes: "Welcome Halima!" 🎨
+
+Gulista starts cleaning the house. She cleans the living room. She cleans the bedrooms. She cleans the kitchen. She makes the beds. She puts flowers in a vase. 🌸
+
+Sajid helps her. He cleans the garden. He waters the plants. He fixes the swing. 🛠️
+
+Everyone is busy. Everyone is happy. Everyone is excited. 😊
+
+But Sajid does not know. Azad and Simran are not happy. They are not excited. They are sad. 😔
+
+Azad has lost his job. He has no money. He is scared. He is stressed. 😟
+
+Simran is pregnant. She is scared. She does not know how to tell Azad. She is afraid he will be angry. 😢
+
+They are fighting. They are not talking. They are not happy. 😔
+
+Something is wrong. Something is very wrong. 😟
+
+---
+
+## Chapter 3: The Arrival 🚗
+
+The next day, Azad, Simran, and Halima arrive. 🚗
+
+Sajid runs to the door. He opens it. He sees his brother. He hugs him. 🤗
+
+**Sajid:** Azad! My brother! I missed you so much! 🥺
+
+**Azad:** I missed you too, Sajid. ❤️
+
+Gulista hugs Simran. 🤗
+
+**Gulista:** Simran! How are you? 😊
+
+**Simran:** I am fine, Gulista. Thank you. 😊
+
+Sultan runs to Halima. 🏃‍♂️
+
+**Sultan:** Halima! You came! 🥳
+
+**Halima:** Sultan! I missed you! 😊
+
+They hug. They laugh. They play. 👫
+
+But Sajid notices something. Azad and Simran are not talking to each other. They are not looking at each other. They seem sad. 😟
+
+Sajid thinks, "Maybe they are tired. Maybe they are just tired from the journey." 🤔
+
+He says to Azad:
+
+**Sajid:** Azad, are you okay? You seem sad. 😔
+
+**Azad:** I am fine, Sajid. Just tired. 😔
+
+**Sajid:** Okay. Let me show you your room. You can rest. 🛏️
+
+**Azad:** Thank you, Sajid. 🙏
+
+Azad goes to his room. Simran goes to her room. They do not talk. They do not look at each other. 😔
+
+Sajid is worried. He says to Gulista:
+
+**Sajid:** Gulista, something is wrong. Azad and Simran are not talking. 😟
+
+**Gulista:** I noticed that too. Maybe they had a fight. 😔
+
+**Sajid:** I hope they are okay. I hope everything is fine. 🙏
+
+**Gulista:** Don't worry, Sajid. I will talk to Simran. Maybe she will tell me. 💬
+
+**Sajid:** Okay. Thank you, Gulista. ❤️
+
+Gulista goes to Simran's room. She knocks on the door. 🚪
+
+**Gulista:** Simran? Can I come in? 🤔
+
+**Simran:** Yes, Gulista. Come in. 😊
+
+Gulista goes inside. Simran is sitting on the bed. She looks sad. 😔
+
+**Gulista:** Simran, what is wrong? You seem sad. 😟
+
+Simran starts crying. 😢
+
+**Simran:** Gulista, I have a secret. I cannot tell anyone. But I will tell you. 🤫
+
+**Gulista:** What is it, Simran? You can tell me. 💕
+
+Simran takes a deep breath. Then she says:
+
+**Simran:** I am pregnant. 🤰
+
+Gulista is surprised. 😲
+
+**Gulista:** That is wonderful news, Simran! Why are you crying? 😊
+
+**Simran:** Because Azad does not know. And I am scared. 😢
+
+**Gulista:** Scared? Why? 🤔
+
+**Simran:** Because Azad is stressed about money. He thinks we cannot afford a baby. He will be angry. 😔
+
+**Gulista:** Oh, Simran. I am sure he will be happy. 😊
+
+**Simran:** No, Gulista. You don't know. He has been very stressed. He says we have no money. He says we cannot have a baby now. 😢
+
+**Gulista:** But a baby is a gift from Allah. He will understand. 🕌
+
+**Simran:** I hope so, Gulista. I hope so. 🙏
+
+Gulista hugs Simran. 🤗
+
+**Gulista:** Don't worry, Simran. Everything will be okay. I will help you. ❤️
+
+**Simran:** Thank you, Gulista. You are a good friend. 😊
+
+But Gulista does not know. Things will not be okay. Things will be very bad. 😟
+
+---
+
+## Chapter 4: The Secret 🤫
+
+That night, everyone eats dinner together. 🍽️
+
+Sajid, Gulista, Sultan, Azad, Simran, and Halima sit at the table. There is good food. There is laughter. But Azad and Simran are quiet. They do not talk. They do not look at each other. 😔
+
+Sultan says to Halima:
+
+**Sultan:** Halima, do you want to play after dinner? 🧸
+
+**Halima:** Yes! I want to play! 🥳
+
+**Sultan:** I will show you my new toys! 🚗
+
+**Halima:** Yay! 😊
+
+Sajid looks at Azad. He says:
+
+**Sajid:** Azad, are you okay? You are very quiet. 😟
+
+**Azad:** I am fine, Sajid. Just tired. 😔
+
+**Sajid:** Okay. If you want to talk, I am here. 💕
+
+**Azad:** Thank you, Sajid. 🙏
+
+After dinner, Sultan and Halima go to play. 🧸
+
+Gulista and Simran go to the kitchen. They wash the dishes. 🍽️
+
+Sajid and Azad sit in the living room. They talk. 💬
+
+**Sajid:** Azad, I know something is wrong. Please tell me. 😔
+
+**Azad:** Sajid, I don't know what to say. 😔
+
+**Sajid:** Are you and Simran okay? 🤔
+
+Azad is quiet. Then he says:
+
+**Azad:** We had a fight. 😔
+
+**Sajid:** A fight? About what? 🤔
+
+**Azad:** About money. About the future. About everything. 😢
+
+**Sajid:** Azad, every couple fights. It is normal. 😊
+
+**Azad:** I know. But this fight was bad. I said hurtful things. 😔
+
+**Sajid:** What did you say? 🤔
+
+**Azad:** I said we cannot have a baby now. I said we have no money. I said... I said many bad things. 😢
+
+**Sajid:** Azad, why did you say that? 🤔
+
+**Azad:** Because I am scared, Sajid. I am scared about money. I am scared about the future. I am scared about everything. 😔
+
+**Sajid:** Azad, you are a software engineer. You have a good job. You have a good salary. Why are you scared? 🤔
+
+**Azad:** Because... because I lost my job, Sajid. 😢
+
+Sajid is shocked. 😲
+
+**Sajid:** What?! You lost your job?! 😲
+
+**Azad:** Yes. Two months ago. I did not tell anyone. I did not tell Simran. I did not tell Amma. I did not tell you. 😢
+
+**Sajid:** Azad, why did you not tell me? 😔
+
+**Azad:** Because I was ashamed. I am the big brother. I am supposed to be strong. I am supposed to take care of everyone. But I failed. 😢
+
+**Sajid:** Azad, you did not fail. Losing a job is not failing. It happens to everyone. 😊
+
+**Azad:** But I have no money, Sajid. I have no job. How will I take care of Simran? How will I take care of Halima? How will I take care of a new baby? 😢
+
+**Sajid:** Azad, you are not alone. You have me. You have Gulista. You have Amma. We are family. We will help you. ❤️
+
+**Azad:** Thank you, Sajid. But I don't know what to do. 😔
+
+**Sajid:** We will find a way, Azad. Together. 🤝
+
+Azad hugs Sajid. He cries. 😢
+
+**Azad:** Thank you, Sajid. You are a good brother. ❤️
+
+**Sajid:** And you are a good brother too, Azad. Always. ❤️
+
+Sajid thinks for a moment. Then he says:
+
+**Sajid:** Azad, does Simran know about your job? 🤔
+
+**Azad:** No. I did not tell her. 😔
+
+**Sajid:** Azad, you must tell her. She is your wife. She has a right to know. 💕
+
+**Azad:** I know. But I am scared. 😢
+
+**Sajid:** I will help you. We will tell her together. 🤝
+
+**Azad:** Okay. Thank you, Sajid. 🙏
+
+But Sajid does not know. The worst is yet to come. 😟
+
+---
+
+## Chapter 5: The Argument 😠
+
+That night, Azad and Simran have a big argument. 😠
+
+Simran is in her room. She is crying. 😢
+
+Azad comes into the room. He looks angry. 😠
+
+**Azad:** Simran, why are you crying? 😠
+
+**Simran:** Because you are angry with me. 😢
+
+**Azad:** I am not angry with you. I am angry with myself. 😔
+
+**Simran:** Then why did you say those things? Why did you say we cannot have a baby? 😢
+
+**Azad:** Because we cannot, Simran! We have no money! I have no job! 😠
+
+**Simran:** Azad, I know you lost your job. But we can find a way. 😊
+
+**Azad:** How, Simran? How? 😠
+
+**Simran:** We can sell some things. We can move to a smaller house. We can— 😊
+
+**Azad:** No, Simran! I don't want to sell things! I don't want to move! I want to give you a good life! 😢
+
+**Simran:** Azad, I don't need a big house. I don't need money. I need you. I need our family. ❤️
+
+**Azad:** But I cannot give you anything, Simran. I am a failure. 😢
+
+**Simran:** You are not a failure, Azad. You are a good husband. You are a good father. You are a good man. ❤️
+
+**Azad:** No, Simran. I am nothing. 😢
+
+**Simran:** Azad, please. Listen to me. 😊
+
+**Azad:** No! I don't want to listen! I want to be alone! 😠
+
+Azad runs out of the room. He goes outside. 🏃‍♂️
+
+Simran cries. She cries and cries. 😢
+
+She thinks, "He does not love me. He does not want the baby. He does not want me." 😢
+
+She gets up. She packs a small bag. She writes a note. She leaves the house. 🏃‍♀️
+
+She goes into the night. She goes to the Dargah in Ajmer. 🕌
+
+She goes to her safe place. 🕌
+
+---
+
+## Chapter 6: The Search 🔍
+
+The next morning, Sajid wakes up. He goes to the living room. He sees Azad sleeping on the sofa. 😴
+
+**Sajid:** Azad? What are you doing here? Why are you not in your room? 🤔
+
+Azad wakes up. He looks sad. 😔
+
+**Azad:** I slept here. I did not want to go to the room. 😔
+
+**Sajid:** Why? Where is Simran? 🤔
+
+**Azad:** I don't know. She was in the room. 😔
+
+Sajid goes to Simran's room. The door is open. The room is empty. Simran is not there. 😲
+
+**Sajid:** Azad! Simran is not in her room! 😲
+
+Azad runs to the room. He sees the empty room. He sees the note on the bed. 📝
+
+He reads the note:
+
+*"Azad, I am sorry. I cannot stay. You do not want me. You do not want the baby. I am going to my safe place. Please do not look for me. — Simran"* 💔
+
+Azad cries. He cries and cries. 😢
+
+**Azad:** No! Simran! I am sorry! I did not mean what I said! 😢
+
+Sajid hugs Azad. 🤗
+
+**Sajid:** Azad, we will find her. I promise. 🤝
+
+Gulista comes into the room. She sees Azad crying. She sees the note. 😲
+
+**Gulista:** What happened? Where is Simran? 😟
+
+**Sajid:** She left. She went to her safe place. 🕌
+
+**Gulista:** Her safe place? What is that? 🤔
+
+**Sajid:** I don't know. But we will find her. 🔍
+
+Halima comes into the room. She is scared. 😟
+
+**Halima:** Abbu? Where is Ammi? 😢
+
+Azad hugs Halima. 🤗
+
+**Azad:** Ammi is fine, Halima. She just went somewhere. We will find her. 😊
+
+**Halima:** I want Ammi! 😢
+
+**Azad:** I want her too, Halima. I want her too. 😢
+
+Sultan comes into the room. He sees everyone sad. 😟
+
+**Sultan:** Abbu? What happened? 🤔
+
+**Sajid:** Sultan, Simran Aunty is missing. We need to find her. 🔍
+
+**Sultan:** I will help! I will find her! 🦸‍♂️
+
+**Sajid:** Thank you, Sultan. You are a good boy. ❤️
+
+Everyone starts searching. They look everywhere. They call Simran's phone. No answer. 📱
+
+They call her friends. No one knows. 📞
+
+They call her family. No one knows. 📞
+
+Everyone is scared. Everyone is worried. 😟
+
+Where is Simran? Where did she go? 🤔
+
+---
+
+## Chapter 7: The Clue 📔
+
+Hours pass. Simran is still missing. 😟
+
+Sajid, Gulista, Azad, Sultan, and Halima are very worried. 😢
+
+Halima goes to Simran's room. She looks around. She sees a small diary. 📔
+
+She picks it up. She opens it. She sees Simran's writing. 📝
+
+She reads:
+
+*"When I am sad, I go to the Dargah in Ajmer. It is my safe place. I feel peace there. I feel close to Allah there."* 🕌
+
+Halima runs to Azad. 🏃‍♀️
+
+**Halima:** Abbu! Abbu! I found something! 📔
+
+**Azad:** What is it, Halima? 🤔
+
+**Halima:** Ammi's diary! She wrote about a place! 🕌
+
+Azad takes the diary. He reads it. He says:
+
+**Azad:** The Dargah in Ajmer! That is her safe place! 🕌
+
+**Sajid:** Ajmer is not far. We can go there. 🚗
+
+**Gulista:** Yes! Let's go! 🚗
+
+**Sultan:** I want to come too! 🦸‍♂️
+
+**Sajid:** Okay, Sultan. You can come. 😊
+
+**Halima:** I want to come too! 😊
+
+**Azad:** Okay, Halima. You can come. 😊
+
+Everyone gets ready. They get into the car. They drive to Ajmer. 🚗
+
+Azad drives. Sajid sits next to him. Gulista, Sultan, and Halima sit in the back. 👨‍👩‍👧‍👦
+
+The drive is long. But everyone is quiet. Everyone is worried. 😟
+
+Azad thinks, "Please, Allah. Let Simran be okay. Let me find her. Let me say sorry." 🙏
+
+Gulista thinks, "Please, Allah. Help us find Simran. Help her be safe." 🙏
+
+Sajid thinks, "Please, Allah. Help my brother. Help his family." 🙏
+
+Sultan thinks, "I will find Simran Aunty. I will bring her back." 🦸‍♂️
+
+Halima thinks, "Ammi, I am coming. Please don't cry." 😢
+
+They drive and drive. Finally, they reach Ajmer. 🕌
+
+They go to the Dargah. It is a beautiful place. It is peaceful. 🕌
+
+They look around. They see many people. But they do not see Simran. 😟
+
+**Azad:** Where is she? 😢
+
+**Sajid:** We will find her, Azad. We will find her. 🤝
+
+They look and look. Then, Sultan says:
+
+**Sultan:** Look! There! 🦸‍♂️
+
+Everyone looks. They see a woman sitting alone. She is crying. 😢
+
+It is Simran. 🕌
+
+---
+
+## Chapter 8: The Trip to Ajmer 🚗
+
+Azad runs to Simran. 🏃‍♂️
+
+**Azad:** Simran! 😢
+
+Simran looks up. She sees Azad. She sees Sajid. She sees Gulista. She sees Sultan. She sees Halima. 😲
+
+**Simran:** Azad? 😢
+
+Azad hugs her. He hugs her tight. 🤗
+
+**Azad:** Simran, I am sorry! I am so sorry! I did not mean what I said! 😢
+
+**Simran:** Azad... 😢
+
+**Azad:** I love you, Simran. I love you so much. I was scared. I was stupid. But I love you. ❤️
+
+**Simran:** I love you too, Azad. ❤️
+
+They cry. They hug. They cry. 😢
+
+Halima runs to Simran. 🏃‍♀️
+
+**Halima:** Ammi! Ammi! 😢
+
+Simran hugs Halima. 🤗
+
+**Simran:** Halima! My baby! 😢
+
+**Halima:** Ammi, I missed you! 😢
+
+**Simran:** I missed you too, Halima. I missed you so much. ❤️
+
+Sultan runs to Simran. 🏃‍♂️
+
+**Sultan:** Simran Aunty! I found you! 🦸‍♂️
+
+Simran laughs. She hugs Sultan. 🤗
+
+**Simran:** You found me, Sultan! You are a hero! 🦸‍♂️
+
+**Sultan:** I am a hero! 🥳
+
+Sajid and Gulista come to Simran. 😊
+
+**Sajid:** Simran, are you okay? 😊
+
+**Simran:** I am okay, Sajid. Thank you. 😊
+
+**Gulista:** Simran, we were so worried. 😢
+
+**Simran:** I am sorry, Gulista. I did not mean to worry you. 😢
+
+**Gulista:** It is okay, Simran. You are safe. That is all that matters. ❤️
+
+Everyone sits together. They talk. They cry. They laugh. 😊
+
+Azad says:
+
+**Azad:** Simran, I am sorry. I was scared. I lost my job. I thought I could not take care of you. I thought I could not take care of Halima. I thought I could not take care of a new baby. 😢
+
+**Simran:** Azad, I know. But we can find a way. We can do it together. 🤝
+
+**Azad:** I know. I know now. I was stupid. I was scared. But I am not scared anymore. ❤️
+
+**Simran:** We will do this together, Azad. 🤝
+
+**Azad:** Together. ❤️
+
+They hug. They cry. They laugh. 😊
+
+Sajid says:
+
+**Sajid:** Azad, you are not alone. You have me. You have Gulista. You have Amma. We are family. We will help you. ❤️
+
+**Azad:** Thank you, Sajid. Thank you, Gulista. 🙏
+
+**Gulista:** You are welcome, Azad. We are family. ❤️
+
+Sultan says:
+
+**Sultan:** Abbu, can we eat now? I am hungry. 🍔
+
+Everyone laughs. 😂
+
+**Sajid:** Yes, Sultan. Let's eat. 😊
+
+They go to a small restaurant. They eat. They talk. They laugh. 😊
+
+The family is together again. ❤️
+
+---
+
+## Chapter 9: The Truth 💬
+
+After eating, they sit together. They talk. 💬
+
+Azad says:
+
+**Azad:** Simran, I have something to tell you. 😊
+
+**Simran:** What is it, Azad? 🤔
+
+**Azad:** I am sorry. I am sorry for everything. I am sorry for saying those things. I am sorry for being scared. I am sorry for being stupid. 😢
+
+**Simran:** Azad, it is okay. I forgive you. ❤️
+
+**Azad:** Thank you, Simran. But I have one more thing to tell you. 😊
+
+**Simran:** What is it? 🤔
+
+**Azad:** I am not scared anymore. I am not scared about money. I am not scared about the future. I am not scared about the baby. 😊
+
+**Simran:** Really? 🤔
+
+**Azad:** Yes. Because I have you. I have Halima. I have Sajid. I have Gulista. I have Amma. I have my family. ❤️
+
+**Simran:** Azad... 😢
+
+**Azad:** And I will find a new job. I will work hard. I will take care of you. I will take care of Halima. I will take care of the baby. I promise. 🤝
+
+**Simran:** I know you will, Azad. I believe in you. ❤️
+
+**Azad:** And I believe in you, Simran. ❤️
+
+Simran smiles. She says:
+
+**Simran:** Azad, I have something to tell you too. 😊
+
+**Azad:** What is it? 🤔
+
+**Simran:** I am pregnant. We are having a baby. 🤰
+
+Azad is shocked. Then he smiles. He smiles a big smile. 😊
+
+**Azad:** A baby? We are having a baby? 🎉
+
+**Simran:** Yes, Azad. We are having a baby. 😊
+
+Azad cries. He cries happy tears. 😢
+
+**Azad:** I am so happy, Simran. I am so happy. ❤️
+
+**Simran:** Me too, Azad. Me too. ❤️
+
+They hug. They cry. They laugh. 😊
+
+Halima says:
+
+**Halima:** Abbu? Ammi? Why are you crying? 😟
+
+**Azad:** We are crying because we are happy, Halima. 😊
+
+**Halima:** Happy? Why? 🤔
+
+**Simran:** Because you are going to have a brother or a sister, Halima. 👶
+
+Halima's eyes open wide. 😲
+
+**Halima:** A brother or a sister? 🎉
+
+**Simran:** Yes, Halima. A brother or a sister. 😊
+
+**Halima:** Yay! I want a sister! 👧
+
+**Sultan:** I want a brother! 👦
+
+Everyone laughs. 😂
+
+**Sajid:** We will see, Sultan. We will see. 😊
+
+**Gulista:** Whatever it is, it will be a gift from Allah. 🕌
+
+**Azad:** Yes. A gift from Allah. ❤️
+
+The family is happy. The family is together. ❤️
+
+---
+
+## Chapter 10: The Forgiveness ❤️
+
+They go back to Bhilwara. 🚗
+
+They tell Amma the good news. 📞
+
+**Amma:** A baby? I will be a grandmother again? 🎉
+
+**Azad:** Yes, Amma. You will be a grandmother again. 😊
+
+**Amma:** Mashallah! I am so happy! ❤️
+
+**Simran:** Thank you, Amma. 😊
+
+**Amma:** Simran, come here. Let me hug you. 🤗
+
+Simran hugs Amma. 🤗
+
+**Amma:** I am so happy for you, Simran. I am so happy for both of you. ❤️
+
+**Azad:** Thank you, Amma. 🙏
+
+**Amma:** And Azad, do not worry about money. We are family. We will help you. 🤝
+
+**Azad:** Thank you, Amma. 😢
+
+**Amma:** And Sajid, Gulista, thank you for helping your brother. ❤️
+
+**Sajid:** We are family, Amma. We help each other. ❤️
+
+**Gulista:** Yes, Amma. We are family. ❤️
+
+Amma smiles. She says:
+
+**Amma:** Family is everything. Remember that. Family is everything. ❤️
+
+Everyone says:
+
+**Everyone:** Yes, Amma. Family is everything. ❤️
+
+---
+
+## Chapter 11: The Return to Bhilwara 🏙️
+
+Everyone goes back to Bhilwara. 🏙️
+
+They have a big celebration. 🎉
+
+There is food. There is music. There is laughter. 😊
+
+Sultan and Halima play together. 👫
+
+Sajid and Gulista talk. 💬
+
+Azad and Simran talk. 💬
+
+Everyone is happy. Everyone is together. ❤️
+
+Sajid says:
+
+**Sajid:** Azad, I am so happy you are here. 😊
+
+**Azad:** Me too, Sajid. Me too. ❤️
+
+**Sajid:** And I am happy about the baby. 🎉
+
+**Azad:** Me too. I was scared. But now I am happy. 😊
+
+**Sajid:** That is good, Azad. That is very good. ❤️
+
+**Azad:** Thank you, Sajid. Thank you for everything. 🙏
+
+**Sajid:** You are welcome, Azad. You are my brother. ❤️
+
+Gulista says to Simran:
+
+**Gulista:** Simran, I am so happy for you. 😊
+
+**Simran:** Thank you, Gulista. Thank you for listening to me. Thank you for helping me. ❤️
+
+**Gulista:** You are welcome, Simran. You are my sister. ❤️
+
+**Simran:** And you are my sister, Gulista. ❤️
+
+They hug. 🤗
+
+The family is happy. The family is together. ❤️
+
+---
+
+## Chapter 12: The Village Visit 🌾
+
+The next day, the family goes to Amma's village near Bhilwara. 🌾
+
+Sultan and Halima play in the fields. They run and laugh. 😊
+
+**Sultan:** Halima! Catch me! 🏃‍♂️
+
+**Halima:** I will catch you! 🏃‍♀️
+
+They run and run. They laugh and laugh. 😊
+
+Amma tells them stories about their Abba (grandfather). 📖
+
+**Amma:** Your Abba was a good man. He loved everyone. He helped everyone. ❤️
+
+**Sultan:** I want to be like Abba. 🦸‍♂️
+
+**Halima:** Me too. 😊
+
+**Amma:** You are like him, Sultan. You are like him, Halima. You have his heart. ❤️
+
+Sultan and Halima smile. 😊
+
+Sajid and Azad sit with Amma. They talk. 💬
+
+**Sajid:** Amma, tell us about Abba. 😊
+
+**Azad:** Yes, Amma. Tell us. 😊
+
+**Amma:** Your Abba was a software engineer too. He worked hard. He took care of us. He loved us. ❤️
+
+**Sajid:** I miss him, Amma. 😢
+
+**Azad:** Me too. 😢
+
+**Amma:** I miss him too. But he is in our hearts. He is always with us. ❤️
+
+**Sajid:** Yes, Amma. He is always with us. ❤️
+
+**Azad:** Always. ❤️
+
+They sit together. They remember Abba. They smile. They cry. They laugh. ❤️
+
+---
+
+## Chapter 13: The Old Photos 📸
+
+Sajid finds old photos of Abba. 📸
+
+He shows them to Sultan and Halima. 😊
+
+**Sajid:** Look, Sultan. This is your Abba. 👴
+
+**Sultan:** He looks like you, Abbu. 😊
+
+**Sajid:** Yes, he does. 😊
+
+**Halima:** He looks like you too, Abbu. 😊
+
+**Azad:** Yes, he does. 😊
+
+Sajid tells them stories about Abba. 📖
+
+**Sajid:** Your Abba loved to read. He loved to write. He loved to help people. ❤️
+
+**Sultan:** I love to read too! 📚
+
+**Halima:** I love to help people too! ❤️
+
+**Sajid:** You are like him, Sultan. You are like him, Halima. ❤️
+
+**Azad:** Yes. You have his heart. ❤️
+
+Sultan and Halima smile. 😊
+
+They look at the photos. They laugh. They cry. They remember. ❤️
+
+---
+
+## Chapter 14: The Fight 😤
+
+Azad and Simran have another fight. 😤
+
+This time, it is about the baby's name. 👶
+
+**Azad:** I want a boy's name. 👦
+
+**Simran:** I want a girl's name. 👧
+
+**Azad:** But I want a boy. 😤
+
+**Simran:** But I want a girl. 😤
+
+**Azad:** Why do you always want what you want? 😠
+
+**Simran:** Why do you always want what you want? 😠
+
+They argue. They argue and argue. 😠
+
+Sultan and Halima are scared. 😟
+
+**Sultan:** Abbu? Ammi? Why are you fighting? 😢
+
+**Halima:** Abbu? Ammi? Please stop! 😢
+
+Azad and Simran stop. They look at Sultan and Halima. They see they are scared. 😟
+
+**Azad:** I am sorry, Sultan. I am sorry, Halima. 😢
+
+**Simran:** We are sorry. We should not fight. 😢
+
+**Sultan:** Please don't fight. It makes me sad. 😢
+
+**Halima:** Me too. 😢
+
+Azad and Simran hug Sultan and Halima. 🤗
+
+**Azad:** We are sorry. We will not fight anymore. 🤝
+
+**Simran:** We promise. 🤝
+
+---
+
+## Chapter 15: The Advice 💡
+
+Sajid and Gulista talk to Azad and Simran. 💬
+
+**Sajid:** Azad, Simran, we need to talk. 😊
+
+**Azad:** What is it, Sajid? 🤔
+
+**Simran:** Yes, what is it? 🤔
+
+**Gulista:** You are fighting too much. 😟
+
+**Sajid:** Yes. You are fighting about small things. 😟
+
+**Azad:** But the name is important. 😤
+
+**Simran:** Yes, the name is important. 😤
+
+**Sajid:** The name is not important. The baby is important. ❤️
+
+**Gulista:** Yes. The baby is important. The love is important. ❤️
+
+**Azad:** But... 😔
+
+**Simran:** But... 😔
+
+**Sajid:** Listen to us. When you fight, you hurt each other. You hurt Sultan. You hurt Halima. 😢
+
+**Gulista:** Yes. They are scared. They are sad. 😢
+
+Azad and Simran look at each other. They feel bad. 😔
+
+**Azad:** You are right, Sajid. 😢
+
+**Simran:** You are right, Gulista. 😢
+
+**Sajid:** Then say sorry to each other. 🤝
+
+**Gulista:** Yes. Say sorry. 🤝
+
+Azad looks at Simran. He says:
+
+**Azad:** Simran, I am sorry. I am sorry for fighting. I am sorry for being angry. I am sorry for everything. 😢
+
+Simran looks at Azad. She says:
+
+**Simran:** Azad, I am sorry too. I am sorry for fighting. I am sorry for being angry. I am sorry for everything. 😢
+
+They hug. They cry. They laugh. ❤️
+
+**Azad:** I love you, Simran. ❤️
+
+**Simran:** I love you too, Azad. ❤️
+
+Sajid and Gulista smile. 😊
+
+**Sajid:** Good. Now you are okay. 😊
+
+**Gulista:** Yes. Now you are okay. ❤️
+
+---
+
+## Chapter 16: The Promise 🤝
+
+Azad and Simran make a promise. 🤝
+
+**Azad:** Simran, I promise. I will not fight anymore. 🤝
+
+**Simran:** Azad, I promise. I will not fight anymore. 🤝
+
+**Azad:** I will talk to you. I will listen to you. 💬
+
+**Simran:** I will talk to you. I will listen to you. 💬
+
+**Azad:** I will love you. ❤️
+
+**Simran:** I will love you. ❤️
+
+**Azad:** We will be a happy family. 😊
+
+**Simran:** We will be a happy family. 😊
+
+They hug. They smile. ❤️
+
+Sultan and Halima come to them. 😊
+
+**Sultan:** Abbu? Ammi? Are you okay? 🤔
+
+**Azad:** Yes, Sultan. We are okay. 😊
+
+**Halima:** Are you still fighting? 😟
+
+**Simran:** No, Halima. We are not fighting. 😊
+
+**Sultan:** Yay! 🥳
+
+**Halima:** Yay! 🥳
+
+They hug their parents. 🤗
+
+The family is happy. The family is together. ❤️
+
+---
+
+## Chapter 17: The Baby Shower 🎀
+
+Gulista and Amma plan a baby shower for Simran. 🎀
+
+They invite everyone. They decorate the house. 🎈
+
+There is food. There is music. There are gifts. 🎁
+
+Simran is very happy. She cries happy tears. 😢
+
+**Simran:** Thank you, Gulista. Thank you, Amma. This is so beautiful. ❤️
+
+**Gulista:** You are welcome, Simran. You are my sister. ❤️
+
+**Amma:** Yes. You are our daughter. ❤️
+
+**Simran:** I love you all. ❤️
+
+**Gulista:** We love you too, Simran. ❤️
+
+**Amma:** We love you too. ❤️
+
+Everyone eats. Everyone laughs. Everyone dances. 💃🕺
+
+Sultan and Halima play with balloons. 🎈
+
+**Sultan:** Halima! Look at this balloon! 🎈
+
+**Halima:** It is so big! 🎈
+
+**Sultan:** I will give it to the baby! 👶
+
+**Halima:** Me too! 🎈
+
+Everyone laughs. 😂
+
+The family is happy. The family is together. ❤️
+
+---
+
+## Chapter 18: The Birth 👶
+
+Simran goes to the hospital. 🏥
+
+Azad is with her. 👫
+
+Sajid, Gulista, Sultan, Halima, and Amma wait outside. ⏳
+
+They wait and wait. They are nervous. 😟
+
+**Sultan:** Abbu? When will the baby come? 🤔
+
+**Sajid:** Soon, Sultan. Soon. 😊
+
+**Halima:** I want to see the baby! 👶
+
+**Gulista:** You will see the baby soon, Halima. 😊
+
+**Amma:** Please, Allah. Let everything be okay. 🙏
+
+After many hours, the doctor comes out. 👩‍⚕️
+
+**Doctor:** Congratulations! It's a girl! 🎉
+
+Azad comes out. He is crying. He is smiling. 😢😊
+
+**Azad:** It's a girl! I have a daughter! 🎉
+
+Everyone hugs Azad. 🤗
+
+**Sajid:** Congratulations, Azad! 🎉
+
+**Gulista:** Congratulations, Azad! 🎉
+
+**Amma:** Mashallah! 🎉
+
+**Sultan:** Yay! A girl! 👧
+
+**Halima:** Yay! A sister! 👧
+
+Azad takes them to see Simran. 👶
+
+Simran is holding the baby. She is tired but happy. 😊
+
+**Simran:** Look, everyone. This is our daughter. 👶
+
+Everyone looks at the baby. She is beautiful. 😊
+
+**Sajid:** She is beautiful, Simran. 😊
+
+**Gulista:** She is so small. 😊
+
+**Amma:** She is a gift from Allah. 🕌
+
+**Sultan:** What is her name? 🤔
+
+**Halima:** Yes, what is her name? 🤔
+
+Azad and Simran look at each other. They smile. 😊
+
+**Azad:** Her name is Aisha. 🌸
+
+**Simran:** Aisha. 🌸
+
+**Everyone:** Aisha! 🌸
+
+The family is happy. The family is complete. ❤️
+
+---
+
+## Chapter 19: The Name 🌸
+
+Azad and Simran name the baby **Aisha**. 🌸
+
+Halima is happy to have a sister. 👧
+
+**Halima:** Aisha! Aisha! I am your sister! 👧
+
+Sultan is happy to have another cousin. 👦
+
+**Sultan:** Aisha! Aisha! I am your cousin! 👦
+
+Everyone is happy. Everyone is together. ❤️
+
+Amma says:
+
+**Amma:** Aisha is a beautiful name. 🌸
+
+**Azad:** Thank you, Amma. 🙏
+
+**Simran:** Thank you, Amma. 🙏
+
+**Amma:** She will be a good girl. Like her sister. Like her mother. ❤️
+
+**Simran:** Thank you, Amma. 😢
+
+**Amma:** And you, Azad. You will be a good father. Like your father. ❤️
+
+**Azad:** Thank you, Amma. 😢
+
+**Amma:** I am proud of you both. ❤️
+
+**Azad and Simran:** Thank you, Amma. ❤️
+
+The family is happy. The family is together. ❤️
+
+---
+
+## Chapter 20: The New Beginning 🌅
+
+Months later, the family sits together. 👨‍👩‍👧‍👦
+
+Sajid, Gulista, Sultan, Azad, Simran, Halima, and baby Aisha. 👶
+
+They sit in the living room. They talk. They laugh. 😊
+
+**Sajid:** This is what family is. 👨‍👩‍👧‍👦
+
+**Gulista:** What do you mean, Sajid? 🤔
+
+**Sajid:** Family is not about being perfect. Family is about being there for each other. ❤️
+
+**Gulista:** Yes. In good times and bad. 😊
+
+**Sajid:** In happiness and sadness. 😢
+
+**Gulista:** Always. ❤️
+
+**Azad:** I love you all. ❤️
+
+**Simran:** Me too. ❤️
+
+**Halima:** I love Aisha! 👶
+
+**Sultan:** I love Aisha too! 👶
+
+**Aisha:** (She smiles.) 😊
+
+Everyone laughs. 😂
+
+**Amma:** Family is everything. Remember that. Family is everything. ❤️
+
+**Everyone:** Yes, Amma. Family is everything. ❤️
+
+They sit together. They hold hands. They smile. 😊
+
+The family is happy. The family is together. The family is complete. ❤️
+
+**The End** 🌅
+
+---    </script>
+
+    <script>
+        const $ = id => document.getElementById(id);
+        const flow = $('flow');
+        const viewport = $('viewport');
+        const book = $('book');
+
+        // ===== Saved reading position (per browser) =====
+        const store = {
+            get() {
+                try { return JSON.parse(localStorage.getItem('dilKiBaat')) || {}; } catch (e) { return {}; }
+            },
+            set(value) {
+                try { localStorage.setItem('dilKiBaat', JSON.stringify(value)); } catch (e) {}
+            }
+        };
+        const state = Object.assign({ page: 0, size: 18, theme: 'day' }, store.get());
+        const chapters = [];
+
+        // ===== Turn the story text into book HTML =====
+        function esc(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function inline(s) {
+            return esc(s)
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>');
+        }
+
+        function buildBook() {
+            const lines = $('story').textContent.split(/\r?\n/);
+            let html = '';
+            let firstPara = false;
+
+            for (const raw of lines) {
+                const t = raw.trim();
+                if (!t || t === '---') continue;
+
+                let m;
+                if (t.startsWith('# ')) {
+                    html += `<h1 class="book-title">${inline(t.slice(2))}</h1>`;
+                } else if ((m = t.match(/^## Chapter (\d+):\s*(.*)$/))) {
+                    const id = 'ch' + m[1];
+                    chapters.push({ num: +m[1], title: m[2], id });
+                    html += `<h2 class="chapter" id="${id}"><span class="ch-num">Chapter ${m[1]}</span>` +
+                            `<span class="ch-title">${inline(m[2])}</span></h2>`;
+                    firstPara = true;
+                } else if (t.startsWith('## ')) {
+                    html += `<p class="book-subtitle">${inline(t.slice(3).replace(/^\(|\)$/g, ''))}</p>`;
+                } else if ((m = t.match(/^\*\*The End\*\*\s*(.*)$/))) {
+                    html += `<p class="the-end">The End ${esc(m[1])}</p>`;
+                } else if ((m = t.match(/^\*\*([^*]+):\*\*\s*(.*)$/))) {
+                    html += `<p class="line"><span class="speaker">${esc(m[1])}</span> ${inline(m[2])}</p>`;
+                    firstPara = false;
+                } else if ((m = t.match(/^\*([^*].*?)\*(.*)$/))) {
+                    html += `<blockquote><em>${inline(m[1])}</em>${inline(m[2])}</blockquote>`;
+                } else {
+                    html += `<p${firstPara ? ' class="first"' : ''}>${inline(t)}</p>`;
+                    firstPara = false;
+                }
+            }
+
+            flow.innerHTML = html + '<span id="endMark"></span>';
+        }
+
+        // ===== Pagination using CSS columns =====
+        let cols = 2;
+        let gap = 120;
+        let step = 1;
+        let total = 1;
+        let spread = 0;
+
+        function pageOf(el) {
+            const x = el.getBoundingClientRect().left - flow.getBoundingClientRect().left;
+            return Math.max(0, Math.floor((x + 2) / step));
+        }
+
+        function firstVisibleElement() {
+            const firstPage = spread * cols;
+            for (const el of flow.children) {
+                if (pageOf(el) >= firstPage) return el;
+            }
+            return null;
+        }
+
+        function layout(anchor) {
+            const isSpread = window.innerWidth >= 900;
+            book.classList.toggle('spread', isSpread);
+            cols = isSpread ? 2 : 1;
+            gap = isSpread ? 120 : 44;
+            document.documentElement.style.setProperty('--font-size', state.size + 'px');
+            document.documentElement.dataset.theme = state.theme;
+            $('themeBtn').textContent = state.theme === 'night' ? '☀️' : '🌙';
+
+            const vw = viewport.clientWidth;
+            const vh = viewport.clientHeight;
+            flow.style.transition = 'none';
+            flow.style.transform = 'none';
+            flow.style.width = vw + 'px';
+            flow.style.height = vh + 'px';
+            flow.style.columnCount = cols;
+            flow.style.columnGap = gap + 'px';
+            step = (vw - gap * (cols - 1)) / cols + gap;
+
+            total = pageOf($('endMark')) + 1;
+            chapters.forEach(c => { c.page = pageOf($(c.id)); });
+
+            const target = anchor ? pageOf(anchor) : Math.min(state.page, total - 1);
+            show(target, false);
+        }
+
+        function show(page, animate = true) {
+            page = Math.max(0, Math.min(total - 1, page));
+            spread = Math.floor(page / cols);
+            const first = spread * cols;
+
+            flow.style.transition = animate ? 'transform 0.55s cubic-bezier(.4,.1,.2,1)' : 'none';
+            flow.style.transform = `translateX(${-spread * (viewport.clientWidth + gap)}px)`;
+
+            state.page = first;
+            store.set(state);
+
+            const a = first + 1;
+            const b = cols === 2 && a < total ? a + 1 : null;
+            $('folioL').textContent = a;
+            $('folioR').textContent = b || '';
+            $('pageLabel').textContent = (b ? `${a}–${b}` : a) + ' / ' + total;
+
+            const range = $('range');
+            range.max = Math.ceil(total / cols) - 1;
+            range.value = spread;
+            $('prev').disabled = spread === 0;
+            $('next').disabled = first + cols >= total;
+
+            const current = currentChapter();
+            $('runningHead').textContent = current ? `Chapter ${current.num}` : '';
+        }
+
+        function currentChapter() {
+            const last = spread * cols + cols - 1;
+            let found = null;
+            for (const c of chapters) {
+                if (c.page <= last) found = c;
+            }
+            return found;
+        }
+
+        const next = () => show((spread + 1) * cols);
+        const prev = () => show((spread - 1) * cols);
+
+        // ===== Controls =====
+        $('next').onclick = next;
+        $('prev').onclick = prev;
+        $('range').oninput = e => show(+e.target.value * cols, false);
+
+        function changeSize(delta) {
+            const anchor = firstVisibleElement();
+            state.size = Math.max(14, Math.min(26, state.size + delta));
+            layout(anchor);
+        }
+        $('smaller').onclick = () => changeSize(-1);
+        $('bigger').onclick = () => changeSize(1);
+
+        $('themeBtn').onclick = () => {
+            state.theme = state.theme === 'night' ? 'day' : 'night';
+            document.documentElement.dataset.theme = state.theme;
+            $('themeBtn').textContent = state.theme === 'night' ? '☀️' : '🌙';
+            store.set(state);
+        };
+
+        // Tap left / right side of the page to turn
+        book.addEventListener('click', e => {
+            if (window.getSelection().toString()) return;
+            const rect = book.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            if (x < 0.3) prev();
+            else if (x > 0.7) next();
+        });
+
+        // Swipe on mobile
+        let touchX = 0, touchY = 0;
+        book.addEventListener('touchstart', e => {
+            touchX = e.touches[0].clientX;
+            touchY = e.touches[0].clientY;
+        }, { passive: true });
+        book.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - touchX;
+            const dy = e.changedTouches[0].clientY - touchY;
+            if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+                dx < 0 ? next() : prev();
+            }
+        });
+
+        document.addEventListener('keydown', e => {
+            if (document.body.classList.contains('cover-open')) {
+                if (e.key === 'Enter') openBook();
+                return;
+            }
+            if (e.key === 'Escape') closeToc();
+            if ($('toc').classList.contains('open')) return;
+            if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
+            if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
+        });
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            const anchor = firstVisibleElement();
+            resizeTimer = setTimeout(() => layout(anchor), 150);
+        });
+
+        // ===== Contents =====
+        function openToc() {
+            const current = currentChapter();
+            $('tocList').innerHTML = chapters.map(c =>
+                `<li><button data-page="${c.page}" class="${c === current ? 'current' : ''}">` +
+                `<span class="n">${c.num}</span><span class="t">${inline(c.title)}</span>` +
+                `<span class="p">${c.page + 1}</span></button></li>`
+            ).join('');
+            $('toc').classList.add('open');
+        }
+
+        function closeToc() {
+            $('toc').classList.remove('open');
+        }
+
+        $('tocBtn').onclick = openToc;
+        $('tocClose').onclick = closeToc;
+        $('toc').addEventListener('click', e => {
+            const btn = e.target.closest('button[data-page]');
+            if (btn) {
+                show(+btn.dataset.page, false);
+                closeToc();
+            } else if (e.target.id === 'toc') {
+                closeToc();
+            }
+        });
+
+        // ===== Cover =====
+        function openBook(page) {
+            if (page !== undefined) show(page, false);
+            $('cover').classList.add('opening');
+            setTimeout(() => {
+                $('cover').classList.add('hidden');
+                document.body.classList.remove('cover-open');
+            }, 750);
+        }
+
+        function backToCover() {
+            updateContinue();
+            $('cover').classList.remove('hidden', 'opening');
+            document.body.classList.add('cover-open');
+        }
+
+        function updateContinue() {
+            const btn = $('continueBtn');
+            btn.hidden = state.page === 0;
+            btn.textContent = `Continue from page ${state.page + 1}`;
+        }
+
+        $('startBtn').onclick = () => openBook(0);
+        $('continueBtn').onclick = () => openBook();
+        $('coverBtn').onclick = backToCover;
+
+        // ===== Start =====
+        buildBook();
+        layout();
+        updateContinue();
+        if (document.fonts) {
+            document.fonts.ready.then(() => layout(firstVisibleElement()));
+        }
+    </script>
+</body>
+</html>
