@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Science 250 Q&A</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    line-height: 1.7;
+    padding: 16px;
+    padding-bottom: 80px;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    background: #1e293b;
+    padding: 12px 16px;
+    margin: -16px -16px 16px -16px;
+    border-bottom: 2px solid #38bdf8;
+    z-index: 100;
+  }
+  header h1 { font-size: 18px; color: #38bdf8; text-align: center; }
+  .progress-bar { height: 6px; background: #334155; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #38bdf8, #818cf8); width: 0%; transition: width 0.3s; }
+  .progress-text { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 4px; }
+  .search-box {
+    width: 100%; padding: 10px 14px; margin: 12px 0;
+    border-radius: 10px; border: 1px solid #334155;
+    background: #1e293b; color: #e2e8f0; font-size: 14px; outline: none;
+  }
+  .search-box:focus { border-color: #38bdf8; }
+  .card {
+    background: #1e293b; border-radius: 12px; padding: 16px;
+    margin-bottom: 14px; border-left: 4px solid #38bdf8;
+  }
+  .qnum {
+    display: inline-block; background: #38bdf8; color: #0f172a;
+    font-weight: bold; font-size: 12px; padding: 2px 10px;
+    border-radius: 20px; margin-bottom: 8px;
+  }
+  .question { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 10px; }
+  .answer { font-size: 14.5px; color: #cbd5e1; }
+  .mark-btn {
+    margin-top: 12px; padding: 6px 14px; font-size: 12px;
+    border: 1px solid #475569; background: transparent;
+    color: #94a3b8; border-radius: 20px; cursor: pointer;
+  }
+  .mark-btn.done { background: #22c55e; color: white; border-color: #22c55e; }
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1e293b; padding: 10px; text-align: center;
+    font-size: 12px; color: #94a3b8; border-top: 1px solid #334155;
+  }
+  .reset-btn {
+    background: #ef4444; color: white; border: none;
+    padding: 6px 14px; border-radius: 20px; font-size: 12px;
+    margin-left: 8px; cursor: pointer;
+  }
+  .loading { text-align: center; padding: 40px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="pageTitle">📘 Science Q&A</h1>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text" id="progressText">0 / 0 padhe</div>
+</header>
+
+<input type="text" class="search-box" id="searchBox" placeholder="🔍 Question search karo...">
+
+<div id="qaContainer"><div class="loading">⏳ Load ho raha hai...</div></div>
+
+<footer>
+  <span id="footerText">Roz 10 questions padho</span>
+  <button class="reset-btn" onclick="resetProgress()">Reset</button>
+</footer>
+
+<script>
+// ============================================
+// YAHAN APNA JSON DATA PASTE KARO
+// ============================================
+const qaData = {
+  "title": "Science 250 Q&A",
+  "questions": [
+    {
+      "id": 1,
+      "q": "Suraj me kitne rang hote hain?",
+      "a": "Suraj ki roshni dekhne me safed lagti hai, lekin asal me usme 7 mukhya rang hote hain — Violet, Indigo, Blue, Green, Yellow, Orange, Red (VIBGYOR). Jab yeh roshni prism ya barish ki boondon se guzarti hai, to yeh 7 rangon me alag ho jati hai. Isi liye rainbow me 7 rang dikhte hain."
+    },
+    {
+      "id": 2,
+      "q": "Insaan ko kaise pata chala ki Suraj me 7 rang hote hain?",
+      "a": "1666 me Isaac Newton ne ek prism ke through sunlight pass ki. Prism se nikli roshni 7 rangon me bat gayi. Usne ek dusra prism lagaya aur wo 7 rang wapas safed roshni me mil gaye. Isse prove hua ki safed roshni asal me 7 rangon ka mixture hai."
+    },
+    {
+      "id": 3,
+      "q": "Aasmaan neela kyu dikhta hai?",
+      "a": "Suraj ki roshni me sab rang hote hain. Jab yeh roshni Earth ke atmosphere me aati hai, to hawa ke chhote molecules blue light ko baaki rangon se zyada scatter karte hain. Isliye hume aasmaan neela dikhta hai. Shaam ko jab Suraj niche hota hai, to light ko zyada hawa se guzarna padta hai, isliye red/orange dikhta hai."
+    },
+    {
+      "id": 4,
+      "q": "Suraj garam kyu hai?",
+      "a": "Suraj ke andar hydrogen atoms bahut zyada pressure aur temperature par takrate hain. Woh milkar helium banate hain. Is process me thodi mass energy me badal jati hai (E=mc²). Yeh energy heat aur light ban kar bahar aati hai. Isse nuclear fusion kehte hain. Yahi Suraj ki energy ka source hai."
+    },
+    {
+      "id": 5,
+      "q": "Suraj kitni door hai?",
+      "a": "Suraj Earth se lagbhag 15 crore kilometer (150 million km) door hai. Agar tum car se 100 km/h ki speed se chalo, to pahunchne me lagbhag 170 saal lagenge. Light ko sirf 8 minute 20 second lagte hain."
+    },
+    {
+      "id": 6,
+      "q": "Suraj ki roshni dharti tak kitni der me pahunchti hai?",
+      "a": "Suraj se light nikal kar Earth tak pahunchne me lagbhag 8 minute 20 second lagte hain. Matlab jab tum Suraj ko dekhte ho, tum usse 8 minute purana roop dekh rahe ho. Agar Suraj abhi gayab ho jaye, to hume 8 minute baad pata chalega."
+    },
+    {
+      "id": 7,
+      "q": "Chand khud chamakta hai?",
+      "a": "Nahi. Chand ka apna koi light nahi hai. Woh Suraj ki light ko reflect karta hai. Jaise mirror light ko reflect karta hai, waise hi Chand bhi. Isliye Chand ki shape har din badalti dikhti hai — kyunki Suraj ki light uske alag-alag hisse par padti hai."
+    },
+    {
+      "id": 8,
+      "q": "Dharti gol kaise pata chali?",
+      "a": "Kai tarikon se pata chali: (1) Door jane wala ship pehle niche se gayab hota hai, upar se nahi — isse pata chalta hai ki Dharti curved hai. (2) Eclipse me Earth ki shadow Chand par gol dikhti hai. (3) Aaj satellites se Earth ki gol shape clearly dikhti hai. (4) Magellan ke ship ne 1519-1522 me Earth ka chakkar lagaya."
+    },
+    {
+      "id": 9,
+      "q": "Gravity kisne discover ki?",
+      "a": "Isaac Newton ne 1687 me gravity ke rules discover kiye. Yeh kahani famous hai ki apple girne ne unhe sochne par majboor kiya. Unhone bataya ki wahi force jo apple ko niche girati hai, wahi Chand ko Earth ke around ghumati hai. Unhone Universal Law of Gravitation diya."
+    },
+    {
+      "id": 10,
+      "q": "Gravity hoti kya hai?",
+      "a": "Gravity ek force hai jo har cheez jo mass rakhti hai, dusri cheez ko apni taraf kheenchti hai. Jitna zyada mass, utni zyada gravity. Earth ka mass bahut bada hai, isliye woh hume apni taraf kheenchti hai. Isi liye hum niche rehte hain, ball niche girti hai, aur Chand Earth ke around ghoomta hai."
+    },
+    {
+      "id": 11,
+      "q": "Pani ka rang kya hota hai?",
+      "a": "Shuddh pani bilkul colorless hota hai. Lekin jab pani gehri hoti hai (jaise samundar), to woh neela dikhti hai kyunki pani laal light ko absorb karti hai aur neeli light ko reflect karti hai. Isliye gehre pani me blue rang zyada dikhta hai."
+    },
+    {
+      "id": 12,
+      "q": "Samundar neela kyu dikhta hai?",
+      "a": "Samundar ka neela rang do wajah se hota hai: (1) Pani khud laal light ko absorb karti hai aur neeli light ko scatter karti hai. (2) Aasmaan ka reflection bhi pani par padta hai. Gehre samundar me blue zyada dikhta hai kyunki wahan zyada pani hoti hai jo laal light absorb kar leti hai."
+    },
+    {
+      "id": 13,
+      "q": "Rainbow kaise banta hai?",
+      "a": "Barish ke baad hawa me chhoti-chhoti pani ki boondein hoti hain. Jab Suraj ki light in boondon se guzarti hai, to woh reflect aur refract hoti hai. Prism ki tarah boondein light ko 7 rangon me tod deti hain. Isliye aasmaan me rainbow dikhta hai. Rainbow hamesha Suraj ke opposite side me banta hai."
+    },
+    {
+      "id": 14,
+      "q": "Bijli (Lightning) kaise banti hai?",
+      "a": "Badalon ke andar pani ki boondein aur ice particles takrate hain. Isse electrical charge paida hota hai. Jab yeh charge bahut zyada ho jata hai, to hawa ke through discharge hota hai. Isse bijli chamakti hai aur thunder ki awaaz aati hai. Bijli 30,000°C tak garam hoti hai."
+    },
+    {
+      "id": 15,
+      "q": "Barish kyu hoti hai?",
+      "a": "Suraj ki heat se samundar aur jheelon ka pani bhaap banta hai. Yeh bhaap upar jati hai aur thandi hokar chhoti boondein banati hai. Yeh boondein milkar badal banate hain. Jab boondein bahut bhaari ho jati hain, to woh barish ban kar niche gir jati hain. Isse water cycle kehte hain."
+    },
+    {
+      "id": 16,
+      "q": "Din aur raat kyu hote hain?",
+      "a": "Earth apni axis par ghoomti hai. Jab Earth ka koi hissa Suraj ki taraf hota hai, to wahan din hota hai. Jab woh hissa Suraj se door hota hai, to wahan raat hoti hai. Earth ko ek chakkar lagane me 24 ghante lagte hain. Isliye har 24 ghante me din aur raat aate hain."
+    },
+    {
+      "id": 17,
+      "q": "Saal me 365 din hi kyu hote hain?",
+      "a": "Earth ko Suraj ke around ek pura chakkar lagane me lagbhag 365 din 6 ghante lagte hain. Isliye saal me 365 din hote hain. Har saal ke 6 extra ghante 4 saal me 24 ghante ban jate hain. Isliye har 4 saal me ek leap year aata hai jisme 366 din hote hain."
+    },
+    {
+      "id": 18,
+      "q": "Leap year kyu hota hai?",
+      "a": "Earth ko Suraj ka ek chakkar lagane me 365 din 6 ghante lagte hain. Har saal ke 6 ghante 4 saal me 24 ghante (1 din) ban jate hain. Isliye har 4 saal me February me ek extra din (29) jod diya jata hai. Us saal ko leap year kehte hain. Isse calendar aur seasons match rahte hain."
+    },
+    {
+      "id": 19,
+      "q": "Dharti ghoomti hai to hume mehsoos kyu nahi hota?",
+      "a": "Earth lagbhag 1,600 km/h ki speed se ghoomti hai. Lekin hume mehsoos nahi hota kyunki: (1) Hum bhi Earth ke saath same speed se ghoom rahe hote hain. (2) Koi rukawat ya jhatka nahi lagta. (3) Hamara inner ear sirf speed change ko mehsoos karta hai, constant speed ko nahi. Jaise train me baithkar pata nahi chalta ki train chal rahi hai."
+    },
+    {
+      "id": 20,
+      "q": "Space me hawa hoti hai?",
+      "a": "Nahi. Space me lagbhag vacuum hota hai. Hawa ke liye molecules chahiye, lekin space me molecules bahut kam hote hain. Isliye space me saans nahi le sakte, sound nahi sun sakte, aur pressure nahi hota. Astronauts ko oxygen cylinders aur spacesuit chahiye."
+    },
+    {
+      "id": 21,
+      "q": "Space kala kyu dikhta hai?",
+      "a": "Space me atmosphere nahi hota. Aasmaan neela dikhta hai kyunki hawa light ko scatter karti hai. Lekin space me koi hawa nahi hai jo light ko scatter kare. Isliye wahan light seedhi chalti hai aur hume kuch bhi nahi dikhta — sirf kala. Stars dikhte hain kyunki woh khud light dete hain."
+    },
+    {
+      "id": 22,
+      "q": "Stars blink kyu karte hain?",
+      "a": "Stars ka light Earth ke atmosphere se guzarta hai. Atmosphere me hawa ki layers alag-alag temperature par hoti hain. Isse light refract hoti hai aur mudti rehti hai. Isliye stars twinkle karte hain. Yeh effect sirf Earth se dekhte waqt hota hai — space se stars steady dikhte hain."
+    },
+    {
+      "id": 23,
+      "q": "Planets blink kyu nahi karte?",
+      "a": "Planets stars se zyada bade dikhte hain. Woh ek point ki jagah ek chhota disc ki tarah dikhte hain. Isliye atmosphere ka effect unke light par kam hota hai. Unka light steady rehta hai. Isliye planets twinkle nahi karte, sirf stars karte hain."
+    },
+    {
+      "id": 24,
+      "q": "Sabse bada planet kaunsa hai?",
+      "a": "Jupiter hamare solar system ka sabse bada planet hai. Iska diameter Earth se lagbhag 11 guna bada hai. Iska mass baaki sabhi planets ke total mass se bhi 2.5 guna zyada hai. Jupiter par ek giant red spot hai jo ek badal hai — woh Earth se bhi bada hai."
+    },
+    {
+      "id": 25,
+      "q": "Sabse chhota planet kaunsa hai?",
+      "a": "Mercury hamare solar system ka sabse chhota planet hai. Iska diameter sirf 4,880 km hai (Earth se lagbhag 3 guna chhota). Yeh Suraj ke sabse paas hai aur sabse tez ghoomta hai. Iska ek din (Suraj ke around) 88 Earth days ka hota hai."
+    },
+    {
+      "id": 26,
+      "q": "Insaan space me saans kyu nahi le sakta?",
+      "a": "Space me oxygen nahi hoti. Insaan ko saans lene ke liye oxygen chahiye. Space me vacuum hota hai — koi hawa nahi. Isliye astronaut ko spacesuit pehnna padta hai jisme oxygen cylinder hota hai. Bina spacesuit ke insaan kuch seconds me behosh ho jayega."
+    },
+    {
+      "id": 27,
+      "q": "Hum oxygen hi kyu lete hain?",
+      "a": "Hamare body ke cells ko energy banane ke liye oxygen chahiye. Hum khana khaate hain, woh glucose me badalta hai. Glucose ko todkar energy banane ke liye oxygen zaroori hai. Is process ko cellular respiration kehte hain. Bina oxygen ke cells mar jate hain."
+    },
+    {
+      "id": 28,
+      "q": "Dil ek din me kitni baar dhadakta hai?",
+      "a": "Ek healthy insaan ka dil ek din me lagbhag 1 lakh (100,000) baar dhadakta hai. Ek minute me lagbhag 70-80 baar. Yeh din-raat bina rukhe kaam karta hai. Saal me lagbhag 3.5 crore baar. Average zindagi me 250 crore se zyada baar."
+    },
+    {
+      "id": 29,
+      "q": "Dimaag me kitne neurons hote hain?",
+      "a": "Insaan ke dimaag me lagbhag 86 billion neurons hote hain. Har neuron hazaaron dusre neurons se juda hota hai. Total connections lagbhag 100 trillion hote hain. Yeh neurons milkar sochna, yaad rakhna, chalna, bolna — sab control karte hain. Yeh duniya ka sabse complex computer hai."
+    },
+    {
+      "id": 30,
+      "q": "Aankh sab kuch ulta dekhti hai?",
+      "a": "Haan. Aankh ke lens se light retina par ulta image banati hai. Lekin hamara brain us image ko seedha kar deta hai. Isliye hume sab kuch seedha dikhta hai. Yeh process itna fast hota hai ki hume pata bhi nahi chalta. Brain har second image ko process karta hai."
+    },
+        {
+      "id": 31,
+      "q": "Hichki kyu aati hai?",
+      "a": "Hichki tab aati hai jab diaphragm muscle achanak contract ho jati hai. Iske saath hi vocal cords band ho jati hain, jisse 'hik' ki awaaz aati hai. Yeh khane ke waqt jaldi khaane, cold drink peene, ya emotional change se ho sakta hai. Aam taur par kuch seconds me theek ho jati hai."
+    },
+    {
+      "id": 32,
+      "q": "Jamhai kyu aati hai?",
+      "a": "Jamhai ka exact reason abhi bhi confirm nahi hai. Kai theories hain: (1) Brain ko thanda karne ke liye, (2) Oxygen badhane ke liye, (3) Thakan ya boredom ka signal, (4) Social behavior — dusron ko dekh kar jamhai aati hai. Yeh sabse mysterious body functions me se ek hai."
+    },
+    {
+      "id": 33,
+      "q": "Baal kaatne se dard kyu nahi hota?",
+      "a": "Baal dead cells se bane hote hain. Unme nerves nahi hoti. Isliye kaatne par dard nahi hota. Lekin baal ke root (jahan se baal nikalta hai) me nerves hoti hain. Agar baal ko zor se kheencho to root par dard hota hai. Isliye baal kaatna painless hai."
+    },
+    {
+      "id": 34,
+      "q": "Nakhun kaatne se dard kyu nahi hota?",
+      "a": "Nakhun dead cells se bane hote hain — mainly keratin protein. Unme koi nerves ya blood vessels nahi hoti. Isliye kaatne par dard nahi hota. Lekin nakhun ke niche wali skin me nerves hoti hain. Agar nakhun bahut chhota kaat do to wahan dard ho sakta hai."
+    },
+    {
+      "id": 35,
+      "q": "Khoon laal kyu hota hai?",
+      "a": "Khoon me hemoglobin naam ka protein hota hai. Hemoglobin me iron hota hai jo oxygen ke saath milkar red color deta hai. Jab hemoglobin oxygen se bhara hota hai (arteries me), to bright red dikhta hai. Jab oxygen kam hota hai (veins me), to dark red dikhta hai. Isliye khoon laal hota hai."
+    },
+    {
+      "id": 36,
+      "q": "Ped hara kyu hota hai?",
+      "a": "Ped ke patton me chlorophyll naam ka green pigment hota hai. Chlorophyll sunlight ko absorb karta hai aur photosynthesis karta hai. Yeh chlorophyll hi hai jo patton ko hara rang deta hai. Autumn me chlorophyll kam ho jata hai, isliye patte peele, laal aur orange ho jate hain."
+    },
+    {
+      "id": 37,
+      "q": "Ped oxygen kaise banate hain?",
+      "a": "Ped photosynthesis karte hain. Woh sunlight, pani (roots se) aur carbon dioxide (hawa se) lete hain. Chlorophyll ki madad se yeh glucose aur oxygen banate hain. Oxygen hawa me chhod dete hain. Isliye ped hamare liye zaroori hain — woh oxygen banate hain aur carbon dioxide absorb karte hain."
+    },
+    {
+      "id": 38,
+      "q": "Machhli pani me saans kaise leti hai?",
+      "a": "Machhli ke gills (gills) hote hain jo pani me oxygen nikalne me madad karte hain. Machhli pani ko muh se leti hai, woh gills se guzarta hai. Gills me blood vessels oxygen absorb karte hain aur carbon dioxide chhodte hain. Isliye machhli pani ke andar bhi saans le pati hai."
+    },
+    {
+      "id": 39,
+      "q": "Birds ud kaise lete hain?",
+      "a": "Birds ke kai adaptations hain: (1) Halke bones — andar hollow hote hain. (2) Powerful wings aur chest muscles. (3) Feathers jo lift dete hain. (4) Air sacs jo oxygen efficiently use karte hain. (5) Tez metabolism. Yeh sab milkar unhe udne me madad karte hain."
+    },
+    {
+      "id": 40,
+      "q": "Cheenti line me kyu chalti hai?",
+      "a": "Cheenti apne peeche pheromone naam ki smell chhodti jaati hai. Baaki cheentiyan us smell ko follow karti hain. Isliye woh line me chalti hain. Jab khana milta hai to woh trail aur strong ho jata hai. Isse poori colony ek hi raste par chalti hai."
+    },
+    {
+      "id": 41,
+      "q": "Madhumakhi shahad kaise banati hai?",
+      "a": "Madhumakhi phoolon se nectar collect karti hai. Woh nectar ko apne pet me store karti hai. Pet me enzymes nectar ko todte hain. Wapas hive me aakar woh nectar ko chhata (comb) me daalti hai. Hawa se pani evaporate hota hai aur shahad ban jata hai. Shahad kabhi kharab nahi hota."
+    },
+    {
+      "id": 42,
+      "q": "Diamond itna hard kyu hota hai?",
+      "a": "Diamond carbon atoms se banta hai. In atoms ka structure bahut special hota hai — har carbon atom 4 dusre carbon atoms se juda hota hai. Yeh tetrahedral structure bahut mazboot hota hai. Isliye diamond duniya ka sabse hard natural material hai. Lekin woh brittle bhi hai — zor se maarne par toot sakta hai."
+    },
+    {
+      "id": 43,
+      "q": "Loha zang kyu khata hai?",
+      "a": "Loha zang (rust) tab khata hai jab woh oxygen aur moisture (pani) ke contact me aata hai. Isse iron oxide ban jata hai. Yeh ek chemical reaction hai. Zang loha ko weak kar deta hai. Isliye loha par paint ya oil lagate hain — taaki hawa aur pani se contact na ho."
+    },
+    {
+      "id": 44,
+      "q": "Chumbak lohe ko hi kyu kheenchta hai?",
+      "a": "Magnet sirf un metals ko kheenchta hai jinme magnetic properties hoti hain — jaise iron, nickel, cobalt. Inke atoms magnet ke saath align ho sakte hain. Aluminium, copper, gold jaise metals magnetic nahi hote. Isliye magnet unhe nahi kheenchta. Yeh unke atomic structure par depend karta hai."
+    },
+    {
+      "id": 45,
+      "q": "Mobile internet kaise chalta hai?",
+      "a": "Mobile internet radio waves ke through chalta hai. Tumhara phone mobile tower se radio signals bhejta aur leta hai. Tower aage internet ke backbone se juda hota hai. Data packets ke roop me travel karta hai. 4G, 5G alag-alag frequencies use karte hain. Isliye bina wire ke internet chalta hai."
+    },
+    {
+      "id": 46,
+      "q": "Wi-Fi bina wire ke kaise kaam karta hai?",
+      "a": "Wi-Fi radio waves use karta hai. Router radio signals bhejta hai. Tumhara phone ya laptop us signal ko pakadta hai. Yeh signals 2.4 GHz ya 5 GHz frequency par hote hain. Isliye bina wire ke data transfer hota hai. Range aam taur par 30-50 meter hoti hai."
+    },
+    {
+      "id": 47,
+      "q": "GPS hume location kaise batata hai?",
+      "a": "GPS me 24 se zyada satellites Earth ke around ghoomte hain. Tumhara phone un satellites se signals leta hai. Har satellite batata hai ki woh kahan hai aur signal kab bheja. Phone 4 satellites se distance calculate karta hai. Isse tumhari exact location pata chalti hai. Yeh trilateration kehte hain."
+    },
+    {
+      "id": 48,
+      "q": "AI kya hoti hai?",
+      "a": "AI (Artificial Intelligence) aisi technology hai jisme computer insaan ki tarah soch, seekh aur decide kar sakta hai. AI ko bahut saara data se train kiya jata hai. Woh patterns seekhta hai. Jaise ChatGPT text samajhta hai, image recognition faces pehchanta hai, aur self-driving cars raste samajhti hain. AI machine learning aur deep learning par based hai."
+    },
+    {
+      "id": 49,
+      "q": "Robot aur AI me kya fark hai?",
+      "a": "Robot ek physical machine hai jo kaam kar sakti hai — jaise uthana, chalna, weld karna. AI ek software intelligence hai jo soch aur seekh sakti hai. Robot ke andar AI ho sakti hai, lekin zaroori nahi. AI bina robot ke bhi ho sakti hai (jaise ChatGPT). Robot bina AI ke bhi ho sakta hai (jaise washing machine). Dono alag cheezein hain."
+    },
+    {
+      "id": 50,
+      "q": "Kya hum dusre planets par reh sakte hain?",
+      "a": "Abhi nahi, lekin research chal rahi hai. Mars par rehne ki planning hai — lekin wahan oxygen nahi, temperature bahut kam, aur radiation zyada hai. Scientists Mars par greenhouse aur underground bases banana chahte hain. Moon par bhi base banane ki planning hai. Lekin yeh sab abhi 20-50 saal door hai."
+    },
+    {
+      "id": 51,
+      "q": "Suraj kab khatam hoga?",
+      "a": "Scientists ke hisab se Suraj ke paas lagbhag 5 billion saal ka fuel bacha hai. Uske baad woh red giant ban jayega — itna bada ki Earth ko nigal jayega. Phir woh apna bahari layer chhod dega aur white dwarf ban jayega. Lekin yeh process itna dheema hai ki abhi chinta ki koi baat nahi."
+    },
+    {
+      "id": 52,
+      "q": "Chand par hawa kyu nahi hai?",
+      "a": "Chand ki gravity Earth se lagbhag 6 guna kam hai. Hawa ke molecules ko pakadne ke liye strong gravity chahiye. Chand ki kam gravity ki wajah se hawa ke molecules space me chale jate hain. Isliye Chand par atmosphere nahi hai. Isliye wahan sound nahi sunai deti aur temperature bahut extreme hota hai."
+    },
+    {
+      "id": 53,
+      "q": "Chand par insaan kitni der tak reh sakta hai?",
+      "a": "Chand par insaan sirf spacesuit aur life support system ke saath reh sakta hai. Bina uske kuch seconds me mar jayega. Abhi tak 12 insaan Chand par gaye hain — sab Apollo missions me. Woh kuch din wahan rahe. Future me permanent base banane ki planning hai jisme log mahino tak reh sakein."
+    },
+    {
+      "id": 54,
+      "q": "Black Hole kya hota hai?",
+      "a": "Black Hole space ka aisa area hai jahan gravity itni zyada hoti hai ki light bhi bahar nahi aa sakti. Yeh tab banta hai jab ek bahut bada star apna fuel khatam karke collapse ho jata hai. Uska mass ek chhoti jagah me simat jata hai. Isliye gravity bahut strong ho jati hai. Hum Black Hole ko directly nahi dekh sakte — sirf uska effect dekh sakte hain."
+    },
+    {
+      "id": 55,
+      "q": "Black Hole ka rang kya hota hai?",
+      "a": "Black Hole ka koi rang nahi hota kyunki woh light ko bhi absorb kar leta hai. Hum usse directly nahi dekh sakte. Lekin uske aas-paas ka material jab garam hota hai, to woh bright dikhta hai. Scientists Black Hole ko uske aas-paas ke effects se pehchante hain — jaise stars ka movement aur X-rays."
+    },
+    {
+      "id": 56,
+      "q": "Kya Black Hole sab kuch kha leta hai?",
+      "a": "Nahi. Black Hole sirf woh cheezein kha leta hai jo uske bahut paas aati hain. Ek safe distance ke baad kuch nahi hota. Jaise agar Suraj Black Hole ban jaye (woh nahi banega), to Earth 8 minute baad andhere me chali jayegi lekin Earth ko kha nahi jayega. Black Hole ka gravity bahut door tak normal hota hai."
+    },
+    {
+      "id": 57,
+      "q": "Universe kitna bada hai?",
+      "a": "Abhi tak kisi ko Universe ka exact size nahi pata. Hum sirf observable universe dekh sakte hain — jo lagbhag 93 billion light years ka hai. Iske aage kya hai, pata nahi. Universe lagatar expand ho raha hai. Scientists ke paas kai theories hain lekin koi pakka jawab nahi."
+    },
+    {
+      "id": 58,
+      "q": "Universe expand kyu ho raha hai?",
+      "a": "Big Bang ke baad se Universe expand ho raha hai. Galaxies ek dusre se door ja rahi hain. Yeh expansion dark energy ki wajah se tez ho rahi hai. Scientists ne 1998 me discover kiya ki expansion tez ho rahi hai. Lekin dark energy kya hai, yeh abhi bhi mystery hai."
+    },
+    {
+      "id": 59,
+      "q": "Big Bang kya tha?",
+      "a": "Big Bang lagbhag 13.8 billion saal pehle hua. Us waqt Universe bahut chhota, garam aur dense tha. Phir woh achanak expand hone laga. Yeh expansion aaj bhi chal rahi hai. Big Bang ek explosion nahi tha — yeh space ka expansion tha. Isse pehle kya tha, yeh abhi bhi mystery hai."
+    },
+    {
+      "id": 60,
+      "q": "Kya universe ka end hoga?",
+      "a": "Scientists ke paas kai theories hain: (1) Big Freeze — Universe itna thanda hoga ki sab kuch ruk jayega. (2) Big Crunch — Expansion ruk kar ulta ho jayega aur sab kuch ek point me aa jayega. (3) Big Rip — Dark energy sab kuch faad degi. Lekin abhi pakka jawab nahi hai. Yeh billions saal door ki baat hai."
+    },
+        {
+      "id": 61,
+      "q": "Seasons kyu badalte hain?",
+      "a": "Earth apni axis par 23.5° jhuki hui hai. Jab Earth Suraj ke around ghoomti hai, to kabhi Northern Hemisphere Suraj ki taraf jhukta hai aur kabhi Southern. Jis hisse par zyada direct sunlight padti hai, wahan garmi (summer) hoti hai. Jahan kam padti hai, wahan sardi (winter) hoti hai. Isi jhukav ki wajah se seasons badalte hain — Suraj se door ya paas hone se nahi."
+    },
+    {
+      "id": 62,
+      "q": "Earth ka center kitna garam hai?",
+      "a": "Earth ka core (center) lagbhag 5,000–6,000°C garam hai — utna hi garam jitni Suraj ki surface. Yeh itna garam hai kyunki: (1) Earth banne ke waqt ki heat abhi bhi trapped hai, (2) Radioactive elements ka decay heat paida karta hai, (3) Core par bahut zyada pressure hai. Iron aur nickel yahan pighle hue roop me hain."
+    },
+    {
+      "id": 63,
+      "q": "Earth ka magnetic field kyu hai?",
+      "a": "Earth ke core me pighla hua iron aur nickel ghoomta rehta hai. Is moving molten metal se electric current paida hota hai. Yeh current magnetic field banata hai. Isse dynamo effect kehte hain. Yeh magnetic field hume Suraj ki harmful radiation se bachata hai. Compass bhi isi ki wajah se North dikhata hai."
+    },
+    {
+      "id": 64,
+      "q": "Volcano kyu phatta hai?",
+      "a": "Earth ke andar magma (pighla hua rock) hota hai. Jab magma par pressure bahut zyada ho jata hai, to woh kamzor jagah se bahar nikalne ki koshish karta hai. Agar zameen ki surface kamzor ho, to magma phat kar bahar aata hai. Isse volcano eruption kehte hain. Lava, gas aur ash bahar nikalte hain."
+    },
+    {
+      "id": 65,
+      "q": "Earthquake kyu aata hai?",
+      "a": "Earth ki surface kai tectonic plates se bani hai. Yeh plates dheere-dheere move karti rehti hain. Jab do plates ek dusre se takrati hain ya phisalti hain, to energy release hoti hai. Yeh energy seismic waves ban kar surface tak aati hai. Isse zameen hil jati hai — isi ko earthquake kehte hain."
+    },
+    {
+      "id": 66,
+      "q": "Tsunami kaise banti hai?",
+      "a": "Tsunami tab banti hai jab samundar ke andar earthquake, volcano ya landslide hota hai. Isse pani ka bahut bada volume achanak hil jata hai. Bahut lambi aur tez waves paida hoti hain. Khule samundar me yeh waves chhoti hoti hain, lekin kinare ke paas aakar bahut badi ho jati hain. Isse bahut damage hota hai."
+    },
+    {
+      "id": 67,
+      "q": "Desert me barish kam kyu hoti hai?",
+      "a": "Desert me barish kam hoti hai kyunki: (1) Wahan hawa me moisture bahut kam hota hai, (2) Zyada heat ki wajah se pani jaldi evaporate ho jata hai, (3) Desert areas aksar mountain ranges ke dusri taraf hote hain jo badalon ko rok dete hain, (4) Wahan upward air movement nahi hoti jo badal banaye."
+    },
+    {
+      "id": 68,
+      "q": "Dil ruk jaye to kya hota hai?",
+      "a": "Agar dil ruk jaye (cardiac arrest), to khoon body me circulate nahi hota. Brain ko oxygen nahi milti. 3-4 minute me brain cells marne lagte hain. Isliye turant CPR (Cardiopulmonary Resuscitation) dena zaroori hai. CPR se dil aur lungs ko manually chalaya jata hai. Jitni jaldi treatment mile, utni zyada bachne ki umeed hoti hai."
+    },
+    {
+      "id": 69,
+      "q": "Brain kitna powerful hai?",
+      "a": "Brain me lagbhag 86 billion neurons hote hain. Har neuron hazaaron dusre neurons se juda hota hai. Total connections lagbhag 100 trillion hote hain. Brain ek second me lakho calculations kar sakta hai. Yeh duniya ka sabse complex computer hai. Lekin yeh sirf 20 watt power use karta hai — ek bulb se bhi kam."
+    },
+    {
+      "id": 70,
+      "q": "Hum sapne kyu dekhte hain?",
+      "a": "Sapne ka exact reason abhi tak confirm nahi hai. Kai theories hain: (1) Brain din bhar ki yaadein process karta hai, (2) Emotions ko handle karta hai, (3) Problem solving karta hai, (4) Random brain activity se kahaniyan banti hain. REM sleep me sabse zyada sapne aate hain. Sapne bhool jana normal hai."
+    },
+    {
+      "id": 71,
+      "q": "Hum palke kyu jhapkate hain?",
+      "a": "Palke jhapkane se: (1) Aankhon ki surface saaf aur geela rehti hai, (2) Dhool aur kachra bahar nikal jata hai, (3) Aankhon ko rest milti hai, (4) Tear film refresh hoti hai. Hum ek minute me lagbhag 15-20 baar palke jhapkate hain. Yeh automatic hota hai — hume sochna nahi padta."
+    },
+    {
+      "id": 72,
+      "q": "Girgit rang kyu badalta hai?",
+      "a": "Girgit rang badalta hai: (1) Temperature control ke liye — thanda me dark, garam me light, (2) Mood aur communication ke liye — gussa, darr, mating, (3) Camouflage ke liye — shikari se bachne ke liye. Uske skin me chromatophore cells hote hain jo rang badalte hain. Yeh aam taur par sirf camouflage ke liye nahi hota."
+    },
+    {
+      "id": 73,
+      "q": "Oont bina pani ke kaise rehta hai?",
+      "a": "Oont bina pani ke kai din reh sakta hai kyunki: (1) Uske hump me fat store hoti hai jo energy deti hai, (2) Woh bahut kam pyaas karta hai, (3) Uske kidneys pani conserve karti hain, (4) Uske body temperature 6°C tak badal sakta hai — isse sweat kam hota hai, (5) Woh ek baar me 100 liter tak pani pee sakta hai."
+    },
+    {
+      "id": 74,
+      "q": "Penguin ud kyu nahi sakta?",
+      "a": "Penguin ke wings swimming ke liye adapted hain, flying ke liye nahi. Uske wings chhote aur strong hote hain jo paani me paddle ki tarah kaam karte hain. Uske bones bhi bhaari hote hain jo diving me madad karte hain. Yeh Antarctica ke thande paani me bahut tez tair sakta hai. Udne ki zarurat nahi kyunki khana paani me milta hai."
+    },
+    {
+      "id": 75,
+      "q": "Dolphin intelligent kyu mani jati hai?",
+      "a": "Dolphin ka brain bahut developed hota hai. Woh: (1) Apna naam pehchanti hai, (2) Tools use kar sakti hai, (3) Dusron ko sikhhati hai, (4) Complex communication karti hai — whistles aur clicks se, (5) Mirror me khud ko pehchanti hai, (6) Emotions dikhati hai. Isliye scientists unhe bahut intelligent mante hain — insaan ke baad sabse zyada."
+    },
+    {
+      "id": 76,
+      "q": "Internet kya hai?",
+      "a": "Internet duniya bhar ke computers ka connected network hai. Yeh 1969 me ARPANET se shuru hua. Aaj billions of devices juda hain. Yeh data packets ke roop me information bhejta hai. Undersea cables, satellites aur towers ke through duniya judi hai. Isse hum email, video, chat, website — sab use karte hain."
+    },
+    {
+      "id": 77,
+      "q": "ChatGPT kaise jawab deta hai?",
+      "a": "ChatGPT ek large language model hai. Ise internet ke bahut saare text par train kiya gaya hai. Jab tum sawal puchte ho, to woh patterns ke hisab se agla sabse sambhavit shabd generate karta hai. Woh ek-ek shabd predict karta hai. Isliye woh insaan ki tarah jawab deta hai — lekin woh samajhta nahi, sirf pattern follow karta hai."
+    },
+    {
+      "id": 78,
+      "q": "QR Code kya hota hai?",
+      "a": "QR Code (Quick Response Code) ek 2D barcode hai. Isme black aur white squares ka pattern hota hai. Isme website link, text, contact, payment info — kuch bhi store ho sakta hai. Phone ka camera ise scan karke decode karta hai. Yeh 1994 me Japan me banaya gaya tha. Aaj payment, ticket, aur website ke liye bahut use hota hai."
+    },
+    {
+      "id": 79,
+      "q": "Cloud Storage kya hoti hai?",
+      "a": "Cloud Storage matlab apna data internet par kisi company ke server par store karna. Jaise Google Drive, iCloud, Dropbox. Tumhara data tumhare phone me nahi, door ke data center me hota hai. Tum kisi bhi device se access kar sakte ho. Agar phone kho jaye to bhi data safe rehta hai. Isliye yeh bahut popular hai."
+    },
+    {
+      "id": 80,
+      "q": "Bluetooth kaise kaam karta hai?",
+      "a": "Bluetooth short-distance radio waves use karta hai — 2.4 GHz frequency par. Do devices ke beech direct connection banta hai. Range aam taur par 10 meter hoti hai. Isse headphone, speaker, car, watch judte hain. WiFi se alag, Bluetooth sirf paas ke devices se connect hota hai. Isliye battery kam khatam hoti hai."
+    },
+    {
+      "id": 81,
+      "q": "Pani ka formula kya hai?",
+      "a": "Pani ka chemical formula H₂O hai. Iska matlab hai 2 hydrogen atoms aur 1 oxygen atom. Yeh atoms covalent bond se jude hote hain. Pani ka angle 104.5° hota hai. Isi wajah se pani ke unique properties hain — jaise ice ka tairna, high boiling point, aur universal solvent hona."
+    },
+    {
+      "id": 82,
+      "q": "Ice pani par tairti kyu hai?",
+      "a": "Ice pani par tairti hai kyunki ice ki density pani se kam hoti hai. Jab pani jamti hai, to uske molecules ek crystal structure me arrange ho jate hain. Is structure me khaali jagah hoti hai. Isliye ice ka volume badh jata hai lekin mass same rehta hai. Isliye density kam ho jati hai aur ice tairti hai."
+    },
+    {
+      "id": 83,
+      "q": "Glass transparent kyu hota hai?",
+      "a": "Glass transparent hai kyunki uske electrons visible light ko absorb nahi karte. Glass me electrons ki energy levels aise hain ki woh visible light ke photons ko pass hone dete hain. Isliye light glass se guzar jati hai. Lekin UV light ko glass absorb kar leta hai. Isliye glass ke through saaf dikhta hai."
+    },
+    {
+      "id": 84,
+      "q": "Fire ko oxygen kyu chahiye?",
+      "a": "Fire ek chemical reaction hai jise combustion kehte hain. Isme fuel oxygen ke saath milta hai. Isse heat, light aur naye products (jaise CO₂ aur pani) bante hain. Bina oxygen ke combustion nahi hota. Isliye agar aag par blanket daal do to oxygen band ho jati hai aur aag bujh jati hai."
+    },
+    {
+      "id": 85,
+      "q": "Pressure cooker me khana jaldi kyu banta hai?",
+      "a": "Pressure cooker me steam bahar nahi nikal pati. Isse andar pressure badh jata hai. Zyada pressure par pani ka boiling point badh jata hai — 100°C se 120°C tak. Zyada temperature par khana jaldi aur achhe se pakta hai. Isliye dal, chawal, meat jaldi bante hain. Yeh time aur gas bachata hai."
+    },
+    {
+      "id": 86,
+      "q": "Balloon hawa me kyu udta hai?",
+      "a": "Agar balloon me helium gas ho, to woh hawa se halka hota hai. Helium ki density hawa se kam hoti hai. Isliye Archimedes principle ke hisab se balloon par upward force lagta hai. Woh hawa me udta hai. Lekin agar balloon me normal hawa ho, to woh nahi udega kyunki dono ki density same hoti hai."
+    },
+    {
+      "id": 87,
+      "q": "Electricity kya hai?",
+      "a": "Electricity electrons ke flow ko kehte hain. Jab electrons ek atom se dusre atom me move karte hain, to current banta hai. Yeh flow wire ke through hota hai. Isse hum bulb jala sakte hain, motor chala sakte hain, phone charge kar sakte hain. Electricity energy ka ek roop hai jo hume bahut kaam me aati hai."
+    },
+    {
+      "id": 88,
+      "q": "Kya hum time travel kar sakte hain?",
+      "a": "Future ki taraf time travel theory ke hisab se thoda mumkin hai — time dilation se. Agar tum bahut tez chalo ya black hole ke paas jao, to tumhara time dheere chalega. Earth par zyada time beet jayega. Lekin past me jana abhi sirf theory aur science fiction hai. Koi practical tareeka nahi mila."
+    },
+    {
+      "id": 89,
+      "q": "Kya aliens hain?",
+      "a": "Abhi tak koi pakka scientific proof nahi mila. Lekin Universe itna bada hai ki scientists mante hain ki kahin na kahin life ho sakti hai. NASA aur ISRO Mars, Europa, Enceladus par life ke signs dhundh rahe hain. Abhi tak sirf radio signals aur mysterious observations hain — koi confirm proof nahi."
+    },
+    {
+      "id": 90,
+      "q": "Kya Mars par life hai?",
+      "a": "Abhi tak life ka proof nahi mila. Lekin Mars par kabhi pani tha — yeh proof mil chuka hai. Aaj bhi Mars ke poles par ice hai. Scientists ko lagta hai ki bahut pehle Mars par life ho sakti thi. Aaj ke missions (Perseverance, Curiosity) wahan samples le rahe hain. Jawaab aane me kuch saal lag sakte hain."
+    },
+        {
+      "id": 91,
+      "q": "Kya insaan amar ho sakta hai?",
+      "a": "Abhi ki science ke hisab se nahi. Hamari body ki cells ek limit tak hi divide kar sakti hain — isse Hayflick limit kehte hain. Har baar divide hone par telomere chhote hote hain. Jab woh khatam ho jate hain, cell mar jati hai. Scientists telomerase enzyme par research kar rahe hain. Lekin aaj tak koi insaan amar nahi hua."
+    },
+    {
+      "id": 92,
+      "q": "Sabse tez cheez kya hai?",
+      "a": "Vacuum me light ki speed sabse tez hai — lagbhag 3,00,000 km per second (299,792,458 m/s). Isse tez kuch bhi nahi chal sakta — Einstein ki theory ke hisab se. Light 1 second me Earth ke around 7.5 baar ghoom sakti hai. Koi bhi cheez jisme mass hai, woh light ki speed tak nahi pahunch sakti."
+    },
+    {
+      "id": 93,
+      "q": "Sabse thandi jagah kaunsi hai?",
+      "a": "Antarctica me sabse kam temperature record hua hai — -89.2°C (1983 me Vostok station par). Space me aur bhi thanda hota hai — cosmic microwave background -270°C ke aas-paas hai. Lab me scientists ne atoms ko absolute zero (-273.15°C) ke bahut paas tak thanda kiya hai. Lekin absolute zero tak kabhi nahi pahunch sakte."
+    },
+    {
+      "id": 94,
+      "q": "Sabse garam planet kaunsa hai?",
+      "a": "Venus hamare solar system ka sabse garam planet hai — surface temperature lagbhag 465°C. Yeh Mercury se bhi garam hai, halanki Mercury Suraj ke zyada paas hai. Venus ka atmosphere bahut thick hai — mainly carbon dioxide. Yeh greenhouse effect ki wajah se heat ko bahar nahi jaane deta. Isliye wahan lead bhi pighal jata hai."
+    },
+    {
+      "id": 95,
+      "q": "Sabse tez janwar kaunsa hai?",
+      "a": "Peregrine Falcon sabse tez janwar hai — dive karte waqt 300 km/h se bhi zyada speed pa sakta hai. Zameen par sabse tez cheetah hai — 120 km/h tak. Paani me sailfish 110 km/h tak. Lekin overall sabse tez peregrine falcon hai. Woh apne shikar ko pakadne ke liye aasmaan se seedha dive karta hai."
+    },
+    {
+      "id": 96,
+      "q": "DNA kya hai?",
+      "a": "DNA (Deoxyribonucleic Acid) hamare sharir ka genetic instruction manual hai. Yeh batata hai ki hamari aankhen kaise banegi, rang kaisa hoga, height kitni hogi. DNA me 4 bases hote hain — A, T, G, C. Yeh double helix shape me hote hain. Har insaan ka DNA 99.9% same hota hai. Sirf 0.1% alag hota hai jo hume unique banata hai."
+    },
+    {
+      "id": 97,
+      "q": "Vaccine kaise kaam karti hai?",
+      "a": "Vaccine me kamzor ya mara hua virus/bacteria ka part hota hai. Jab yeh body me jata hai, to immune system use pehchanta hai aur antibodies banata hai. Body yaad rakhti hai ki isse kaise ladna hai. Agar asli virus baad me attack kare, to body pehle se taiyar hoti hai. Isliye vaccine se bachav hota hai."
+    },
+    {
+      "id": 98,
+      "q": "Virus aur bacteria me kya fark hai?",
+      "a": "Bacteria ek-celled living organisms hain — woh apne aap jee sakte hain, khana kha sakte hain, badh sakte hain. Virus living aur non-living ke beech hai — woh khud nahi badh sakta. Usse badhne ke liye host cell chahiye. Bacteria antibiotics se mar sakte hain. Virus ke liye antiviral ya vaccine chahiye. Bacteria bade hote hain, virus chhote."
+    },
+    {
+      "id": 99,
+      "q": "Kya sabhi bacteria bure hote hain?",
+      "a": "Nahi. Bahut se bacteria hamare liye faydemand hote hain. Jaise: (1) Gut bacteria khana digest karte hain, (2) Dahi aur cheese banane me madad karte hain, (3) Antibiotics banane me use hote hain, (4) Soil me nitrogen fix karte hain, (5) Body ko harmful bacteria se bachate hain. Sirf kuch bacteria bimar karte hain."
+    },
+    {
+      "id": 100,
+      "q": "Science ka sabse bada lesson kya hai?",
+      "a": "Science ka sabse bada lesson hai — har baat ko saboot (evidence), observation aur experiment se parakhna. Kisi baat ko sirf isliye mat mano kyunki kisi ne kaha. Sawal pucho, test karo, aur naye discoveries ke saath apni understanding update karo. Isi wajah se science lagataar aage badhti hai. Yeh curiosity aur honesty ka rasta hai."
+    },
+    {
+      "id": 101,
+      "q": "Gravity kya hoti hai?",
+      "a": "Gravity ek invisible force hai jo har cheez jo mass rakhti hai, dusri cheez ko apni taraf kheenchti hai. Jitna zyada mass, utni zyada gravity. Earth ka mass bahut bada hai, isliye woh hume apni taraf kheenchti hai. Isi liye hum niche rehte hain, ball niche girti hai, aur Chand Earth ke around ghoomta hai. Newton ne iske rules diye."
+    },
+    {
+      "id": 102,
+      "q": "Hum niche hi kyu rehte hain?",
+      "a": "Hum niche rehte hain kyunki Earth ki gravity hume apni taraf kheenchti hai. Earth ka mass bahut bada hai, isliye uski gravity strong hai. Hum jo bhi jump karte hain, gravity hume wapas niche le aati hai. Agar gravity na hoti, to hum hawa me tairte rehte. Isliye har cheez Earth par tiki rehti hai."
+    },
+    {
+      "id": 103,
+      "q": "Weight aur Mass me kya difference hai?",
+      "a": "Mass = Tumhare body me kitna matter hai. Yeh har jagah same rehta hai. Weight = Gravity tumhe kitni force se kheench rahi hai. Yeh jagah ke saath badalta hai. Earth par tumhara weight zyada, Moon par kam. Mass kilogram me, weight Newton me. Tumhara mass Earth aur Moon par same rahega, lekin weight badal jayega."
+    },
+    {
+      "id": 104,
+      "q": "Moon par tum halka kyu ho jate ho?",
+      "a": "Moon ki gravity Earth se lagbhag 6 guna kam hai. Isliye Moon par tumhara weight Earth ke weight ka 1/6 ho jata hai. Agar Earth par tum 60 kg ke ho, to Moon par 10 kg jaisa mehsoos hoga. Lekin tumhara mass same rahega. Isliye astronauts Moon par aasani se uchhal sakte hain."
+    },
+    {
+      "id": 105,
+      "q": "Agar gravity band ho jaye to kya hoga?",
+      "a": "Agar gravity achanak band ho jaye, to: (1) Sab cheezein hawa me tairne lagengi, (2) Atmosphere space me chala jayega, (3) Ped, building, car sab ud jayenge, (4) Insaan bhi tairne lagega, (5) Earth ka rotation bhi badal jayega. Yeh catastrophic hoga. Life possible nahi rahegi. Isliye gravity hamare liye bahut zaroori hai."
+    },
+    {
+      "id": 106,
+      "q": "Ball niche hi kyu girti hai?",
+      "a": "Ball niche girti hai kyunki Earth ki gravity usse apni taraf kheenchti hai. Jab tum ball chhodte ho, to gravity us par kaam karti hai. Woh 9.8 m/s² ki acceleration se niche girti hai. Har second uski speed badhti hai. Isliye ball niche girti hai — upar nahi. Yeh Newton ke laws se samjhaya ja sakta hai."
+    },
+    {
+      "id": 107,
+      "q": "Suraj itna bada hote hue bhi Earth par kyu nahi girta?",
+      "a": "Suraj bahut bada hai, lekin Earth uske around ghoomti rehti hai. Earth ki speed bahut zyada hai — lagbhag 1,07,000 km/h. Yeh speed Earth ko Suraj ki taraf girne se rok deti hai. Jaise rassi se ball ghumate ho — ball bahar bhaagti hai lekin rassi kheench leti hai. Waise hi gravity aur speed milkar Earth ko orbit me rakhte hain."
+    },
+    {
+      "id": 108,
+      "q": "Din aur raat kyu hote hain?",
+      "a": "Earth apni axis par ghoomti hai — lagbhag 24 ghante me ek chakkar. Jab Earth ka koi hissa Suraj ki taraf hota hai, to wahan din hota hai. Jab woh hissa Suraj se door hota hai, to wahan raat hoti hai. Isliye har 24 ghante me din aur raat aate hain. Yeh rotation ki wajah se hota hai — revolution se nahi."
+    },
+    {
+      "id": 109,
+      "q": "Hawa dikhti kyu nahi?",
+      "a": "Hawa transparent hoti hai — uske molecules itne chhote hote hain ki woh light ko scatter nahi karte. Isliye hume hawa nahi dikhti. Lekin hum uska asar dekh sakte hain — ped hilte hain, pankha chalte waqt mehsoos hoti hai, badal udte hain. Hawa ko hum feel kar sakte hain, dekh nahi sakte. Hawa me oxygen, nitrogen aur dusri gases hoti hain."
+    },
+    {
+      "id": 110,
+      "q": "Pankha hawa kaise deta hai?",
+      "a": "Pankha khud hawa nahi banata. Woh pehle se room me maujood hawa ko move karta hai. Fan ke blades ghoomkar hawa ko tumhari taraf dhakelte hain. Isse hawa ki speed badh jati hai. Tumhare skin par hawa ke molecules takrate hain — isse thanda mehsoos hota hai. Isliye pankha hawa deta hai."
+    },
+    {
+      "id": 111,
+      "q": "Sound kya hai?",
+      "a": "Sound ek vibration hai jo hawa, pani ya solid ke through travel karti hai. Jab koi cheez vibrate karti hai, to woh apne aas-paas ke molecules ko hilati hai. Yeh vibration aage badhti hai. Jab yeh tumhare kaan tak pahunchti hai, to tum sunte ho. Sound ko travel karne ke liye medium chahiye. Space me sound nahi sunai deti kyunki wahan hawa nahi."
+    },
+    {
+      "id": 112,
+      "q": "Space me sound kyu nahi sunai deti?",
+      "a": "Sound ko travel karne ke liye medium chahiye — hawa, pani ya solid. Space me lagbhag vacuum hota hai — koi molecules nahi. Isliye sound wahan travel nahi kar sakti. Astronauts space me radio waves se baat karte hain kyunki radio waves bina medium ke bhi chal sakti hain. Isliye space me sound nahi sunai deti."
+    },
+    {
+      "id": 113,
+      "q": "Light kya hai?",
+      "a": "Light energy ka ek form hai jo electromagnetic waves ke roop me travel karti hai. Yeh photons naam ke particles se banti hai. Light ki speed 3 lakh km/s hai. Isse hum dekh pate hain. Light ke bina andhera hota hai. Light alag-alag wavelength par alag-alag rang dikhati hai — red se violet tak. Light na medium chahiye — vacuum me bhi chalti hai."
+    },
+    {
+      "id": 114,
+      "q": "Andhera kya hota hai?",
+      "a": "Andhera light ki absence hai. Andhera khud ek cheez nahi hai — yeh sirf light ka na hona hai. Jahan light nahi pahunchti, wahan andhera hota hai. Isliye raat me andhera hota hai — Suraj ki light us hisse par nahi padti. Andhera ko hum measure nahi kar sakte — sirf light ko measure kar sakte hain."
+    },
+    {
+      "id": 115,
+      "q": "Shadow kaise banti hai?",
+      "a": "Shadow tab banti hai jab koi opaque (light na jaane wali) cheez light ke raste me aa jati hai. Light us cheez ke peeche nahi pahunch pati. Isliye us area me andhera hota hai — isse shadow kehte hain. Shadow ki shape us cheez par depend karti hai. Suraj ki position badalne se shadow bhi badalti hai."
+    },
+    {
+      "id": 116,
+      "q": "Ice pani par tairti kyu hai?",
+      "a": "Ice pani par tairti hai kyunki ice ki density pani se kam hoti hai. Jab pani jamti hai, to uske molecules ek crystal structure me arrange ho jate hain. Is structure me khaali jagah hoti hai. Isliye ice ka volume badh jata hai lekin mass same rehta hai. Isliye density kam ho jati hai aur ice tairti hai. Yeh pani ki unique property hai."
+    },
+    {
+      "id": 117,
+      "q": "Loha pani me dubta hai?",
+      "a": "Loha pani me dubta hai kyunki uski density pani se zyada hoti hai. Loha ki density lagbhag 7.8 g/cm³ hai, pani ki 1 g/cm³. Jab koi cheez apne se kam dense liquid me daali jati hai, to woh doob jati hai. Isliye loha pani me dubta hai. Lekin agar loha ko bowl shape me banao, to woh tair sakta hai — jaise ship."
+    },
+    {
+      "id": 118,
+      "q": "Bahut bada ship dubta kyu nahi?",
+      "a": "Ship bhaari hone ke bawajood tairta hai kyunki uske andar bahut hawa hoti hai. Ship ka total volume bahut bada hota hai, lekin uska average density pani se kam hoti hai. Archimedes principle ke hisab se ship apne weight ke barabar pani ko displace karta hai. Isliye woh tairta hai. Agar ship me pani bhar jaye, to woh doob jayega."
+    },
+    {
+      "id": 119,
+      "q": "Balloon upar kyu jata hai?",
+      "a": "Agar balloon me helium gas ho, to woh hawa se halka hota hai. Helium ki density hawa se kam hoti hai. Archimedes principle ke hisab se balloon par upward force lagta hai. Yeh force balloon ke weight se zyada hota hai. Isliye balloon upar jata hai. Normal hawa wala balloon nahi udta kyunki uski density hawa se same hoti hai."
+    },
+    {
+      "id": 120,
+      "q": "Bijli kya hoti hai?",
+      "a": "Bijli (electricity) electrons ke flow ko kehte hain. Jab electrons ek atom se dusre atom me move karte hain, to current banta hai. Yeh flow wire ke through hota hai. Isse hum bulb jala sakte hain, motor chala sakte hain, phone charge kar sakte hain. Bijli energy ka ek roop hai jo hume bahut kaam me aati hai. Iske bina aaj ki duniya nahi chal sakti."
+    },
+        {
+      "id": 121,
+      "q": "Wire garam kyu ho jata hai?",
+      "a": "Jab electrons wire ke through guzarte hain, to unhe resistance milta hai. Wire ke atoms electrons ko rokne ki koshish karte hain. Is takraav se heat paida hoti hai. Isliye wire garam ho jata hai. Jitna zyada current, utni zyada heat. Isi principle par heater, bulb, aur fuse kaam karte hain."
+    },
+    {
+      "id": 122,
+      "q": "Magnet kya karta hai?",
+      "a": "Magnet kuch metals ko apni taraf kheench leta hai — jaise iron, nickel, cobalt. Uske do poles hote hain — North aur South. Same poles ek dusre ko repel karte hain, alag poles attract karte hain. Magnet ke around magnetic field hoti hai. Yeh field invisible hoti hai lekin iron filings se dikhai ja sakti hai."
+    },
+    {
+      "id": 123,
+      "q": "Compass North hi kyu dikhata hai?",
+      "a": "Compass ki sui ek chhota magnet hoti hai. Earth khud ek bahut bada magnet hai. Earth ka magnetic North pole geographic North ke paas hai. Compass ki sui Earth ke magnetic field ke saath align ho jati hai. Isliye woh hamesha North dikhati hai. Yeh navigation me bahut kaam aata hai."
+    },
+    {
+      "id": 124,
+      "q": "Rainbow me 7 rang hi kyu hote hain?",
+      "a": "Sunlight alag-alag wavelength ke rangon se milkar bani hoti hai. Jab yeh light barish ki boondon se guzarti hai, to woh refract aur reflect hoti hai. Har rang alag angle par mudta hai. Isliye 7 rang alag-alag dikhte hain — Violet, Indigo, Blue, Green, Yellow, Orange, Red (VIBGYOR). Asal me yeh continuous spectrum hai, lekin hum 7 mukhya rangon me describe karte hain."
+    },
+    {
+      "id": 125,
+      "q": "Scientist kaise sochte hain?",
+      "a": "Scientist har baat par sawal poochte hain: Yeh aisa kyu hua? Agar ulta hota to? Main ise prove kaise kar sakta hoon? Kya iske peeche koi rule hai? Woh observation karte hain, experiment karte hain, aur evidence ke hisab se apni understanding badalte hain. Woh kabhi bhi kisi baat ko sirf isliye nahi mante ki kisi ne kaha. Yeh scientific thinking hai."
+    },
+    {
+      "id": 126,
+      "q": "Force kya hota hai?",
+      "a": "Force matlab dhakka (Push) ya kheenchna (Pull). Jab tum kisi cheez par force lagate ho, to woh move karti hai, ruk jati hai, ya apni shape badalti hai. Force ka unit Newton hai. Force ke bina kuch bhi move nahi karega. Jaise football ko kick karna, door ko dhakka dena, rassi se bucket kheenchna — sab force hai."
+    },
+    {
+      "id": 127,
+      "q": "Agar kisi cheez par force na lage to kya hoga?",
+      "a": "Agar kisi cheez par koi force na lage, to: (1) Jo cheez ruki hai woh ruki rahegi, (2) Jo chal rahi hai woh same speed se chalti rahegi, (3) Woh apni direction nahi badlegi. Isse Newton ka First Law kehte hain — Law of Inertia. Space me satellite isi wajah se chalti rehti hai kyunki wahan koi friction nahi hoti."
+    },
+    {
+      "id": 128,
+      "q": "Newton ka First Law kya hai?",
+      "a": "Newton ka First Law: Har cheez apni current state me rehna chahti hai. Agar woh ruki hai, to ruki rahegi. Agar woh chal rahi hai, to chalti rahegi — jab tak koi external force na lage. Isse Law of Inertia bhi kehte hain. Jaise bus achanak chalti hai to hum piche girte hain kyunki body ruki rehna chahti thi."
+    },
+    {
+      "id": 129,
+      "q": "Bus achanak chalti hai to hum piche kyu girte hain?",
+      "a": "Bus achanak chalti hai to humara lower body bus ke saath aage chala jata hai. Lekin upper body inertia ki wajah se peeche rehna chahti hai. Isliye hum piche jhukte hain. Yeh Newton ka First Law hai. Isi tarah jab bus rukti hai to hum aage jhukte hain kyunki body chalna chahti thi."
+    },
+    {
+      "id": 130,
+      "q": "Bus achanak rukti hai to hum aage kyu girte hain?",
+      "a": "Bus achanak rukti hai to humara lower body bus ke saath ruk jata hai. Lekin upper body inertia ki wajah se aage chalna chahti hai. Isliye hum aage jhukte hain. Yeh Newton ka First Law hai. Isliye seat belt pehnna zaroori hai — woh hume aage girne se rokti hai."
+    },
+    {
+      "id": 131,
+      "q": "Inertia kya hota hai?",
+      "a": "Inertia kisi bhi cheez ki aadat hai ki woh apni state badalna nahi chahti. Agar woh ruki hai, to ruki rehna chahti hai. Agar chal rahi hai, to chalti rehna chahti hai. Jitna zyada mass, utna zyada inertia. Isliye bhaari cheez ko hilana mushkil hota hai. Yeh Newton ke First Law ka base hai."
+    },
+    {
+      "id": 132,
+      "q": "Bhaari cheez ko dhakka dena mushkil kyu hota hai?",
+      "a": "Bhaari cheez ka mass zyada hota hai. Mass jitna zyada, utna inertia zyada. Inertia ki wajah se woh apni state badalna nahi chahti. Isliye use hilane ke liye zyada force lagana padta hai. Halki cheez ka mass kam hota hai, isliye woh aasani se hil jati hai. Yeh Newton ke Second Law se samjhaya ja sakta hai."
+    },
+    {
+      "id": 133,
+      "q": "Newton ka Second Law kya hai?",
+      "a": "Newton ka Second Law: Jitna zyada force, utni zyada acceleration. Formula: Force = Mass × Acceleration (F = m × a). Matlab agar same force lagao, to halki cheez zyada tez chalegi aur bhaari cheez kam tez. Agar zyada force lagao, to acceleration bhi zyada hoga. Yeh law batata hai ki force, mass aur acceleration kaise related hain."
+    },
+    {
+      "id": 134,
+      "q": "Halka football aur bhaari stone me kise door fekna aasaan hai?",
+      "a": "Halka football door fekna aasaan hai. Kyunki uska mass kam hai. Newton ke Second Law ke hisab se same force se halki cheez ko zyada acceleration milti hai. Football ka mass kam hai, isliye woh zyada door jati hai. Stone bhaari hai, isliye woh kam door jata hai. Isliye cricket ball, football halke hote hain."
+    },
+    {
+      "id": 135,
+      "q": "Acceleration kya hota hai?",
+      "a": "Acceleration matlab speed ka badhna ya ghatna. Agar car 20 km/h se 80 km/h pahunchti hai, to woh accelerate kar rahi hai. Agar woh 80 se 20 par aati hai, to woh decelerate kar rahi hai. Acceleration ka unit m/s² hai. Force lagane se acceleration hota hai. Gravity bhi acceleration hai — 9.8 m/s²."
+    },
+    {
+      "id": 136,
+      "q": "Speed aur Velocity me kya difference hai?",
+      "a": "Speed = Kitni fast chal rahe ho. Velocity = Kitni fast aur kis direction me chal rahe ho. Speed scalar hai (sirf magnitude). Velocity vector hai (magnitude + direction). Agar tum 50 km/h se North chal rahe ho, to speed 50 km/h hai aur velocity 50 km/h North. Speed same ho sakti hai lekin velocity alag."
+    },
+    {
+      "id": 137,
+      "q": "Direction important kyu hai?",
+      "a": "Direction important hai kyunki do log same speed se chal sakte hain lekin opposite direction me. Unki velocity alag hogi. Force bhi direction ke saath lagta hai. Agar tum ball ko upar feko, to woh upar jayegi. Agar niche feko, to niche. Direction ke bina physics adhoori hai. Isliye velocity aur force vector quantities hain."
+    },
+    {
+      "id": 138,
+      "q": "Newton ka Third Law kya hai?",
+      "a": "Newton ka Third Law: Har action ka equal aur opposite reaction hota hai. Matlab agar tum kisi cheez par force lagate ho, to woh bhi tum par utna hi force lagati hai — opposite direction me. Jaise tum zameen par chalte ho, to tum zameen ko peeche dhakelte ho, zameen tumhe aage dhakelti hai. Isi liye tum chal pate ho."
+    },
+    {
+      "id": 139,
+      "q": "Gun chalti hai to piche kyu jati hai?",
+      "a": "Gun chalne par bullet aage ki taraf bahut tez speed se nikalti hai. Newton ke Third Law ke hisab se gun ko bhi utna hi reaction milta hai — opposite direction me. Isliye gun peeche ki taraf jhatka deti hai. Isse recoil kehte hain. Isliye gun ko kandhe par mazbooti se lagana padta hai."
+    },
+    {
+      "id": 140,
+      "q": "Rocket upar kaise jata hai?",
+      "a": "Rocket fuel jalata hai aur gas ko bahut tez speed se niche fekta hai. Newton ke Third Law ke hisab se gas niche jati hai, to rocket upar jata hai — equal aur opposite reaction. Rocket ko hawa ki zarurat nahi hoti. Isliye woh space me bhi chal sakta hai. Yeh action-reaction ka best example hai."
+    },
+    {
+      "id": 141,
+      "q": "Friction kya hota hai?",
+      "a": "Friction do cheezon ke beech lagne wala rukawat ka force hai. Jab do surfaces ek dusre par slide karti hain, to friction lagta hai. Yeh movement ko rokta hai. Friction ki wajah se hum chal pate hain, car ruk pati hai, pencil se likh pate hain. Friction ke bina duniya nahi chal sakti. Lekin friction se heat aur wear bhi hoti hai."
+    },
+    {
+      "id": 142,
+      "q": "Agar Friction na ho to?",
+      "a": "Agar friction na ho to: (1) Chal nahi paoge — pair phisal jayenge, (2) Car ruk nahi payegi — brake kaam nahi karega, (3) Pencil se likh nahi paoge, (4) Kuch bhi pakad nahi paoge, (5) Nails wall me nahi tikenge, (6) Rassi me knot nahi lagega. Friction ke bina life impossible hai. Lekin friction se machines wear hoti hain."
+    },
+    {
+      "id": 143,
+      "q": "Ice par chalna mushkil kyu hota hai?",
+      "a": "Ice par friction bahut kam hota hai. Ice ki surface smooth hoti hai aur uske upar pani ki patli layer hoti hai. Isliye pair phisalte hain. Chalne ke liye friction chahiye — pair zameen ko peeche dhakelte hain aur zameen aage. Ice par yeh nahi hota. Isliye ice par chalna mushkil hai. Ice skates isi liye patli hoti hain."
+    },
+    {
+      "id": 144,
+      "q": "Car ke tyres par lines kyu bani hoti hain?",
+      "a": "Car ke tyres par lines (treads) friction badhane ke liye bani hoti hain. Yeh lines road ko achhe se pakadti hain. Isse car mudne, rukne aur chalne me madad milti hai. Bina lines ke tyre phisal jayega — khaas kar barish me. Treads pani ko bahar nikalne me bhi madad karti hain. Isliye worn-out tyres dangerous hote hain."
+    },
+    {
+      "id": 145,
+      "q": "Energy kya hoti hai?",
+      "a": "Energy kaam karne ki taakat hai. Yeh har jagah hoti hai — khane me, petrol me, sunlight me, battery me. Energy na banayi ja sakti hai na khatam ki ja sakti hai — sirf ek form se dusri form me badalti hai. Isse Law of Conservation of Energy kehte hain. Energy ke bina kuch bhi nahi ho sakta. Iska unit Joule hai."
+    },
+    {
+      "id": 146,
+      "q": "Kya Energy khatam ho sakti hai?",
+      "a": "Nahi. Energy khatam nahi hoti — sirf ek form se dusri form me badalti hai. Isse Law of Conservation of Energy kehte hain. Jaise bulb me electric energy light aur heat me badalti hai. Car me petrol ki chemical energy kinetic energy me badalti hai. Total energy universe me same rehti hai. Lekin usable energy kam hoti jaati hai."
+    },
+    {
+      "id": 147,
+      "q": "Mobile charge karte waqt kya hota hai?",
+      "a": "Mobile charge karte waqt electric energy chemical energy me badal jati hai. Battery ke andar lithium ions ek electrode se dusre electrode me jate hain. Yeh chemical energy store hoti hai. Jab mobile use karte ho, to yeh chemical energy wapas electric energy me badalti hai. Isliye battery charge rehti hai. Battery khatam hone par yeh reaction ulta ho jata hai."
+    },
+    {
+      "id": 148,
+      "q": "Bulb jalta kaise hai?",
+      "a": "Bulb me ek filament hota hai — aam taur par tungsten ka. Jab electricity filament se guzarti hai, to woh garam ho jata hai — 2000°C se zyada. Itna garam hone par woh light deta hai. Yeh electric energy ko light aur heat energy me badalta hai. LED bulb me alag process hoti hai — woh kam heat deti hai aur zyada efficient hai."
+    },
+    {
+      "id": 149,
+      "q": "Solar Panel bijli kaise banata hai?",
+      "a": "Solar panel me solar cells hote hain — aam taur par silicon ke. Jab sunlight ke photons solar cell se takrate hain, to woh electrons ko free kar dete hain. Yeh electrons move karte hain aur current paida karte hain. Isse DC electricity banti hai. Inverter usse AC me badal deta hai. Isliye solar panel sunlight se bijli banata hai — bina fuel ke."
+    },
+    {
+      "id": 150,
+      "q": "Engineer aur Scientist me difference kya hai?",
+      "a": "Scientist nature ke rules ko samajhta hai — woh puchta hai 'Yeh kyu hota hai?' Engineer un rules ka use karke kuch naya banata hai — woh puchta hai 'Isse problem ka solution kaise banaun?' Scientist research karta hai, Engineer design karta hai. Dono ek dusre ke complementary hain. Science ke bina engineering nahi, engineering ke bina science adhoori."
+    },
+        {
+      "id": 151,
+      "q": "Heat kya hoti hai?",
+      "a": "Heat ek energy hai jo garam cheez se thandi cheez ki taraf jati hai. Yeh molecules ki movement se paida hoti hai. Jab molecules tez hilte hain, to heat zyada hoti hai. Jab dheere hilte hain, to heat kam hoti hai. Heat ka unit Joule hai. Heat hamesha high temperature se low temperature ki taraf jati hai — ulta nahi. Isliye chai thandi hoti hai, fridge garam nahi hota."
+    },
+    {
+      "id": 152,
+      "q": "Temperature kya hota hai?",
+      "a": "Temperature batata hai ki koi cheez kitni garam ya thandi hai. Yeh molecules ki average kinetic energy ka measure hai. Heat = Energy (Joule me). Temperature = Kitni garam hai (Celsius, Fahrenheit, Kelvin me). Ek chhoti garam cheez me kam heat ho sakti hai lekin temperature zyada. Ek badi thandi cheez me zyada heat ho sakti hai lekin temperature kam. Dono alag cheezein hain."
+    },
+    {
+      "id": 153,
+      "q": "Aag ke paas khade hone se garam kyu lagta hai?",
+      "a": "Aag infrared radiation ke through heat bhejti hai. Yeh radiation bina kisi medium ke travel karti hai. Jab yeh tumhare skin tak pahunchti hai, to tumhe garam lagta hai. Isliye bina chhuye bhi garam mehsoos hota hai. Agar tum aag ke paas khade ho to radiation seedha tum par padti hai. Agar tum door jao to kam radiation pahunchti hai."
+    },
+    {
+      "id": 154,
+      "q": "Dhatu jaldi garam kyu ho jati hai?",
+      "a": "Metal heat ka bahut achha conductor hota hai. Uske atoms ke electrons freely move karte hain. Jab ek jagah heat lagti hai, to electrons usse jaldi dusri jagah le jate hain. Isliye metal jaldi garam ho jata hai. Jaise steel ka chamach garam chai me jaldi garam ho jata hai. Isliye kitchen me metal ke bartan use hote hain — woh jaldi garam hote hain."
+    },
+    {
+      "id": 155,
+      "q": "Lakdi ka chamach garam kyu nahi hota?",
+      "a": "Lakdi heat ki kharab conductor (insulator) hai. Uske electrons freely move nahi karte. Isliye heat ek jagah se dusri jagah nahi jati. Lakdi ka chamach garam chai me rakho to sirf neeche wala hissa garam hoga — upar wala thanda rahega. Isliye kitchen me wooden spoon use kiya jata hai. Yeh hath jalne se bachata hai."
+    },
+    {
+      "id": 156,
+      "q": "Pressure kya hota hai?",
+      "a": "Pressure tab banta hai jab force kisi area par lagta hai. Formula: Pressure = Force ÷ Area. Matlab same force chhoti area par zyada pressure banata hai. Iska unit Pascal (Pa) hai. Jaise chaku tez hota hai to area chhota hota hai, isliye pressure zyada. Camel ke pair bade hote hain, isliye pressure kam. Isliye woh ret me nahi dhasta."
+    },
+    {
+      "id": 157,
+      "q": "Chaku tez kyu hota hai?",
+      "a": "Chaku tez hota hai kyunki uska area bahut chhota hota hai. Same force chhoti jagah par lagta hai, isliye pressure bahut zyada hota hai. Isliye chaku aasani se cheez ko kaat deta hai. Agar chaku blunt ho, to area bada ho jata hai, pressure kam hota hai, aur kaatna mushkil ho jata hai. Isliye chaku ko sharpen karte hain."
+    },
+    {
+      "id": 158,
+      "q": "Camel ret me kam kyu dhasta hai?",
+      "a": "Camel ke pair bade aur chauda hote hain. Isliye uske weight ka pressure kam area par nahi, zyada area par failta hai. Pressure = Force ÷ Area. Area zyada hone se pressure kam hota hai. Isliye camel ret me kam dhasta hai. Yeh desert me chalne ke liye adaptation hai. Snow shoes bhi isi principle par bane hote hain."
+    },
+    {
+      "id": 159,
+      "q": "High heels ret me zyada kyu dhasti hain?",
+      "a": "High heels ka area bahut chhota hota hai. Isliye same weight chhoti area par lagta hai. Pressure = Force ÷ Area. Area kam hone se pressure bahut zyada hota hai. Isliye high heels ret, grass ya soft ground me dhas jati hain. Isi wajah se high heels pehenkar chalna mushkil hota hai. Flat shoes me area zyada hota hai, pressure kam."
+    },
+    {
+      "id": 160,
+      "q": "Straw se juice kaise peete hain?",
+      "a": "Jab tum straw se juice peete ho, to tum straw ke andar ki hawa ko muh se kheenchte ho. Isse straw ke andar pressure kam ho jata hai. Bahar ka atmospheric pressure zyada hota hai. Woh juice ko upar dhakel deta hai. Isliye juice straw me upar aata hai. Agar straw me hole ho, to pressure barabar ho jata hai aur juice nahi aata."
+    },
+    {
+      "id": 161,
+      "q": "Light seedhi line me kyu chalti hai?",
+      "a": "Ek hi medium me light seedhi line me chalti hai. Kyunki woh shortest path follow karti hai. Isse rectilinear propagation kehte hain. Isliye shadow banti hai — light seedhi chalti hai aur opaque cheez ke peeche nahi pahunchti. Lekin jab light ek medium se dusre medium me jati hai (jaise hawa se pani me), to woh mud jati hai. Isse refraction kehte hain."
+    },
+    {
+      "id": 162,
+      "q": "Hum kisi cheez ko dekh kaise pate hain?",
+      "a": "Hum kisi cheez ko dekh pate hain jab light us cheez se reflect hokar hamari aankhon tak pahunchti hai. Object khud light nahi deta — woh light ko reflect karta hai. Woh reflected light hamari aankh ke retina par image banati hai. Brain us image ko samajhta hai. Isliye hum dekh pate hain. Andhere me kuch nahi dikhta kyunki light nahi hoti."
+    },
+    {
+      "id": 163,
+      "q": "Kaali shirt dhoop me zyada garam kyu hoti hai?",
+      "a": "Black color zyada light absorb karta hai. Jab dhoop kaali shirt par padti hai, to woh almost saari light absorb kar leti hai. Yeh light heat energy me badal jati hai. Isliye kaali shirt jaldi garam ho jati hai. White color zyada light reflect karta hai. Isliye garmi me white ya halke rang ke kapde pehnna better hota hai."
+    },
+    {
+      "id": 164,
+      "q": "White shirt garmi me thandi kyu lagti hai?",
+      "a": "White color zyada sunlight reflect kar deta hai. Isliye kam light absorb hoti hai aur kam heat paida hoti hai. Isliye white shirt garmi me thandi lagti hai. Isi wajah se garmi ke deshon me log white kapde pehente hain. Fridge aur building bhi white rangte hain taaki woh kam garam hon. Dark colors zyada heat absorb karte hain."
+    },
+    {
+      "id": 165,
+      "q": "Light ki speed kitni hoti hai?",
+      "a": "Light ki speed vacuum me lagbhag 3,00,000 kilometer per second (299,792,458 m/s) hai. Yeh universe ki sabse tez speed hai. Light 1 second me Earth ke around 7.5 baar ghoom sakti hai. Suraj se Earth tak light 8 minute 20 second me pahunchti hai. Koi bhi cheez jisme mass hai, woh light ki speed tak nahi pahunch sakti."
+    },
+    {
+      "id": 166,
+      "q": "Mirror me hum ulte kyu dikhte hain?",
+      "a": "Mirror actually front aur back direction ko reverse karta hai — left-right ko nahi. Jab tum mirror ke saamne khade ho, to tumhara right hand mirror me left dikhta hai kyunki mirror front-back reverse karta hai. Hamara dimaag ise left-right ulta samajhta hai. Asal me mirror upar-niche nahi badalta. Yeh ek optical illusion hai."
+    },
+    {
+      "id": 167,
+      "q": "Mirror image asli nahi hoti, kyu?",
+      "a": "Mirror image ko screen par seedha pakda nahi ja sakta. Kyunki light actually wahan se nahi aa rahi — woh sirf aisi lagti hai. Isliye ise Virtual Image kehte hain. Real image ko screen par project kiya ja sakta hai — jaise cinema screen par. Mirror image ko nahi. Isliye mirror image asli nahi hoti. Lens se real image banti hai."
+    },
+    {
+      "id": 168,
+      "q": "Car ke side mirror par 'Objects are closer than they appear' kyu likha hota hai?",
+      "a": "Car ke side mirror convex hote hain. Convex mirror bada area dikhata hai lekin objects chhote dikhte hain. Isliye woh door lagte hain jabki woh paas hote hain. Yeh warning isliye likhi hoti hai taaki driver ko pata rahe ki object actually paas hai. Isse accident se bacha ja sakta hai. Convex mirror ka use wider view ke liye hota hai."
+    },
+    {
+      "id": 169,
+      "q": "Dentist chhota mirror kyu use karta hai?",
+      "a": "Dentist concave mirror use karta hai. Concave mirror paas ki cheez ko bada dikhata hai. Isliye daant clearly aur bade dikhte hain. Dentist ko chhoti details dekhni hoti hain. Concave mirror light ko focus karta hai, isliye woh area bright bhi hota hai. Isliye dentist chhota concave mirror use karta hai. Makeup mirror bhi concave hota hai."
+    },
+    {
+      "id": 170,
+      "q": "Telescope me mirror ya lens kyu use hote hain?",
+      "a": "Telescope me mirror ya lens door ki light ko collect karke image ko bada aur clear dikhane ke liye use hote hain. Door ke objects se bahut kam light aati hai. Bada mirror ya lens zyada light collect karta hai. Isse faint objects bhi dikhte hain. Reflecting telescope mirror use karta hai. Refracting telescope lens use karta hai. Hubble space telescope mirror use karta hai."
+    },
+    {
+      "id": 171,
+      "q": "Chashma aankhon ki help kaise karta hai?",
+      "a": "Chashma lens se light ko sahi jagah focus karta hai. Agar aankh ki lens light ko retina par sahi focus nahi kar pati, to image dhundhli dikhti hai. Chashma us light ko adjust karta hai. Myopia me concave lens, hypermetropia me convex lens use hota hai. Isse image retina par clearly banti hai. Isliye chashma pehnne se saaf dikhta hai."
+    },
+    {
+      "id": 172,
+      "q": "Magnifying Glass cheez ko bada kaise dikhata hai?",
+      "a": "Magnifying Glass ek convex lens hota hai. Jab tum usse kisi cheez ko dekhte ho, to woh light ko is tarah bend karta hai ki object bada nazar aata hai. Yeh object ko focus ke andar rakhte waqt hota hai. Isse magnification hoti hai. Isliye chhoti cheezein badi dikhti hain. Microscope bhi isi principle par kaam karta hai — lekin do lenses ke saath."
+    },
+    {
+      "id": 173,
+      "q": "Camera photo kaise leta hai?",
+      "a": "Camera me ek lens hota hai. Jab tum photo lete ho, to lens light ko sensor par focus karta hai. Sensor light ko digital signals me badal deta hai. Yeh signals memory card me save ho jate hain. Shutter speed aur aperture light ko control karte hain. Isliye camera photo leta hai. Phone camera me bhi yahi process hota hai — bas sensor chhota hota hai."
+    },
+    {
+      "id": 174,
+      "q": "Rainbow me hamesha 7 rang hi dikhte hain?",
+      "a": "Rainbow ek continuous spectrum hota hai. Asal me rang ek dusre me smoothly milte rehte hain. Hum aam taur par 7 mukhya rangon (VIBGYOR) me usse describe karte hain — Violet, Indigo, Blue, Green, Yellow, Orange, Red. Lekin yeh categories hamari convenience ke liye hain. Nature me rang alag-alag nahi hote. Isliye scientifically rainbow me infinite shades hoti hain."
+    },
+    {
+      "id": 175,
+      "q": "Kya hum light ko rok sakte hain?",
+      "a": "Haan, agar koi opaque (light na jaane wali) cheez beech me aa jaye to light uske paar nahi ja pati. Jaise deewar ke us paar torch ki light nahi pahunchti. Lekin transparent cheezein (glass, pani) light ko pass hone deti hain. Translucent cheezein (kaghaz) thodi light pass karti hain. Isliye light ko rokne ke liye opaque material chahiye. Shadow isi wajah se banti hai."
+    },
+    {
+      "id": 176,
+      "q": "Electricity kya hai?",
+      "a": "Electricity electrons ke flow ko kehte hain. Electrons atom ke andar negative charge wale particles hote hain. Jab woh ek atom se dusre atom me move karte hain, to current banta hai. Yeh flow wire ke through hota hai. Isse hum bulb jala sakte hain, motor chala sakte hain, phone charge kar sakte hain. Electricity energy ka ek roop hai. Iska unit Ampere hai."
+    },
+    {
+      "id": 177,
+      "q": "Electron kya hota hai?",
+      "a": "Electron ek bahut chhota particle hai jo har atom ke andar hota hai. Uska negative charge hota hai. Woh nucleus ke around ghoomta hai. Electron ka mass proton se lagbhag 1836 guna kam hota hai. Electron hi electricity ka flow banata hai. Jab woh move karte hain, to current paida hota hai. Electron ki discovery J.J. Thomson ne 1897 me ki thi."
+    },
+    {
+      "id": 178,
+      "q": "Atom kya hota hai?",
+      "a": "Atom kisi bhi cheez ka sabse chhota building block hai. Jaise LEGO ke chhote blocks milkar ghar bante hain, waise atoms milkar duniya ki har cheez banate hain. Atom ke andar nucleus hota hai jisme proton aur neutron hote hain. Uske around electron ghoomte hain. Atom ka size lagbhag 0.1 nanometer hota hai. Yeh itna chhota hai ki normal microscope se bhi nahi dikhta."
+    },
+    {
+      "id": 179,
+      "q": "Atom ke andar kya hota hai?",
+      "a": "Atom ke center me nucleus hota hai. Nucleus me: Proton (positive charge) aur Neutron (no charge). Nucleus ke bahar: Electron (negative charge) ghoomte hain. Proton aur neutron ka mass lagbhag same hota hai. Electron bahut halka hota hai. Atom ka 99.9% khaali space hota hai. Nucleus bahut chhota hota hai — atom ke size ka 1/100,000."
+    },
+    {
+      "id": 180,
+      "q": "Atom itna chhota hai to dikhta kyu nahi?",
+      "a": "Atom bahut hi chhota hota hai — lagbhag 0.1 nanometer. Normal microscope se bhi nahi dikhta. Kyunki visible light ki wavelength atom se bahut badi hoti hai. Atom ko dekhne ke liye electron microscope ya scanning tunneling microscope chahiye. 1981 me pehli baar atom ko dekha gaya. Isliye hum atom ko direct nahi dekh sakte — sirf special instruments se."
+    },
+        {
+      "id": 181,
+      "q": "Battery bijli kaise banati hai?",
+      "a": "Battery ke andar chemicals hote hain — jaise lithium, zinc, carbon. Yeh chemicals reaction karte hain. Is reaction se electrons ek electrode se dusre electrode ki taraf move karte hain. Yeh electron ka flow hi current hai. Battery ke do terminals hote hain — positive aur negative. Jab circuit complete hota hai, to current bahne lagta hai. Isliye battery bijli banati hai."
+    },
+    {
+      "id": 182,
+      "q": "Battery khatam kyu ho jati hai?",
+      "a": "Battery khatam ho jati hai kyunki uske andar ka chemical reaction dheere-dheere khatam ho jata hai. Jab saare chemicals react kar lete hain, to electrons ka flow ruk jata hai. Isliye battery khatam ho jati hai. Rechargeable battery me yeh reaction ulta kiya ja sakta hai — charger se. Non-rechargeable battery ek baar khatam hone ke baad phenkni padti hai."
+    },
+    {
+      "id": 183,
+      "q": "Mobile charge hone par andar kya hota hai?",
+      "a": "Mobile charge karte waqt charger electric energy ko chemical energy me badal deta hai. Lithium ions battery ke positive electrode se negative electrode ki taraf jate hain. Woh wahan store ho jate hain. Isliye battery charge ho jati hai. Jab mobile use karte ho, to yeh process ulta hota hai — ions wapas jate hain aur electric energy paida hoti hai. Isliye battery discharge hoti hai."
+    },
+    {
+      "id": 184,
+      "q": "Short Circuit kya hota hai?",
+      "a": "Short Circuit tab hota hai jab electricity galat raste se bahut jaldi bahne lagti hai. Jaise phase aur neutral wire direct mil jayein. Isse resistance kam ho jata hai aur current bahut zyada badh jata hai. Wire garam ho jata hai. Aag bhi lag sakti hai. Isliye fuse aur MCB lagaye jate hain. Short circuit se ghar aur devices bach jate hain."
+    },
+    {
+      "id": 185,
+      "q": "Fuse kyu lagaya jata hai?",
+      "a": "Fuse ek safety device hai. Woh circuit me lagaya jata hai. Usme ek patla wire hota hai. Jab zyada current aata hai, to woh wire pighal jata hai aur circuit tod deta hai. Isse ghar aur devices bach jate hain. Fuse ke bina zyada current se wire jal sakta hai, aag lag sakti hai. Isliye fuse zaroori hai. Aaj MCB bhi use hota hai — woh reset ho jata hai."
+    },
+    {
+      "id": 186,
+      "q": "Magnet sirf Iron ko hi kyu kheenchta hai?",
+      "a": "Magnet sirf un metals ko kheenchta hai jinme magnetic properties hoti hain — jaise iron, nickel, cobalt. Inke atoms magnet ke saath align ho sakte hain. Isse woh khud chhote magnets ban jate hain. Aluminium, copper, gold jaise metals magnetic nahi hote. Isliye magnet unhe nahi kheenchta. Yeh unke atomic structure par depend karta hai. Iron sabse common magnetic metal hai."
+    },
+    {
+      "id": 187,
+      "q": "Earth khud Magnet kaise hai?",
+      "a": "Earth ke core me pighla hua iron aur nickel ghoomta rehta hai. Is moving molten metal se electric current paida hota hai. Yeh current magnetic field banata hai. Isse dynamo effect kehte hain. Earth ka magnetic North pole geographic North ke paas hai. Yeh magnetic field hume Suraj ki harmful radiation se bachata hai. Compass bhi isi ki wajah se North dikhata hai."
+    },
+    {
+      "id": 188,
+      "q": "Birds ko direction kaise pata chalti hai?",
+      "a": "Kuch birds Earth ke magnetic field ko mehsoos kar sakte hain. Unke beak ya eyes me special cells hote hain jo magnetic field detect karte hain. Isse unhe migration me madad milti hai. Woh hazaaron kilometer door tak sahi rasta dhundh leti hain. Kuch birds stars aur Sun ki position bhi use karti hain. Yeh ek amazing navigation system hai."
+    },
+    {
+      "id": 189,
+      "q": "Compass hamesha North hi kyu dikhata hai?",
+      "a": "Compass ki sui chhota magnet hoti hai. Woh aasani se ghoom sakti hai. Earth ka magnetic field usse North-South direction me align kar deta hai. Isliye woh North dikhati hai. Yeh navigation me bahut kaam aata hai. Lekin magnetic North actually geographic North se thoda alag hota hai. Isliye pilots aur sailors correction karte hain."
+    },
+    {
+      "id": 190,
+      "q": "Magnet kab weak ho jata hai?",
+      "a": "Magnet weak ho jata hai: (1) Bahut zyada heat se — temperature badhne par atoms ke magnetic domains random ho jate hain, (2) Zor ka jhatka ya girne se, (3) Bahut zyada time tak use na karne se, (4) Dusre magnet ke opposite field se. Isliye magnets ko thanda aur safe jagah rakhna chahiye. Fridge magnet dheere-dheere weak ho jate hain."
+    },
+    {
+      "id": 191,
+      "q": "Wave kya hoti hai?",
+      "a": "Wave energy ko ek jagah se dusri jagah le jane ka tareeka hai. Isme energy travel karti hai, lekin matter nahi. Do types hoti hain: Mechanical waves (sound, pani ki lehr) — inhe medium chahiye. Electromagnetic waves (light, radio, X-ray) — inhe medium nahi chahiye. Wave ki properties: wavelength, frequency, amplitude. Sound wave longitudinal hoti hai, light transverse."
+    },
+    {
+      "id": 192,
+      "q": "Sound aur Light me sabse bada difference kya hai?",
+      "a": "Sound ko travel karne ke liye medium chahiye — hawa, pani ya solid. Light ko medium nahi chahiye — woh vacuum me bhi chalti hai. Sound ki speed light se bahut kam hai — 343 m/s hawa me. Light ki speed 3 lakh km/s hai. Sound longitudinal wave hai, Light transverse. Sound sunai deti hai, Light dikhti hai. Space me sound nahi sunai deti, lekin light aati hai."
+    },
+    {
+      "id": 193,
+      "q": "Wi-Fi dikhta kyu nahi?",
+      "a": "Wi-Fi ek radio wave hai. Radio waves electromagnetic waves hoti hain. Hamari aankhen sirf visible light dekh sakti hain — ek chhota sa spectrum. Radio waves ki wavelength bahut badi hoti hai. Isliye woh hamari aankhon ko nahi dikhti. Lekin hamare phone aur laptop unhe detect kar sakte hain. Isliye Wi-Fi invisible hai — jaise radio, TV signals, aur mobile network."
+    },
+    {
+      "id": 194,
+      "q": "Mobile bina wire ke signal kaise bhejta hai?",
+      "a": "Mobile radio waves ke through signal bhejta hai. Tumhara phone mobile tower se radio signals bhejta aur leta hai. Tower aage internet ke backbone se juda hota hai. Data packets ke roop me travel karta hai. 4G, 5G alag-alag frequencies use karte hain. Isliye bina wire ke internet chalta hai. Tower har jagah lagaye jate hain taaki signal pahunche."
+    },
+    {
+      "id": 195,
+      "q": "Microwave Oven khana kaise garam karta hai?",
+      "a": "Microwave oven microwave waves bhejta hai — 2.45 GHz frequency par. Yeh waves pani ke molecules ko bahut tezi se hilati hain. Molecules ke hilne se heat paida hoti hai. Isliye khana garam ho jata hai. Microwave waves metal se reflect hoti hain, isliye oven ke andar metal nahi rakhte. Khana ke andar ka pani hi garam hota hai, isliye plate thandi rehti hai."
+    },
+    {
+      "id": 196,
+      "q": "Einstein ka sabse famous idea kya tha?",
+      "a": "Einstein ka sabse famous idea tha — Theory of Relativity. Usne bataya ki Time aur Space alag nahi hain. Dono milkar Space-Time banate hain. Gravity space-time ka curve hai. Usne E=mc² diya — mass energy me badal sakti hai. Usne bataya ki light ki speed constant hai. Time high speed ya strong gravity me dheere chal sakta hai. Yeh physics ki sabse badi discovery hai."
+    },
+    {
+      "id": 197,
+      "q": "Time slow bhi ho sakta hai?",
+      "a": "Haan. Time dilation kehte hain ise. Do situations me: (1) Bahut high speed par — jitna tez chaloge, utna time dheere chalega. (2) Bahut strong gravity ke paas — jaise black hole ke paas. ISS astronauts ka time Earth se thoda dheere chalta hai. GPS satellites me yeh correction lagana padta hai. Yeh theory nahi — experiments me prove ho chuka hai."
+    },
+    {
+      "id": 198,
+      "q": "GPS ko Einstein ki Theory ki zarurat kyu padti hai?",
+      "a": "GPS satellites Earth se lagbhag 20,000 km upar hain. Wahan gravity kam hai, isliye unka time thoda tez chalta hai. Lekin woh bahut tez speed se bhi ghoomte hain, isliye time thoda dheere chalta hai. Dono effects milkar roz lagbhag 38 microsecond ka difference banate hain. Agar yeh correction na kiya jaye, to GPS ki location roz 10 km galat hoti jayegi. Isliye Einstein ki theory zaroori hai."
+    },
+    {
+      "id": 199,
+      "q": "Kya Time Machine ban sakti hai?",
+      "a": "Future me time travel thoda mumkin hai — time dilation se. Agar tum bahut tez chalo ya black hole ke paas jao, to tumhara time dheere chalega. Earth par zyada time beet jayega. Tum future me pahunch jaoge. Lekin past me jana abhi tak prove nahi hua. Koi practical tareeka nahi mila. Scientists is par research kar rahe hain. Abhi yeh sirf theory aur science fiction hai."
+    },
+    {
+      "id": 200,
+      "q": "Physics ka sabse important rule kya hai?",
+      "a": "Physics ka sabse important rule hai — kisi baat ko sirf isliye mat mano kyunki kisi ne kaha hai. Dekho, Socho, Experiment karo, Saboot (Evidence) dekho. Yahi asli Scientific Thinking hai. Har theory ko test kiya ja sakta hai. Galat prove hone par theory badal di jati hai. Isliye physics lagataar aage badhti hai. Curiosity aur honesty iska base hai."
+    },
+    {
+      "id": 201,
+      "q": "Projectile Motion kya hota hai?",
+      "a": "Projectile Motion tab hota hai jab koi cheez hawa me ek angle par feki jati hai, aur sirf gravity us par kaam karti hai. Uske do movements hote hain: horizontal (constant speed) aur vertical (gravity ki wajah se accelerate). Dono milkar curve banate hain — parabola. Jaise cricket me six, football ki kick, basketball ka shot. Air resistance na ho to yeh perfect parabola hota hai."
+    },
+    {
+      "id": 202,
+      "q": "Ball seedhi line me kyu nahi jati?",
+      "a": "Ball ko fekte waqt do cheezein hoti hain: (1) Aage ki speed — jo usse horizontal le jati hai, (2) Gravity — jo usse niche kheenchti hai. Dono milkar curve banate hain. Isliye ball seedhi line me nahi, parabola me chalti hai. Agar gravity na hoti, to ball seedhi line me chali jati. Agar speed na hoti, to ball seedha niche girti."
+    },
+    {
+      "id": 203,
+      "q": "Agar gravity na ho to ball kaise chalegi?",
+      "a": "Agar gravity na ho, to ball seedhi line me chalti rahegi. Woh na upar jayegi na niche. Woh apni speed se seedha aage badhti rahegi. Space me aisa hi hota hai. Astronauts agar space me ball fekein, to woh seedhi line me chalti rahegi — jab tak koi dusri force na lage. Isse Newton ka First Law prove hota hai."
+    },
+    {
+      "id": 204,
+      "q": "Ball jitni tez feko, utni door kyu jati hai?",
+      "a": "Jab ball tez fekte ho, to uski horizontal speed zyada hoti hai. Gravity use utni hi tez niche kheenchti hai, lekin ball zyada door pahunch jati hai. Kyunki gravity use niche lane se pehle woh zyada distance cover kar leti hai. Isliye tez ball zyada door jati hai. Isi wajah se fast bowlers ball ko zyada door phenkte hain."
+    },
+    {
+      "id": 205,
+      "q": "Sabse door throw karne ke liye kaunsa angle best hota hai?",
+      "a": "Ideal conditions me 45° best angle hota hai. Kyunki 45° par upar aur aage dono direction me balance milta hai. Isse maximum range milti hai. Agar angle kam ho (jaise 30°), to ball jaldi niche gir jati hai. Agar angle zyada ho (jaise 60°), to ball upar to jati hai lekin door kam jati hai. Lekin air resistance ke saath best angle thoda kam hota hai — lagbhag 42°."
+    },
+    {
+      "id": 206,
+      "q": "90° par ball feko to kya hoga?",
+      "a": "90° par ball seedhi upar jayegi. Uski horizontal speed zero hogi. Gravity use upar se niche la degi. Woh lagbhag wahi aa jayegi jahan se feki thi. Yeh maximum height deta hai lekin zero range. Jaise tum ball ko bilkul upar uchhalte ho. Woh upar jati hai, rukti hai, aur wapas tumhare paas aati hai."
+    },
+    {
+      "id": 207,
+      "q": "0° par ball feko to?",
+      "a": "0° par ball bilkul horizontal jayegi. Uski saari speed aage ki taraf hogi. Gravity use turant niche kheenchne lagegi. Ball jaldi niche gir jayegi. Woh zyada door nahi jayegi. Isliye 0° par throw karne se kam range milti hai. Isliye thoda angle dena zaroori hai — 45° best hai."
+    },
+    {
+      "id": 208,
+      "q": "Cricket me six marna science kaise hai?",
+      "a": "Six marna science hai kyunki: (1) Player bat ki speed aur angle control karta hai, (2) Ball ka mass aur speed matter karta hai, (3) Timing important hai — ball bat se kitni der tak contact me rahi, (4) Air resistance bhi effect karti hai, (5) Ground aur pitch bhi matter karte hain. Player experience se yeh sab calculate karta hai. Isliye six marna skill + science hai."
+    },
+    {
+      "id": 209,
+      "q": "Moon par six zyada door kyu jayega?",
+      "a": "Moon ki gravity Earth se lagbhag 1/6 hai. Isliye ball ko niche aane me zyada time lagega. Woh zyada der hawa me rahegi. Isliye woh zyada door jayegi. Agar Earth par 100 meter ka six hota hai, to Moon par lagbhag 600 meter ka ho sakta hai. Lekin Moon par hawa nahi hai, isliye air resistance bhi nahi hoga. Isse ball aur bhi door jayegi."
+    },
+    {
+      "id": 210,
+      "q": "Air Resistance kya hoti hai?",
+      "a": "Air Resistance ek force hai jo hawa chalti hui cheez ko rokne ki koshish karti hai. Jab koi cheez hawa me chalti hai, to hawa ke molecules usse takrate hain. Isse speed kam hoti hai. Jitna bada area, utni zyada resistance. Isliye parachute dheere girta hai. Air resistance ke bina sab cheezein same speed se girti. Isliye vacuum me feather aur hammer ek saath girte hain."
+    },
+        {
+      "id": 211,
+      "q": "Feather aur Stone me kaun pehle niche girta hai?",
+      "a": "Earth par stone pehle girta hai. Kyunki hawa feather ko zyada rokti hai — uska area bada aur weight kam hota hai. Lekin vacuum me dono ek saath girte hain. Kyunki wahan air resistance nahi hoti. Apollo 15 mission me astronaut ne Moon par feather aur hammer ek saath giraye — dono ek saath zameen par pahunche. Isse Galileo ka idea prove hua."
+    },
+    {
+      "id": 212,
+      "q": "Parachute dheere kyu girta hai?",
+      "a": "Parachute ka area bahut bada hota hai. Isliye hawa use zyada rok pati hai. Air resistance badh jati hai. Yeh resistance gravity ke against kaam karti hai. Isliye parachute dheere girta hai. Bina parachute ke insaan 200 km/h se girta hai. Parachute ke saath 20 km/h tak. Isse safe landing hoti hai. Parachute ka design bhi important hai."
+    },
+    {
+      "id": 213,
+      "q": "Circular Motion kya hota hai?",
+      "a": "Circular Motion tab hota hai jab koi cheez circle me move karti hai. Jaise fan, clock ki sui, Ferris wheel, satellite. Isme speed same ho sakti hai lekin direction lagatar badalti hai. Isliye velocity badalti hai. Iske liye centripetal force chahiye — jo center ki taraf kheenchti hai. Circular motion me acceleration hota hai — direction change ki wajah se."
+    },
+    {
+      "id": 214,
+      "q": "Fan ke blade bahar kyu nahi udd jate?",
+      "a": "Fan ke blade bahar nahi udte kyunki motor aur fan ka center unhe circle me ghoomne par majboor rakhta hai. Centripetal force unhe center ki taraf kheenchti hai. Agar fan ka center toot jaye, to blade tangent direction me udd jayenge. Yeh Newton ka First Law hai. Isliye fan ke blades mazbooti se lage hote hain."
+    },
+    {
+      "id": 215,
+      "q": "Rassi se ball ghumane par ball bahar kyu nahi jati?",
+      "a": "Rassi ball ko center ki taraf kheenchti rehti hai. Is force ko Centripetal Force kehte hain. Ball bahar bhaagna chahti hai (inertia ki wajah se), lekin rassi use rok leti hai. Dono forces balance hote hain. Isliye ball circle me ghoomti rehti hai. Agar rassi toot jaye, to centripetal force khatam ho jata hai aur ball seedhi line me chali jati hai."
+    },
+    {
+      "id": 216,
+      "q": "Agar rassi toot jaye to ball kidhar jayegi?",
+      "a": "Agar rassi toot jaye, to ball tangent direction me seedhi line me nikal jayegi. Woh bahar nahi mudti — balki apni current direction me chalti rehti hai. Yeh Newton ka First Law hai. Ball circle me nahi rahegi kyunki centripetal force khatam ho gaya. Isliye woh seedha chali jayegi. Yeh experiment karke dekh sakte ho — dhyaan se."
+    },
+    {
+      "id": 217,
+      "q": "Car turn lete waqt bahar ki taraf dhakka kyu lagta hai?",
+      "a": "Car turn lete waqt tumhara body seedhi chalna chahti hai — inertia ki wajah se. Lekin car mud jati hai. Isliye tumhe lagta hai ki tum bahar ja rahe ho. Asal me tum seedha ja rahe ho aur car mud rahi hai. Isse centrifugal force jaisa mehsoos hota hai — lekin woh asli force nahi hai. Yeh pseudo force hai. Seat belt isi liye zaroori hai."
+    },
+    {
+      "id": 218,
+      "q": "Seat Belt kyu zaruri hai?",
+      "a": "Accident me car achanak rukti hai. Lekin tumhara body inertia ki wajah se aage badhna chahti hai. Bina seat belt ke tum steering, dashboard ya windshield se takra sakte ho. Seat belt tumhe rok leti hai. Woh force ko body ke strong parts par distribute karti hai. Isse serious injury se bachav hota hai. Isliye seat belt pehnna zaroori hai — short distance par bhi."
+    },
+    {
+      "id": 219,
+      "q": "Washing Machine spin karke kapde kaise sukha deti hai?",
+      "a": "Washing machine ke drum me kapde daalte hain. Woh bahut tez ghoomta hai. Is tez ghoomne se pani ke drops bahar nikal jate hain — centrifugal force ki wajah se. Pani drum ke holes se bahar chala jata hai. Kapde drum me reh jate hain. Isse kapde sukhe ho jate hain. Spin cycle ke baad kapde lagbhag 50% sukh jate hain. Baaki hawa se sukhata hai."
+    },
+    {
+      "id": 220,
+      "q": "Roller Coaster me maza kyu aata hai?",
+      "a": "Roller Coaster me speed aur direction baar-baar badalti hai. Body alag-alag forces mehsoos karti hai. Upar jate waqt weightless feel hota hai. Niche jate waqt zyada weight feel hota hai. Isse adrenaline release hota hai. Dil tez dhadakta hai. Yeh excitement aur thrill deta hai. Isliye logon ko maza aata hai. Lekin kuch logon ko darr bhi lagta hai."
+    },
+    {
+      "id": 221,
+      "q": "Satellite Earth par girti kyu nahi?",
+      "a": "Satellite bahut tez speed se aage badh rahi hoti hai — lagbhag 28,000 km/h. Earth ki gravity use niche kheenchti rehti hai. Lekin uski speed itni zyada hai ki woh Earth ko miss karti rehti hai. Dono milkar usse orbit me rakhte hain. Jaise rassi se ball ghumate ho. Agar satellite ki speed kam ho jaye, to woh Earth par gir jayegi. Agar zyada ho jaye, to space me chali jayegi."
+    },
+    {
+      "id": 222,
+      "q": "Moon Earth par girta kyu nahi?",
+      "a": "Moon bhi lagatar Earth ki taraf 'gir' raha hota hai. Lekin uski aage ki speed bahut zyada hai. Isliye woh Earth ko miss karta rehta hai. Woh Earth ke around orbit me ghoomta rehta hai. Yeh Newton ne samjhaya tha — wahi force jo apple ko girati hai, wahi Moon ko orbit me rakhti hai. Agar Moon ki speed kam ho jaye, to woh Earth par gir jayega."
+    },
+    {
+      "id": 223,
+      "q": "Astronauts space me tairte kyu dikhte hain?",
+      "a": "Space station aur astronauts dono Earth ke around lagatar free fall me hote hain. Woh same speed se girte hain. Isliye unhe weightless jaisa mehsoos hota hai. Woh actually space me tair nahi rahe — woh gir rahe hain lekin Earth ko miss kar rahe hain. Yeh microgravity kehte hain. Isliye astronauts float karte dikhte hain. Space station me sab kuch tairta hai."
+    },
+    {
+      "id": 224,
+      "q": "Kya gravity space me khatam ho jati hai?",
+      "a": "Nahi. Gravity bahut door tak hoti hai. Space station par bhi Earth ki gravity kaafi hoti hai — lagbhag 90% surface gravity. Lekin astronauts weightless feel karte hain kyunki woh free fall me hain. Gravity infinite range tak hoti hai — lekin distance ke saath kam hoti jaati hai. Isliye planets, stars, galaxies sab gravity se bandhe hain. Universe me gravity sabse important force hai."
+    },
+    {
+      "id": 225,
+      "q": "Rocket seedha upar hi kyu nahi jata?",
+      "a": "Rocket pehle upar jata hai — atmosphere se bahar nikalne ke liye. Phir dheere-dheere side me mudta hai. Kyunki orbit me pahunchne ke liye horizontal speed chahiye — lagbhag 28,000 km/h. Agar rocket seedha upar jaye, to woh wapas niche gir jayega. Isliye woh curve path follow karta hai. Isse kam fuel me orbit mil jati hai. Yeh science aur engineering ka combination hai."
+    },
+    {
+      "id": 226,
+      "q": "Momentum kya hota hai?",
+      "a": "Momentum batata hai ki chalti hui cheez ko rokna kitna mushkil hoga. Formula: Momentum = Mass × Velocity (p = m × v). Jitna zyada mass ya speed, utna zyada momentum. Chalti cycle ko rokna aasaan hai. Chalti train ko rokna mushkil hai — kyunki uska momentum bahut zyada hai. Momentum vector quantity hai — direction bhi important hai. Iska unit kg·m/s hai."
+    },
+    {
+      "id": 227,
+      "q": "Momentum kis par depend karta hai?",
+      "a": "Momentum 2 cheezon par depend karta hai: (1) Mass — kitna bhaari hai, (2) Velocity — kitni tez aur kis direction me chal raha hai. Bhaari + Tez = Bahut zyada momentum. Halka + Dheema = Kam momentum. Isliye truck ka momentum car se zyada hota hai — same speed par bhi. Aur tez ball ka momentum dheemi ball se zyada hota hai — same mass par bhi."
+    },
+    {
+      "id": 228,
+      "q": "Train ko rokna car se mushkil kyu hota hai?",
+      "a": "Train ka mass bahut zyada hota hai — hazaaron ton. Isliye uska momentum bhi bahut zyada hota hai. Use rokne ke liye bahut zyada force chahiye. Train ki brakes bhi bahut strong hoti hain lekin phir bhi woh door tak chalti rehti hai. Car ka mass kam hota hai, isliye woh jaldi ruk jati hai. Isliye train ko rokne me zyada distance lagta hai."
+    },
+    {
+      "id": 229,
+      "q": "Truck aur Bike ek hi speed se chal rahe hain. Kiska momentum zyada hoga?",
+      "a": "Truck ka momentum zyada hoga. Kyunki uska mass bike se bahut zyada hai. Same speed par bhi, mass zyada hone se momentum zyada hota hai. Isliye truck ko rokna mushkil hota hai. Aur accident me truck zyada damage karta hai. Isliye heavy vehicles ke liye alag rules hote hain — speed limit kam, alag lanes. Momentum mass ke proportional hota hai."
+    },
+    {
+      "id": 230,
+      "q": "Cricket me Fast Bowler dangerous kyu hota hai?",
+      "a": "Fast Bowler ki ball bahut tez hoti hai — 140-160 km/h. Ball ka mass bhi hota hai — lagbhag 156 gram. Isliye ball ka momentum bahut zyada hota hai. Batsman ko usse khelne me mushkil hoti hai. Agar ball lag jaye to bahut chot lag sakti hai. Isliye helmet, pads zaroori hain. Speed badhne se momentum bhi badhta hai — aur impact bhi."
+    },
+    {
+      "id": 231,
+      "q": "Helmet jaan kaise bachata hai?",
+      "a": "Helmet impact ka time badha deta hai. Momentum change same rehta hai, lekin time zyada lagta hai. Isse force kam ho jata hai — kyunki Force = Momentum Change ÷ Time. Helmet ke andar padding hoti hai jo energy absorb karti hai. Isse sir par kam force lagta hai. Bina helmet ke chot zyada lagti hai. Isliye helmet pehnna zaroori hai — bike, cricket, construction sab me."
+    },
+    {
+      "id": 232,
+      "q": "Airbag kaise kaam karta hai?",
+      "a": "Airbag accident ke turant baad phool jata hai. Woh body ko dheere rokta hai. Jitna dheere rukoge utna kam force lagega. Kyunki Force = Momentum Change ÷ Time. Airbag time badha deta hai. Isse sir, chest par kam chot lagti hai. Airbag ke bina dashboard se takraav hota hai. Isliye airbag + seat belt dono zaroori hain."
+    },
+    {
+      "id": 233,
+      "q": "Collision kya hota hai?",
+      "a": "Collision tab hota hai jab do objects takrate hain. Isme momentum aur energy transfer hoti hai. Do types hoti hain: Elastic collision — energy aur momentum dono conserve hote hain (billiard balls). Inelastic collision — sirf momentum conserve hota hai, energy heat/sound me badal jati hai (car accident). Total momentum hamesha conserve hota hai — chahe koi bhi collision ho. Yeh physics ka important law hai."
+    },
+    {
+      "id": 234,
+      "q": "Collision me energy gayab ho jati hai?",
+      "a": "Nahi. Energy gayab nahi hoti — sirf shape badalti hai. Isse Law of Conservation of Energy kehte hain. Collision me kinetic energy heat, sound aur vibration me badal jati hai. Jaise takraane ki awaaz, garam hona, tootna. Total energy same rehti hai. Lekin usable kinetic energy kam ho jati hai. Isliye elastic collision me ball wapas uchhalti hai, inelastic me nahi."
+    },
+    {
+      "id": 235,
+      "q": "Rubber Ball zyada uchhalti hai. Clay Ball kyu nahi?",
+      "a": "Rubber ball energy ko wapas de deti hai — woh elastic hoti hai. Jab woh zameen se takrati hai, to woh deform hoti hai lekin apni shape wapas le leti hai. Energy kinetic me wapas badal jati hai. Clay ball energy ko shape badalne me use kar leti hai. Woh permanently deform ho jati hai. Energy heat aur sound me badal jati hai. Isliye clay ball uchhalti nahi. Isse elastic aur inelastic collision samajh aata hai."
+    },
+    {
+      "id": 236,
+      "q": "Car ke front ko soft kyu banaya jata hai?",
+      "a": "Car ke front ko crumple zone kehte hain. Woh accident me deform ho jata hai. Isse impact ka time badh jata hai. Force kam ho jata hai — kyunki Force = Momentum Change ÷ Time. Energy absorb ho jati hai. Passenger ko kam force lagta hai. Isliye car ke front soft aur back strong hota hai. Yeh safety feature hai. Isse serious injury se bachav hota hai."
+    },
+    {
+      "id": 237,
+      "q": "Physics me Work kya hota hai?",
+      "a": "Physics me Work tab hota hai jab Force ki wajah se koi object move kare. Formula: Work = Force × Distance × cos(θ). Matlab force aur movement dono chahiye. Agar object move nahi hua, to work zero. Work ka unit Joule hai. Jaise bag uthana work hai. Wall ko dhakka dena work nahi hai — kyunki wall hilli nahi. Energy work karne ki taakat hai."
+    },
+    {
+      "id": 238,
+      "q": "Wall ko pura din dhakka diya. Work hua?",
+      "a": "Nahi. Work nahi hua. Kyunki wall hilli hi nahi. Physics me Work = Force × Distance. Distance zero hai, isliye Work zero hai. Tum thak gaye — lekin physics ke hisab se work nahi hua. Yeh important concept hai. Sirf thak jana work nahi hota. Movement zaroori hai. Isliye scientists alag tareeke se work measure karte hain — energy transfer se."
+    },
+    {
+      "id": 239,
+      "q": "School Bag uthana Work hai?",
+      "a": "Haan. School bag uthana work hai. Kyunki bag upar move hua. Force lagaya — gravity ke against. Distance bhi hua. Isliye Work = Force × Distance. Bag ka weight jitna zyada, utna zyada work. Agar bag uthakar khade raho — bina move kiye — to work zero. Kyunki distance zero. Isliye bag uthana work hai, lekin pakadkar khade rehna work nahi."
+    },
+    {
+      "id": 240,
+      "q": "Bag pakadkar khade rehna Work hai?",
+      "a": "Nahi. Bag pakadkar khade rehna physics ke hisab se Work nahi hai. Kyunki bag move nahi ho raha — distance zero hai. Tumhara body thak rahi hai — muscles tension me hain. Lekin physics me work = force × distance. Distance zero, isliye work zero. Yeh confusing lagta hai lekin important concept hai. Isliye scientists muscle fatigue aur physics work ko alag mante hain."
+    },
+    {
+      "id": 241,
+      "q": "Energy kya hai?",
+      "a": "Energy kaam karne ki taakat hai. Har machine ko energy chahiye. Energy na banayi ja sakti hai na khatam ki ja sakti hai — sirf ek form se dusri form me badalti hai. Isse Law of Conservation of Energy kehte hain. Energy ke kai types hain: kinetic, potential, heat, light, chemical, nuclear, sound, electrical. Iska unit Joule hai. Energy ke bina kuch bhi nahi ho sakta."
+    },
+    {
+      "id": 242,
+      "q": "Energy kitni types ki hoti hai?",
+      "a": "Energy mukhya 2 types ki hoti hai: (1) Kinetic Energy — moving object ki energy, (2) Potential Energy — stored energy. Lekin kai forms me dikhti hai: Heat Energy, Light Energy, Electrical Energy, Chemical Energy, Sound Energy, Nuclear Energy, Mechanical Energy, Gravitational Energy, Elastic Energy. Sab energy ek dusre me badal sakti hai. Isliye total energy hamesha same rehti hai."
+    },
+    {
+      "id": 243,
+      "q": "Kinetic Energy kya hoti hai?",
+      "a": "Kinetic Energy woh energy hai jo moving object me hoti hai. Formula: KE = ½ × m × v². Matlab mass aur speed par depend karti hai. Speed ka square hota hai — isliye speed double karne se KE 4 guna badh jati hai. Jaise running car, moving football, flying bird, flowing water. Kinetic energy ko rokne ke liye kaam karna padta hai. Isliye tez gaadi ko rokna mushkil hota hai."
+    },
+    {
+      "id": 244,
+      "q": "Potential Energy kya hoti hai?",
+      "a": "Potential Energy woh stored energy hai jo position ya state ki wajah se hoti hai. Formula: PE = m × g × h. Matlab mass, gravity aur height par depend karti hai. Jaise hill par khadi car, tana hua bow, dam me pani, upar uthaya hua weight. Jab woh release hoti hai, to kinetic energy me badal jati hai. Isliye hill se car niche aate waqt tez hoti hai."
+    },
+    {
+      "id": 245,
+      "q": "Roller Coaster me Energy kaise badalti hai?",
+      "a": "Roller Coaster me energy lagatar badalti rehti hai. Top par Potential Energy maximum hoti hai — speed zero. Niche aate waqt PE kam hoti hai aur KE badhti hai — speed maximum. Phir wapas upar jate waqt KE kam hoti hai aur PE badhti hai. Total energy same rehti hai — sirf form badalti hai. Isliye Roller Coaster bina engine ke bhi chalta hai. Yeh energy conservation ka best example hai."
+    },
+    {
+      "id": 246,
+      "q": "Mobile Battery me kaunsi Energy hoti hai?",
+      "a": "Mobile battery me Chemical Energy hoti hai. Charge karte waqt Electric Energy chemical energy me badal jati hai. Lithium ions ek electrode se dusre me jate hain. Jab mobile use karte ho, to chemical energy wapas electric energy me badalti hai. Isse phone chalta hai. Battery khatam hone par yeh reaction khatam ho jata hai. Isliye charge karna padta hai."
+    },
+    {
+      "id": 247,
+      "q": "Khana khakar hume Energy kaise milti hai?",
+      "a": "Khana khane ke baad body usse todti hai. Carbohydrates glucose me badalte hain. Glucose cells me oxygen ke saath milta hai. Isse chemical energy paida hoti hai. Yeh energy ATP me store hoti hai. ATP cells ko energy deta hai. Isse hum chal pate hain, soch pate hain, dil dhadakta hai. Bina khane ke energy nahi milti. Isliye khana zaroori hai."
+    },
+    {
+      "id": 248,
+      "q": "Power kya hoti hai?",
+      "a": "Power batati hai ki kitni jaldi Work kiya gaya. Formula: Power = Work ÷ Time. Iska unit Watt hai. Jaise do log 100 seedhiyan chadhte hain. Ek 1 minute me, dusra 5 minute me. Dono ne same work kiya. Lekin pehle wale ki power zyada hai — kyunki usne jaldi kiya. 1 Watt = 1 Joule per second. Bulb, motor, engine sab power me measure hote hain."
+    },
+    {
+      "id": 249,
+      "q": "100 Watt Bulb aur 20 Watt Bulb me kya difference hai?",
+      "a": "100 Watt bulb har second me 100 Joule energy use karta hai. 20 Watt bulb 20 Joule. Isliye 100W bulb zyada bright hota hai — lekin zyada bijli bhi khata hai. 20W bulb kam bright hota hai lekin efficient hai. Aaj LED bulbs 9-15 Watt me 100W jaisi brightness dete hain. Isliye log LED use karte hain — bijli bachti hai. Power zyada matlab energy consumption zyada."
+    },
+    {
+      "id": 250,
+      "q": "Ek 1000 kg ki car aur 1000 kg ka truck. Dono same speed se chal rahe hain. Kaun zyada dangerous hoga?",
+      "a": "Agar dono ka mass aur speed bilkul same hai, to physics ke hisab se unka momentum aur kinetic energy bhi same hogi. Isliye dono barabar dangerous honge. Real life me trucks aksar zyada bhaari hote hain — 10,000 kg ya zyada. Isliye woh zyada dangerous hote hain. Lekin is question me mass same diya gaya hai — isliye physics ka jawab hai: dono same. Yeh MIT thinking ka example hai — question ko dhyan se padho, facts ke hisab se jawab do."
+    },
+        {
+      "id": 251,
+      "q": "Software Architecture kya hota hai?",
+      "a": "Software Architecture software banane ka Master Plan hai. Jaise ghar banane se pehle architect map banata hai, waise hi software me bhi pehle design banta hai. Isme decide hota hai ki kaunse parts honge, woh kaise connect honge, data kahan store hoga, aur system kaise chalega. Bina architecture ke coding karna jaise bina map ke ghar banana — baad me sab kuch bigad jata hai."
+    },
+    {
+      "id": 252,
+      "q": "Seedha Coding kyu nahi shuru karte?",
+      "a": "Agar bina planning ke coding karoge to baad me sab badalna mushkil ho jayega. Ek chhoti galti poori app ko tod sakti hai. MIT ka rule hai: 10 minute ki planning se 10 ghante ki coding bach sakti hai. Sochne me time lagao, phir code likho. Achha engineer pehle design banata hai, phir code karta hai."
+    },
+    {
+      "id": 253,
+      "q": "Architecture aur Coding me Difference?",
+      "a": "Architecture = Plan, Map, Design. Yeh batata hai ki software kaise banega. Coding = Plan ko Reality me badalna. Architect sochta hai 'kya banana hai aur kaise', Coder sochta hai 'kaise likhna hai'. Dono zaroori hain. Lekin architecture ke bina coding sirf guesswork hoti hai. Isliye pehle architecture, phir coding."
+    },
+    {
+      "id": 254,
+      "q": "WhatsApp kitne Parts me bana hoga?",
+      "a": "WhatsApp sirf chat app nahi hai. Uske bahut se alag systems hain: Login System, Chat System, Call System, Video Call System, Backup System, Status System, Notification System, Security/Encryption System, Database System, aur Server Infrastructure. Har system alag team bana sakti hai. Sab milkar WhatsApp banate hain. Isliye badi apps ko chhote modules me todkar banate hain."
+    },
+    {
+      "id": 255,
+      "q": "Ek Engineer pehle kya banata hai?",
+      "a": "Ek engineer pehle Diagram banata hai, phir Code. MIT ka rule hai: Think → Design → Code. Pehle socho problem kya hai, phir design banao solution ka, phir code likho. Bina design ke code likhna jaise bina naksha ghar banana. Isliye achhe engineers pehle paper par ya whiteboard par design banate hain, phir computer par code karte hain."
+    },
+    {
+      "id": 256,
+      "q": "Scalability kya hoti hai?",
+      "a": "Scalability matlab agar users 100 se 100 crore ho jayein, aur app fir bhi fast chale. Jaise ek dukan me 10 log aayein to aaram se chal jata hai, lekin 10,000 log aa jayein to system collapse ho jata hai. Scalable system woh hai jo badhte load ko handle kar sake. Iske liye servers badhane padte hain, database optimize karna padta hai, aur design smart banana padta hai."
+    },
+    {
+      "id": 257,
+      "q": "Agar Instagram par kal 50 Crore naye Users aa jaye?",
+      "a": "Agar Instagram par 50 crore naye users achanak aa jayein to: (1) Server badhane padenge — zyada machines chahiye, (2) Database optimize karna padega — data ko alag-alag servers me baantna padega, (3) Network improve karna padega — zyada bandwidth chahiye, (4) Load Balancer lagana padega — requests ko alag servers me baantna, (5) Cache badhana padega — baar-baar use hone wala data jaldi mile. Isse scalability kehte hain."
+    },
+    {
+      "id": 258,
+      "q": "App Slow kyu ho jati hai?",
+      "a": "App slow hone ke kai reasons ho sakte hain: (1) Server Busy — bahut zyada requests aa rahi hain, (2) Internet Slow — user ka network kamzor hai, (3) Database Slow — data dhundhne me time lag raha hai, (4) Code Slow — inefficient algorithm use ho raha hai, (5) Bahut zyada Users — server overload ho gaya, (6) Memory kam — RAM full ho gayi. Har reason ka alag solution hota hai."
+    },
+    {
+      "id": 259,
+      "q": "Google Crash kyu nahi hota?",
+      "a": "Google crash nahi hota kyunki: (1) Bahut saare Servers — ek nahi, lakhon servers hain, (2) Backup — ek server fail ho to dusra sambhal leta hai, (3) Load Balancer — requests ko alag-alag servers me baantta hai, (4) Fast Database — data jaldi milta hai, (5) Smart Design — system aisa banaya gaya hai ki fail hone par bhi chalta rahe, (6) Distributed System — data duniya bhar me faila hua hai. Isliye Google 24/7 chalta rehta hai."
+    },
+    {
+      "id": 260,
+      "q": "Netflix Movie itni Fast kaise chalti hai?",
+      "a": "Netflix movie tumhare paas wale server se aati hai, door wale se nahi. Netflix ne duniya bhar me CDN (Content Delivery Network) lagaye hain. Yeh servers tumhare shehar ke paas hote hain. Isliye data kam distance travel karta hai aur speed badh jati hai. Iske alawa Netflix video ko chhote parts me todkar bhejta hai, aur tumhara phone usse jodta hai. Isliye buffering kam hoti hai."
+    },
+    {
+      "id": 261,
+      "q": "Cloud Computing kya hoti hai?",
+      "a": "Cloud Computing matlab Internet par Computer rent par lena. Tumhe apna server kharidna nahi padta. Tum AWS, Azure ya Google Cloud se server rent par lete ho. Woh tumhara data store karte hain, tumhara code chalate hain. Tumhe sirf use ke hisab se paisa dena hota hai. Isse chhoti companies bhi badi companies jaisa infrastructure use kar sakti hain — bina zyada paisa kharch kiye."
+    },
+    {
+      "id": 262,
+      "q": "Cloud ka Real Life Example?",
+      "a": "Cloud ke real life examples: (1) Google Drive — photos aur files internet par store, (2) Dropbox — files cloud me save, (3) AWS — Amazon ka cloud jahan companies apna software chalati hain, (4) Azure — Microsoft ka cloud, (5) Google Cloud — Google ka cloud, (6) iCloud — Apple ka cloud. Jab tum photo Google Drive par upload karte ho, woh tumhare phone me nahi, Google ke server par hoti hai. Wahi cloud hai."
+    },
+    {
+      "id": 263,
+      "q": "AWS kya hai?",
+      "a": "AWS (Amazon Web Services) Amazon ki Cloud Service hai. Companies AWS se servers, storage, database aur bahut kuch rent par leti hain. Duniya ki bahut si badi companies AWS use karti hain — Netflix, Instagram, Airbnb. AWS ke bina unhe khud ke server kharidne padte, jo bahut mehenga aur mushkil hota. AWS ne cloud computing ko aasaan bana diya. Isliye aaj AWS duniya ka sabse bada cloud provider hai."
+    },
+    {
+      "id": 264,
+      "q": "Microsoft Azure kya hai?",
+      "a": "Microsoft Azure Microsoft ka Cloud Platform hai. Yeh AWS ka competitor hai. Companies Azure se servers, storage, AI services aur databases rent par leti hain. Azure Microsoft ke products ke saath achhe se kaam karta hai — Windows, Office, Active Directory. Bahut si companies Azure use karti hain. AWS aur Azure duniya ke do sabse bade cloud providers hain. Google Cloud teesra hai."
+    },
+    {
+      "id": 265,
+      "q": "Google Cloud kya hai?",
+      "a": "Google Cloud Google ka Cloud Platform hai. Google apni technology dusri companies ko bhi use karne deta hai. YouTube, Gmail, Google Maps jaise products Google Cloud par chalte hain. Companies Google Cloud se servers, storage, AI, machine learning aur databases rent par leti hain. Google Cloud AI aur data analytics me bahut strong hai. Yeh AWS aur Azure ke baad teesra sabse bada cloud provider hai."
+    },
+    {
+      "id": 266,
+      "q": "Ek hi Server kyu use nahi karte?",
+      "a": "Ek hi server isliye use nahi karte kyunki: (1) Agar woh kharab ho gaya to poori website band ho jayegi, (2) Ek server crores users ka load nahi utha sakta, (3) Ek server slow ho jayega jab zyada log aayenge, (4) Maintenance ke waqt website down ho jayegi. Isliye bahut saare servers use hote hain — load baantne ke liye, backup ke liye, aur reliability ke liye. Isse distributed system kehte hain."
+    },
+    {
+      "id": 267,
+      "q": "Distributed System kya hota hai?",
+      "a": "Distributed System matlab bahut saare computers milkar ek hi system ki tarah kaam karte hain. Jaise ek school me bahut se teachers hain, lekin sab milkar school chalate hain. Distributed system me: (1) Kaam baant diya jata hai, (2) Ek computer fail ho to dusra sambhal leta hai, (3) Load zyada ho to naye computers add kar sakte hain, (4) Data alag-alag jagah store hota hai. Google, Facebook, WhatsApp sab distributed systems hain."
+    },
+    {
+      "id": 268,
+      "q": "Load Balancer kya karta hai?",
+      "a": "Load Balancer requests ko alag-alag servers me baantta hai. Jaise bank me 100 customers aayein aur 4 counters khule hain — har counter par 25 log. Load Balancer bhi waise hi kaam karta hai. Woh dekhta hai kaunsa server free hai aur request usse bhejta hai. Isse koi server overload nahi hota. Agar ek server down ho jaye to Load Balancer requests dusre servers par bhej deta hai. Isliye website fast aur reliable rehti hai."
+    },
+    {
+      "id": 269,
+      "q": "Server Down ho gaya. Ab?",
+      "a": "Agar ek server down ho gaya to dusra server kaam sambhal leta hai. Isko Redundancy kehte hain. Matlab ek se zyada server hamesha ready rehte hain. Agar primary server fail ho jaye to backup server turant active ho jata hai. User ko pata bhi nahi chalta. Isliye badi companies ek se zyada data centers alag-alag shehron me rakhti hain. Agar ek data center me bijli chali jaye to dusra sambhal leta hai."
+    },
+    {
+      "id": 270,
+      "q": "Backup Server kyu hota hai?",
+      "a": "Backup Server emergency ke liye hota hai. Jaise hospital me generator hota hai — bijli chali jaye to generator turant chal padta hai. Waise hi agar main server fail ho jaye to backup server kaam sambhal leta hai. Backup server ka data regularly update hota rehta hai. Isse data loss nahi hota. Badi companies ke paas multiple backup servers hote hain — alag-alag shehron me. Isliye unki services kabhi band nahi hoti."
+    },
+    {
+      "id": 271,
+      "q": "Ek hi Database kyu nahi hota?",
+      "a": "Ek hi database isliye nahi hota kyunki: (1) Crores users ke liye ek database bahut slow ho jayega, (2) Agar woh crash ho gaya to poora system band, (3) Ek server me itna data store nahi ho sakta, (4) Door ke users ko data dhundhne me time lagega. Isliye data ko alag-alag databases me baanta jata hai — region ke hisab se, user ke hisab se, ya data type ke hisab se. Isse speed aur reliability badhti hai."
+    },
+    {
+      "id": 272,
+      "q": "Instagram Photo kahan Store hoti hai?",
+      "a": "Instagram me photo files alag storage systems me rakhi jaati hain — jaise Amazon S3 ya similar object storage. Database me sirf photo ki information hoti hai — jaise kisne upload ki, kab upload ki, kaunse users ne like kiya. Photo ko direct database me nahi rakhte kyunki database text aur numbers ke liye hota hai, badi files ke liye nahi. Isliye photo alag, information alag. Isse system fast rehta hai."
+    },
+    {
+      "id": 273,
+      "q": "YouTube Video Database me hoti hai?",
+      "a": "YouTube me video files alag storage me hoti hain — Google ke data centers me. Database me unki details hoti hain — title, description, upload date, views, likes, comments, channel name. Video ko database me nahi rakhte kyunki woh bahut badi file hoti hai. Database sirf information rakhta hai. Video ko CDN ke through users tak bheja jata hai. Isliye YouTube itni fast chalti hai."
+    },
+    {
+      "id": 274,
+      "q": "Backup har din kyu lete hain?",
+      "a": "Backup har din isliye lete hain taaki agar data delete ho jaye, corrupt ho jaye, ya koi attack ho jaye, to wapas la sake. Jaise tum apne phone ki photos Google Photos me backup karte ho — agar phone kho jaye to photos safe rehti hain. Badi companies ka data bahut valuable hota hai. Agar ek din ka backup na ho aur data lost ho jaye to crores ka nuksan ho sakta hai. Isliye automatic daily backup hota hai."
+    },
+    {
+      "id": 275,
+      "q": "MIT Engineer sabse pehle kya sochta hai?",
+      "a": "MIT Engineer sabse pehle ye sochta hai: Agar server toot gaya, Internet slow hai, 10 crore users aa gaye — fir bhi system kaise chalega? Woh failure ke baare me pehle sochta hai, success ke baare me baad me. Woh system aisa design karta hai jo fail hone par bhi kaam kare. Isko 'design for failure' kehte hain. Yahi real engineering hai — sirf happy path nahi, har situation ke liye ready rehna."
+    },
+    {
+      "id": 276,
+      "q": "Computer me ek saath itne Apps kaise chalte hain?",
+      "a": "Operating System har App ko thoda-thoda CPU time deta hai. Jaise teacher 40 students ko ek saath nahi padhata — woh har student ko thoda-thoda time deta hai. Computer bhi aisa hi karta hai. CPU itni tez hai ki woh har second me lakho instructions execute karta hai. Isliye hume lagta hai ki sab Apps ek saath chal rahe hain. Asal me woh ek ke baad ek chalte hain — bas bahut tez."
+    },
+    {
+      "id": 277,
+      "q": "CPU sirf ek hi kaam karta hai?",
+      "a": "CPU ek samay me bahut kam instructions execute karta hai, lekin bahut hi tez speed se. Modern CPU ek second me billions of instructions kar sakta hai. Isliye hume lagta hai ki sab Apps ek saath chal rahe hain. Asal me CPU ek ke baad ek kaam karta hai — bas itna tez ki hume pata nahi chalta. Isko multitasking kehte hain. Operating System CPU ka time sab Apps me baantta hai."
+    },
+    {
+      "id": 278,
+      "q": "Agar RAM bhar jaye to kya hota hai?",
+      "a": "Agar RAM bhar jaye to Operating System kuch data ko Storage (SSD/HDD) par temporarily rakh deta hai. Isko Virtual Memory kehte hain. Lekin Storage RAM se bahut slow hota hai. Isliye Computer slow ho jata hai. Jaise table bhar gayi aur ab books zameen par rakhni pad rahi hain. Zameen se uthane me zyada time lagta hai. Isliye RAM kam ho to computer slow ho jata hai. Zyada RAM se computer fast chalta hai."
+    },
+    {
+      "id": 279,
+      "q": "Restart karne se Computer fast kyu ho jata hai?",
+      "a": "Restart karne se Computer fast ho jata hai kyunki: (1) Temporary memory (RAM) saaf ho jati hai, (2) Background me chal rahe bahut se programs band ho jate hain, (3) Memory leaks clear ho jate hain, (4) System files refresh hoti hain, (5) Pending updates install ho jate hain. Isliye jab computer slow lage to restart karna chahiye. Yeh ek simple solution hai jo bahut baar kaam karta hai."
+    },
+    {
+      "id": 280,
+      "q": "Computer Hang kyu hota hai?",
+      "a": "Computer hang hone ke kai reasons ho sakte hain: (1) RAM kam — bahut se programs chal rahe hain, (2) CPU bahut busy — koi heavy task chal raha hai, (3) Software bug — koi program crash ho gaya, (4) Storage issue — hard disk kharab ho raha hai, (5) Virus — malware system slow kar raha hai, (6) Overheating — fan kharab hai. MIT thinking: ek problem ke hamesha kai possible reasons ho sakte hain. Ek-ek karke check karo."
+    },
+        {
+      "id": 281,
+      "q": "Compiler kya hota hai?",
+      "a": "Compiler tumhare likhe code ko Computer ki language me badalta hai. Tum Python, Java ya C++ me code likhte ho — woh insaan ke liye aasaan hai. Lekin computer sirf 0 aur 1 samajhta hai. Compiler tumhare code ko machine language me translate karta hai. Jaise tum Hindi bolte ho aur translator English me badal deta hai. Compiler bhi wahi karta hai. Bina compiler ke computer tumhara code nahi chala sakta."
+    },
+    {
+      "id": 282,
+      "q": "Computer English samajhta hai?",
+      "a": "Nahi. Computer sirf Machine Language samajhta hai — sirf 0 aur 1. Jab tum English me code likhte ho (jaise print('Hello')), to compiler usse 0 aur 1 me badal deta hai. Computer wahi 0 aur 1 padhta hai aur kaam karta hai. Isliye programming languages banayi gayi — taaki insaan aasani se code likh sake. Computer ke liye sab kuch binary hai — 0 aur 1."
+    },
+    {
+      "id": 283,
+      "q": "Programming Language kyu banayi gayi?",
+      "a": "Programming Language isliye banayi gayi taaki insaan aasani se program likh sake. Agar hume direct 0 aur 1 me code likhna padta, to bahut mushkil hota. Python, Java, JavaScript, C++ jaise languages English jaise lagte hain. Compiler unhe machine language me badal deta hai. Isse coding aasaan, fast aur readable ho gayi. Alag-alag languages alag kaam ke liye banayi gayi — jaise Python AI ke liye, JavaScript websites ke liye."
+    },
+    {
+      "id": 284,
+      "q": "Binary kya hoti hai?",
+      "a": "Binary Computer ki basic language hai. Isme sirf do digits hote hain — 0 aur 1. Har instruction, har photo, har video, har song — sab 0 aur 1 me store hota hai. Jaise tumhare phone me photo hai — woh asal me crores 0 aur 1 ka pattern hai. Computer in patterns ko padhkar samajhta hai. Binary system base-2 par chalta hai. Isliye computer ke liye 0 aur 1 hi sab kuch hain."
+    },
+    {
+      "id": 285,
+      "q": "Sirf 0 aur 1 se Game kaise ban jata hai?",
+      "a": "Sirf 0 aur 1 se Game isliye ban jata hai kyunki: (1) Crores aur arbon 0 aur 1 milkar instructions banate hain, (2) Instructions milkar functions banate hain, (3) Functions milkar features banate hain, (4) Features milkar game banta hai. Jaise eenton se ghar banta hai. Har pixel, har sound, har movement — sab 0 aur 1 ka combination hai. Programmer high-level language me likhta hai, compiler usse 0 aur 1 me badal deta hai."
+    },
+    {
+      "id": 286,
+      "q": "AI aur Normal Program me Difference?",
+      "a": "Normal Program me rules pehle se likhe hote hain. Programmer batata hai ki agar yeh ho to yeh karo. AI me examples dekhkar pattern seekhne ki koshish hoti hai. AI ko pehle se rules nahi diye jate — woh data se seekhti hai. Jaise normal program calculator hai — usme rules fixed hain. AI ChatGPT hai — usne crores text se seekha hai. Normal program predictable hota hai, AI thoda unpredictable."
+    },
+    {
+      "id": 287,
+      "q": "AI ko Training kyu chahiye?",
+      "a": "AI ko Training isliye chahiye kyunki jaise bachcha examples dekhkar seekhta hai, AI bhi data se seekhti hai. Agar AI ko 10 lakh dogs ki photos dikhao, to woh dog pehchanna seekh jayegi. Training me AI ko bahut saara data dikhaya jata hai. Woh patterns dhundhti hai. Jitna zyada aur achha data, utni intelligent AI. Bina training ke AI kuch nahi kar sakti — woh sirf ek empty brain hai."
+    },
+    {
+      "id": 288,
+      "q": "Agar AI ko galat data mile to?",
+      "a": "Agar AI ko galat data mile to AI galat prediction kar sakti hai. Isko 'Garbage In, Garbage Out' kehte hain. Jaise agar AI ko sirf red apples ki photos dikhao, to woh green apple ko apple nahi maanegi. Isliye data quality bahut important hai. Companies data ko clean karti hain, check karti hain, aur bias hatati hain. Agar AI ko galat data se train karo to woh galat decisions legi — chahe uska code kitna bhi achha ho."
+    },
+    {
+      "id": 289,
+      "q": "Kya AI sab problems solve kar sakti hai?",
+      "a": "Nahi. AI bahut useful hai, lekin har problem ke liye sahi tool nahi hoti. AI achhi hai: pattern recognition, language, images, predictions me. Lekin AI kamzor hai: emotions samajhne, common sense, creativity, aur moral decisions me. Kuch problems ke liye simple program better hai. AI ko har jagah use karna galat hai. Sahi problem ke liye sahi tool chuno — kabhi AI, kabhi simple code, kabhi dono."
+    },
+    {
+      "id": 290,
+      "q": "Future me AI Engineers ki demand badhegi?",
+      "a": "Bahut sambhavna hai ki AI Engineers ki demand badhegi. Kyunki AI har industry me enter kar rahi hai — health, education, finance, transport. Lekin AI ke saath Programming, Mathematics aur Problem Solving bhi zaroori rahenge. Sirf AI use karna kaafi nahi — usse banana, samajhna aur improve karna zaroori hai. Isliye jo log AI + coding + maths + thinking seekhenge, unki demand bahut zyada hogi. Yeh future ka sabse hot career hoga."
+    },
+    {
+      "id": 291,
+      "q": "Hacking sirf Password todna hai?",
+      "a": "Nahi. Hacking sirf password todna nahi hai. Hacking me software, network ya systems ki kamzori dhoondhna bhi shamil hai. Hacker system me ghusne ka rasta dhundhta hai — jaise purana software, weak password, misconfiguration. Ethical hackers companies ko security improve karne me madad karte hain. Malicious hackers nuksan pahunchate hain. Hacking ek skill hai — uska use achha ya bura ho sakta hai."
+    },
+    {
+      "id": 292,
+      "q": "Encryption kya hoti hai?",
+      "a": "Encryption data ko secret code me badal dena hai. Sirf sahi key wala hi use padh sakta hai. Jaise tum ek letter likho aur usse special code me badal do — bina code ke koi nahi padh sakta. WhatsApp me messages encrypted hote hain. Bank transactions encrypted hoti hain. Agar koi data chura bhi le, to woh use padh nahi sakta. Encryption internet security ka sabse important tool hai. Iske bina online shopping, banking, chat — sab unsafe hoga."
+    },
+    {
+      "id": 293,
+      "q": "Two-Factor Authentication (2FA) kya hai?",
+      "a": "Two-Factor Authentication matlab login ke liye do alag proofs dene padte hain. Jaise: (1) Password — jo tumhe pata hai, (2) OTP — jo tumhare phone par aata hai. Dono chahiye. Agar kisi ko tumhara password pata bhi chal jaye, to bina OTP ke woh login nahi kar sakta. Isse account bahut safe ho jata hai. 2FA on karna chahiye — Gmail, Instagram, WhatsApp, bank — sab me. Yeh security ka simple aur powerful tool hai."
+    },
+    {
+      "id": 294,
+      "q": "Hacker se bachne ka best tareeka?",
+      "a": "Hacker se bachne ke liye: (1) Strong Password — lamba, unique, random, (2) 2FA on karo — OTP wala extra layer, (3) Software Update — purane software me holes hote hain, (4) Unknown Links par click mat karo — phishing attacks, (5) Public WiFi se banking mat karo, (6) Antivirus use karo, (7) Password Manager use karo, (8) Suspicious emails delete karo. Yeh sab habits hacker se bachati hain. Security ek habit hai, ek baar ka kaam nahi."
+    },
+    {
+      "id": 295,
+      "q": "Companies Security par itna paisa kyu kharch karti hain?",
+      "a": "Companies Security par itna paisa isliye kharch karti hain kyunki data bahut valuable hota hai. Agar data leak ho jaye to: (1) Users ka nuksan — personal info, paisa, photos, (2) Company ka nuksan — reputation kharab, fine, customers chale jayenge, (3) Legal problems — laws hain jo data protect karna mandatory karte hain, (4) Business band ho sakta hai. Isliye companies crores security par kharch karti hain. Ek data breach se poori company tabah ho sakti hai."
+    },
+    {
+      "id": 296,
+      "q": "Coding seekhna enough hai?",
+      "a": "Nahi. Coding seekhna enough nahi hai. Ek achhe engineer ko ye bhi samajhna chahiye: Users — unhe kya chahiye, Design — app kaisi dikhegi aur kaam karegi, Security — data safe kaise rahega, Performance — app fast kaise chalegi, Testing — bugs kaise pakdenge, Scalability — 10 crore users aa jayein to kya hoga. Sirf coding ek skill hai — engineering ek mindset hai. Dono chahiye."
+    },
+    {
+      "id": 297,
+      "q": "Google Engineer aur Beginner me Difference?",
+      "a": "Beginner feature bana deta hai aur kehta hai 'ho gaya'. Google Engineer sochta hai: Fast hai? Secure hai? Scalable hai? Maintainable hai? Agar 10 crore users aaye to chalega? Agar server fail ho jaye to? Agar attacker attack kare to? Beginner 'kaam kar raha hai' par khush hota hai. Engineer 'kaam kar raha hai, lekin better ho sakta hai' sochta hai. Yahi difference hai coding aur engineering me."
+    },
+    {
+      "id": 298,
+      "q": "Computer Science ka asli goal kya hai?",
+      "a": "Computer Science ka asli goal real-world problems ko technology se solve karna hai. Sirf code likhna nahi — balki samajhna ki kaunsi problem solve karni hai, kaise solve karni hai, aur usse logon ki zindagi kaise better banegi. Google ne search problem solve ki. Uber ne taxi problem solve ki. WhatsApp ne communication problem solve ki. Har badi technology ke peeche ek real problem hoti hai. CS ka goal woh problem solve karna hai."
+    },
+    {
+      "id": 299,
+      "q": "MIT Student roz kya practice karta hai?",
+      "a": "MIT Student roz har cheez par sawal karta hai: Kyu? Kaise? Aur better kaise? Woh kabhi bhi kisi baat ko sirf isliye nahi manta ki kisi ne kaha. Woh khud test karta hai, experiment karta hai, aur evidence dekhta hai. Yeh habit uski thinking ko strong banati hai. Woh answers yaad nahi karta — questions puchna seekhta hai. Yahi habit usse aage badhne me madad karti hai. Roz thoda-thoda sochna, bada difference banata hai."
+    },
+    {
+      "id": 300,
+      "q": "Sabse bada Secret kya hai?",
+      "a": "Sabse bada secret hai: Technology se pehle Thinking aati hai. Agar tumhari thinking strong hai to tum: Website bana sakte ho, App bana sakte ho, AI bana sakte ho, Startup bana sakte ho. Code seekhna zaroori hai — lekin sochna usse bhi zyada zaroori hai. Code sirf ek tool hai. Soch woh cheez hai jo tool ko direction deti hai. Isliye pehle socho, phir code likho. Yahi MIT, Stanford aur top engineers ka sabse bada secret hai."
+    },
+    {
+      "id": 301,
+      "q": "Google Search sirf ek Website hai?",
+      "a": "Nahi. Google Search sirf ek website nahi hai. Google hazaron computers (servers) ka ek bahut bada system hai. Jab tum search karte ho, to tumhara request duniya bhar ke servers me se guzarta hai. Woh index se data dhundhte hain, rank karte hain, aur result bhejte hain. Yeh sab 1 second se kam me hota hai. Google ke peeche lakhon engineers, millions of programs, aur bahut bada infrastructure hai. Isliye Google ko samajhna matlab ek pura system samajhna."
+    },
+    {
+      "id": 302,
+      "q": "Jab tum Google par Search karte ho to pehle kya hota hai?",
+      "a": "Jab tum Google par search karte ho to: (1) Tum search likhte ho, (2) Google Server tak Request jati hai, (3) Server Index me search karta hai, (4) Best results rank karta hai, (5) Result wapas bhejta hai. Sab kuch 1 second se bhi kam time me hota hai. Iske peeche lakho servers, smart algorithms, aur years of research hai. Tumhe sirf ek search box dikhta hai — lekin andar bahut complex system chalta hai."
+    },
+    {
+      "id": 303,
+      "q": "Google ko kaise pata chalta hai ki kaunsi Website pehle dikhani hai?",
+      "a": "Google bahut saare signals dekhta hai: (1) Content kitna useful hai — kya woh tumhare sawal ka jawab deta hai, (2) Website kitni trusted hai — kya woh reliable source hai, (3) Search se kitna related hai — keywords match karte hain ya nahi, (4) Kitne log usse visit karte hain, (5) Kitni baar link kiya gaya hai, (6) Page kitna fast hai, (7) Mobile-friendly hai ya nahi. In sab signals ko milakar Google rank decide karta hai. Exact algorithm public nahi hai — yeh Google ka secret hai."
+    },
+    {
+      "id": 304,
+      "q": "Google poora Internet har baar padhta hai?",
+      "a": "Nahi. Google poora internet har baar nahi padhta. Google pehle se information ka ek bada Index banakar rakhta hai. Jaise dictionary me words pehle se arrange hote hain — tumhe poora dictionary nahi padhna padta, seedha word dhundh lete ho. Waise hi Google ka index pehle se ready hota hai. Jab tum search karte ho, to Google index me dekhta hai — poore internet me nahi. Isliye search itni fast hoti hai. Index banane me Google ke crawlers lagatar kaam karte rehte hain."
+    },
+    {
+      "id": 305,
+      "q": "Google itna Fast kyu hai?",
+      "a": "Google itna fast isliye hai kyunki: (1) Index bana hua hai — data pehle se organized, (2) Bahut saare Servers hain — lakhon machines, (3) Smart Algorithms hain — efficient search, (4) Data duniya bhar me distribute hai — paas wale server se data aata hai, (5) Cache use hota hai — common searches ka result ready, (6) Parallel processing — kai servers ek saath kaam karte hain. Yeh sab milkar Google ko 1 second se kam me result dene me madad karte hain."
+    },
+    {
+      "id": 306,
+      "q": "YouTube Video kaise chalti hai?",
+      "a": "YouTube video is tarah chalti hai: (1) Tum video par click karte ho, (2) Phone internet se request bhejta hai, (3) YouTube Server video ka data bhejta hai, (4) Video chhote parts me aati hai, (5) Phone usse jodkar play karta hai. Video files duniya bhar ke CDN servers me hoti hain — tumhare paas wale server se data aata hai. Isliye video jaldi load hoti hai. Buffering tab hoti hai jab data slow aata hai."
+    },
+    {
+      "id": 307,
+      "q": "Video Buffering kya hoti hai?",
+      "a": "Video Buffering tab hoti hai jab video ka kuch hissa pehle download ho jata hai. Isliye video smoothly chalti hai. Jaise tum ek book padhne se pehle kuch pages padh lete ho. Buffer matlab temporary storage. Agar internet slow ho, to buffer khatam ho jata hai aur video ruk jati hai — phir se buffer hoti hai. Isliye buffering ka matlab hai video ka data pehle se aa raha hai taaki play smooth rahe. Jitna fast internet, utni kam buffering."
+    },
+    {
+      "id": 308,
+      "q": "Agar Internet Slow ho?",
+      "a": "Agar internet slow ho to video dheere download hogi. Buffering dikh sakti hai. Video quality kam ho sakti hai — YouTube automatically quality kam kar deta hai. Loading time badh jata hai. Agar bahut slow ho to video ruk-ruk kar chalegi. Isliye fast internet zaroori hai. YouTube adaptive streaming use karta hai — woh tumhari internet speed ke hisab se quality adjust karta hai. Isse video chalti rehti hai — chahe quality kam ho."
+    },
+    {
+      "id": 309,
+      "q": "YouTube ko kaise pata chalta hai ki tumhe kya pasand hai?",
+      "a": "YouTube system dekhta hai: (1) Kaunsi Videos dekhi — history, (2) Kitni der dekhi — jaldi chhod di ya poori dekhi, (3) Kis Topic par zyada time diya, (4) Kaunse videos like, comment, share kiye, (5) Kis channel ko subscribe kiya, (6) Kis time par dekhte ho, (7) Kis device se dekhte ho. In sab data se YouTube recommendation banata hai. Isliye tumhe woh videos suggest hoti hain jo tumhe pasand aa sakti hain. Yeh machine learning ka example hai."
+    },
+    {
+      "id": 310,
+      "q": "YouTube ek din me kitna Data handle karta hoga?",
+      "a": "YouTube ek din me bahut zyada data handle karta hai. Har second me hazaron videos upload hoti hain. Duniya bhar ke crores log videos dekhte hain. YouTube ke data centers me exabytes data store hai. Har din petabytes naya data add hota hai. Isliye YouTube ko bahut bade infrastructure ki zarurat hoti hai — lakhon servers, CDN, storage systems. Iske bina YouTube chal nahi sakta. Yeh duniya ke sabse bade data systems me se ek hai."
+    },
+        {
+      "id": 311,
+      "q": "WhatsApp Message itni jaldi kaise pahunchta hai?",
+      "a": "WhatsApp message is tarah jaldi pahunchta hai: (1) Tumhara phone message ko encrypt karke server par bhejta hai, (2) WhatsApp Server use turant receive karta hai, (3) Server check karta hai ki receiver online hai ya nahi, (4) Agar online hai to message turant uske phone par bhej deta hai, (5) Agar offline hai to server message ko kuch samay ke liye sambhal kar rakhta hai. Yeh sab milliseconds me hota hai. Isliye message turant pahunchta hai — chahe receiver duniya me kahin bhi ho."
+    },
+    {
+      "id": 312,
+      "q": "Blue Tick kab aata hai?",
+      "a": "Blue Tick ke 3 stages hote hain: (1) Ek Grey Tick — Message tumhare phone se nikla aur WhatsApp Server tak pahunch gaya, (2) Do Grey Tick — Message dusre user ke phone tak pahunch gaya, (3) Blue Tick — Message dusre user ne padh liya (agar read receipts on hain). Agar dusra user read receipts off kar de, to tumhe blue tick nahi dikhega. Group me blue tick tab aata hai jab sab members padh lein."
+    },
+    {
+      "id": 313,
+      "q": "WhatsApp Offline Message kaise bhej deta hai?",
+      "a": "Agar dusra user offline hai, to WhatsApp Server message ko kuch samay ke liye sambhal kar rakhta hai. Yeh messages server par encrypted form me store hote hain. Jab dusra user online aata hai, to server turant usse message deliver kar deta hai. WhatsApp server message ko 30 din tak rakhta hai. Agar 30 din me user online nahi aaya, to message delete ho jata hai. Isliye offline message bhi safely pahunch jata hai — bas thodi der baad."
+    },
+    {
+      "id": 314,
+      "q": "WhatsApp Backup kya hota hai?",
+      "a": "WhatsApp Backup matlab chats ki copy cloud me save karna. Agar phone kharab ho jaye, kho jaye, ya naya phone le lo — to chats wapas mil sakti hain. WhatsApp me Google Drive ya iCloud me backup hota hai. Tum daily, weekly ya monthly backup set kar sakte ho. Backup me messages, photos, videos sab aate hain. Lekin backup bhi encrypted hota hai. Isliye important chats ke liye backup zaroor on rakho."
+    },
+    {
+      "id": 315,
+      "q": "WhatsApp End-to-End Encryption kya hoti hai?",
+      "a": "WhatsApp End-to-End Encryption matlab message aise lock hota hai ki sirf sender aur receiver hi use padh sakte hain. WhatsApp server bhi message nahi padh sakta. Jaise tum letter ko special lock wale box me bhejo — box ki chaabi sirf tumhare paas aur receiver ke paas. Beech me koi bhi box nahi khol sakta. Isliye WhatsApp messages safe hote hain. Government, hackers, ya WhatsApp khud bhi messages nahi padh sakte. Yeh security ka sabse strong form hai."
+    },
+    {
+      "id": 316,
+      "q": "ChatGPT kya karta hai?",
+      "a": "ChatGPT language ko samajhne aur uske hisab se jawab generate karne ki koshish karta hai. Jab tum sawal puchte ho, to woh tumhare words ko samajhta hai. Phir apni training ke patterns ke hisab se jawab banata hai. Woh ek-ek shabd predict karta hai — sabse sambhavit agla shabd. Isliye woh insaan ki tarah jawab deta hai. Lekin woh samajhta nahi — sirf patterns follow karta hai. Woh ek language model hai — ek bahut bada pattern-matching system."
+    },
+    {
+      "id": 317,
+      "q": "ChatGPT har jawab copy karta hai?",
+      "a": "Nahi. ChatGPT har jawab copy nahi karta. Har baar naya jawab generate karta hai. Isliye ek hi question ke alag-alag answers mil sakte hain. Woh apni training ke patterns use karta hai — lekin har baar naya combination banata hai. Jaise tum ek hi kahani alag-alag shabdon me suna sakte ho. Waise hi ChatGPT ek hi baat alag-alag tareeke se keh sakta hai. Lekin kabhi-kabhi woh galat bhi ho sakta hai — kyunki woh sirf patterns follow karta hai, sach nahi jaanch sakta."
+    },
+    {
+      "id": 318,
+      "q": "ChatGPT ko itna sab kaise pata hai?",
+      "a": "ChatGPT ko itna sab isliye pata hai kyunki usne training ke dauran bahut saare text examples se patterns seekhe hain. Usne internet ke books, articles, websites, conversations — sab padha hai. Isse usne language ke patterns, facts, aur reasoning seekhi. Training me crores text use hue. Lekin woh sab yaad nahi rakhta — woh patterns seekhta hai. Isliye woh naye sawalon ka bhi jawab de sakta hai — chahe woh sawal usne pehle dekha na ho."
+    },
+    {
+      "id": 319,
+      "q": "Kya ChatGPT hamesha sahi hota hai?",
+      "a": "Nahi. ChatGPT hamesha sahi nahi hota. Kabhi-kabhi galti bhi ho sakti hai. Isko 'hallucination' kehte hain — jab AI confident tareeke se galat jawab deta hai. Kyunki woh sirf patterns follow karta hai, sach nahi jaanch sakta. Isliye important information ko verify karna chahiye. Medical, legal, financial advice ke liye expert se pucho. ChatGPT ek tool hai — final authority nahi. Usse starting point ki tarah use karo, final answer ki tarah nahi."
+    },
+    {
+      "id": 320,
+      "q": "AI aur Google me Difference?",
+      "a": "Google information dhundhta hai — woh tumhe websites ke links deta hai. AI information ko samajhkar jawab banane ki koshish karti hai — woh tumhe seedha jawab deti hai. Google ke paas index hai — woh pages dhundhta hai. AI ke paas patterns hain — woh jawab generate karti hai. Google tumhe sources dikhata hai — tum khud padh sakte ho. AI tumhe summary deti hai — lekin woh galat bhi ho sakti hai. Dono ke apne use hain. Kabhi Google better, kabhi AI better. Best hai dono ko milakar use karna."
+    },
+    {
+      "id": 321,
+      "q": "Agar Google Down ho jaye... Kya hoga?",
+      "a": "Agar Google down ho jaye to: (1) Search ruk jayegi — log kuch dhundh nahi payenge, (2) Gmail band — emails nahi aayenge, (3) YouTube band — videos nahi chalengi, (4) Google Maps band — navigation nahi hoga, (5) Google Drive band — files access nahi hongi, (6) Android services affect hongi, (7) Bahut si apps jo Google services use karti hain woh bhi band ho jayengi. Duniya ka bahut bada hissa ruk jayega. Isliye Google ke paas backup systems hote hain — taaki aisa na ho. Google ka downtime bahut rare hota hai."
+    },
+    {
+      "id": 322,
+      "q": "Agar WhatsApp me 10 Crore log ek saath Message bhej dein?",
+      "a": "Agar WhatsApp me 10 crore log ek saath message bhejein to ek server kaafi nahi hoga. System load ko bahut saare servers me baantna padega. WhatsApp ke paas already lakhon servers hain. Load Balancer requests ko alag-alag servers me baantta hai. Data alag-alag data centers me hota hai. Agar ek server busy ho to dusra sambhal leta hai. Isliye WhatsApp itna bada load handle kar leta hai. Lekin agar achanak 10 guna zyada load aa jaye to thodi slow ho sakti hai. Isliye WhatsApp naye servers add karta rehta hai."
+    },
+    {
+      "id": 323,
+      "q": "Agar YouTube sirf ek Computer par chal raha ho?",
+      "a": "Agar YouTube sirf ek computer par chal raha ho to woh bahut jaldi overload ho jayega. Ek computer crores users ka load nahi utha sakta. Videos store karne ki jagah nahi hogi. Data transfer ki speed kam hogi. Kuch seconds me woh crash ho jayega. Isliye YouTube distributed systems use karta hai — lakhon computers milkar kaam karte hain. Data duniya bhar me faila hota hai. Isliye YouTube 24/7 chal sakta hai — bina ruke."
+    },
+    {
+      "id": 324,
+      "q": "OpenAI jaise AI banana mushkil kyu hai?",
+      "a": "OpenAI jaise AI banana mushkil isliye hai kyunki: (1) Bahut saara data chahiye — crores books, articles, websites, (2) Powerful computers chahiye — hazaron GPUs, (3) Research chahiye — naye algorithms, naye methods, (4) Testing chahiye — AI ko safe, helpful aur honest banana, (5) Team chahiye — scientists, engineers, researchers, (6) Paisa chahiye — crores dollars, (7) Time chahiye — saal lag jate hain. Sirf coding nahi — data, hardware, research, testing, aur bahut kuch chahiye. Isliye duniya me sirf kuch companies AI bana pati hain."
+    },
+    {
+      "id": 325,
+      "q": "Top Engineers ka sabse bada Skill kya hai?",
+      "a": "Top Engineers ka sabse bada skill hai: Complex problem ko simple banana. MIT ka rule hai: Agar tum kisi difficult cheez ko 12 saal ke bachche ko samjha sakte ho, to tum use achhi tarah samajhte ho. Top engineers badi problems ko chhote parts me todte hain. Woh simple solutions dhundhte hain — complex nahi. Woh dusron ko samjha sakte hain. Woh questions puchte hain — answers nahi ratte. Yahi skill unhe alag banati hai. Yeh skill practice se aati hai — roz thoda-thoda sochne se."
+    },
+    {
+      "id": 326,
+      "q": "Google ko aur Fast kaise banaoge?",
+      "a": "Google ko aur fast banane ke liye: (1) Better Index — data ko aur smart tareeke se organize karo, (2) AI Ranking — machine learning se best results pehle dikhao, (3) Edge Servers — tumhare shehar ke paas server lagao, (4) Cache — common searches ka result ready rakho, (5) Faster Network — better cables, better protocols, (6) Predictive Search — tumhare sawal ka jawab pehle se taiyar rakho, (7) Compression — data chhota karke bhejo. In sab se Google aur fast ho sakta hai. Lekin Google already bahut fast hai — 1 second se kam. Aur fast karna mushkil hai — lekin possible hai."
+    },
+    {
+      "id": 327,
+      "q": "WhatsApp me ek naya Feature add karo. Jo duniya me kisi App me na ho.",
+      "a": "Ek naya WhatsApp feature: 'Mood Messages'. Jab tum message bhejo, to tum apna mood set kar sakte ho — happy, sad, angry, tired. Receiver ko message ke saath tumhara mood dikhega. Agar tumhara mood sad hai, to WhatsApp tumhe suggest karega ki kya likhna hai. Agar tumhara mood angry hai, to WhatsApp tumhe thoda rukne ko kahega — taaki tum kuch galat na bhejo. Yeh feature emotional intelligence add karega. Aisa feature aaj kisi messaging app me nahi hai. Yeh logon ki mental health me madad kar sakta hai."
+    },
+    {
+      "id": 328,
+      "q": "YouTube Recommendation ko Fair kaise banaoge?",
+      "a": "YouTube Recommendation ko fair banane ke liye: (1) New Creators ko chance do — sirf popular channels ko na dikhao, (2) Small Languages ko support karo — sirf English aur Hindi nahi, (3) Educational Content ko push karo — sirf entertainment nahi, (4) Diverse Opinions dikhao — ek hi viewpoint nahi, (5) Regional Content promote karo, (6) Quality ko importance do — sirf views ko nahi, (7) User ko control do — woh decide kare kya dekhna hai. Isse chhote creators ko mauka milega aur users ko variety milegi."
+    },
+    {
+      "id": 329,
+      "q": "Socho tum OpenAI ke CTO ho. AI ko aur Safe banane ke liye 5 Rules banao.",
+      "a": "AI Safety ke 5 Rules: (1) Honesty — AI ko sirf sach bolna chahiye, ya clear kare ki usse nahi pata, (2) Transparency — AI ko batana chahiye ki usne jawab kaise banaya, (3) Privacy — AI user ka personal data safe rakhe, (4) Human Control — important decisions me human involved rahe, (5) No Harm — AI kisi ko nuksan na pahunchaye — chahe koi usse aisa kehne ki koshish kare. In rules se AI safe aur trustworthy ban sakti hai. AI ka goal insaan ki madad karna hai — nuksan nahi."
+    },
+    {
+      "id": 330,
+      "q": "Tumhe ₹1 Crore diye gaye hain. Ek App banao jo Google, YouTube aur WhatsApp se better ho kisi ek kaam me.",
+      "a": "App Idea: 'Local Help' — ek app jo tumhare aas-paas ke logon se madad dhundhta hai. Problem: Jab tumhe kisi chhoti cheez ki zarurat ho — jaise plumber, electrician, tutor, ya koi saaman — to Google slow hai, WhatsApp me group dhundhna mushkil hai. Solution: Tum app kholo, bolo kya chahiye — app tumhare 5 km ke andar wale logon se connect kare. Target Users: Har shehar ke log. Technology: GPS + Messaging + AI matching. Earning: Chhoti commission har kaam par. Yeh Google se better hai kyunki woh local aur fast hai. WhatsApp se better hai kyunki woh organized hai."
+    },
+    {
+      "id": 331,
+      "q": "Software Architecture kya hota hai?",
+      "a": "Software Architecture software banane ka Master Plan hai. Yeh batata hai ki software ke kaunse parts honge, woh kaise connect honge, data kahan store hoga, kaunsi technology use hogi, aur system kaise scale karega. Jaise ghar banane se pehle architect map banata hai — kitne kamre, kahan kitchen, kahan bathroom. Waise hi software architect batata hai — kitne modules, kahan database, kahan API. Bina architecture ke coding karna jaise bina map ke ghar banana. Architecture achha ho to software 10 saal chal sakta hai."
+    },
+    {
+      "id": 332,
+      "q": "Seedha Coding kyu nahi shuru karte?",
+      "a": "Seedha coding isliye nahi shuru karte kyunki bina planning ke baad me sab badalna mushkil ho jata hai. Ek chhoti galti poori app ko tod sakti hai. MIT ka rule hai: 10 minute ki planning se 10 ghante ki coding bach sakti hai. Pehle socho: Problem kya hai? Users kaun hain? Kaunse features chahiye? Data kahan store hoga? Kaise test karoge? In sab ka jawab dhoondhne ke baad code likho. Achha engineer pehle design banata hai — paper par ya whiteboard par — phir computer par code karta hai."
+    },
+    {
+      "id": 333,
+      "q": "Architecture aur Coding me Difference?",
+      "a": "Architecture = Plan, Map, Design. Yeh batata hai ki software kaise banega — kaunse parts honge, kaise connect honge, kaunsi technology use hogi. Coding = Plan ko Reality me badalna. Architect sochta hai 'kya banana hai aur kaise'. Coder sochta hai 'kaise likhna hai'. Dono zaroori hain. Lekin architecture ke bina coding sirf guesswork hoti hai. Achha architecture achha code deta hai. Bura architecture bura code deta hai — chahe coder kitna bhi achha ho. Isliye pehle architecture, phir coding."
+    },
+    {
+      "id": 334,
+      "q": "WhatsApp kitne Parts me bana hoga?",
+      "a": "WhatsApp sirf chat app nahi hai. Uske bahut se alag systems hain: (1) Login System — phone number verify, (2) Chat System — messages bhejna, receive karna, (3) Call System — voice calls, (4) Video Call System — video calls, (5) Backup System — chats cloud me save, (6) Status System — 24 ghante wale status, (7) Notification System — naye message ki suchna, (8) Security System — end-to-end encryption, (9) Database System — crores users ka data, (10) Server Infrastructure — lakhon servers. Har system alag team bana sakti hai. Sab milkar WhatsApp banate hain. Isliye badi apps ko chhote modules me todkar banate hain — isse manage karna aasaan hota hai."
+    },
+    {
+      "id": 335,
+      "q": "Ek Engineer pehle kya banata hai?",
+      "a": "Ek engineer pehle Diagram banata hai, phir Code. MIT ka rule hai: Think → Design → Code. Pehle socho problem kya hai. Phir design banao solution ka — paper par ya whiteboard par. Kaunse modules honge, kaise connect honge, data kahan store hoga. Phir code likho. Bina design ke code likhna jaise bina naksha ghar banana — deewar ban jayegi lekin darwaza kahan hoga pata nahi. Achhe engineers pehle paper par design banate hain. Phir computer par code karte hain. Isse time bachta hai aur code clean rehta hai."
+    },
+    {
+      "id": 336,
+      "q": "Scalability kya hoti hai?",
+      "a": "Scalability matlab agar users 100 se 100 crore ho jayein, aur app fir bhi fast chale. Jaise ek dukan me 10 log aayein to aaram se chal jata hai, lekin 10,000 log aa jayein to system collapse ho jata hai. Scalable system woh hai jo badhte load ko handle kar sake. Iske liye: (1) Servers badhane padte hain, (2) Database optimize karna padta hai, (3) Load Balancer lagana padta hai, (4) Cache use karna padta hai, (5) Design smart banana padta hai. Google, WhatsApp, Instagram — sab scalable hain. Isliye woh crores users ko handle kar lete hain."
+    },
+    {
+      "id": 337,
+      "q": "Agar Instagram par kal 50 Crore naye Users aa jaye?",
+      "a": "Agar Instagram par 50 crore naye users achanak aa jayein to: (1) Server badhane padenge — zyada machines chahiye, (2) Database optimize karna padega — data ko alag-alag servers me baantna padega, (3) Network improve karna padega — zyada bandwidth chahiye, (4) Load Balancer lagana padega — requests ko alag servers me baantna, (5) Cache badhana padega — baar-baar use hone wala data jaldi mile, (6) CDN badhana padega — photos aur videos paas wale server se aayein, (7) Team badhani padegi — zyada engineers chahiye. Isse scalability kehte hain. Instagram already scalable hai — lekin 50 crore naye users achanak aayein to thodi der slow ho sakti hai."
+    },
+    {
+      "id": 338,
+      "q": "App Slow kyu ho jati hai?",
+      "a": "App slow hone ke kai reasons ho sakte hain: (1) Server Busy — bahut zyada requests aa rahi hain, (2) Internet Slow — user ka network kamzor hai, (3) Database Slow — data dhundhne me time lag raha hai, (4) Code Slow — inefficient algorithm use ho raha hai, (5) Bahut zyada Users — server overload ho gaya, (6) Memory kam — RAM full ho gayi, (7) Bad Design — architecture weak hai, (8) Third-party services slow — jaise payment gateway. Har reason ka alag solution hota hai. Isliye pehle reason dhundho, phir solution. MIT thinking: ek problem ke hamesha kai possible reasons ho sakte hain."
+    },
+    {
+      "id": 339,
+      "q": "Google Crash kyu nahi hota?",
+      "a": "Google crash nahi hota kyunki: (1) Bahut saare Servers — ek nahi, lakhon servers hain, (2) Backup — ek server fail ho to dusra sambhal leta hai, (3) Load Balancer — requests ko alag-alag servers me baantta hai, (4) Fast Database — data jaldi milta hai, (5) Smart Design — system aisa banaya gaya hai ki fail hone par bhi chalta rahe, (6) Distributed System — data duniya bhar me faila hua hai, (7) Regular Testing — system ki weaknesses dhundhi jaati hain, (8) Automatic Recovery — fail hone par system khud theek ho jata hai. Isliye Google 24/7 chalta rehta hai — saal me sirf kuch minute downtime hota hai."
+    },
+    {
+      "id": 340,
+      "q": "Netflix Movie itni Fast kaise chalti hai?",
+      "a": "Netflix movie tumhare paas wale server se aati hai, door wale se nahi. Netflix ne duniya bhar me CDN (Content Delivery Network) lagaye hain. Yeh servers tumhare shehar ke paas hote hain. Isliye data kam distance travel karta hai aur speed badh jati hai. Iske alawa Netflix video ko chhote parts me todkar bhejta hai, aur tumhara phone usse jodta hai. Netflix adaptive streaming use karta hai — woh tumhari internet speed ke hisab se quality adjust karta hai. Isliye buffering kam hoti hai. Netflix ne apni technology khud banayi hai — Open Connect. Isliye Netflix fast chalti hai — chahe duniya me kahin bhi ho."
+    },
+        {
+      "id": 341,
+      "q": "Cloud Computing kya hoti hai?",
+      "a": "Cloud Computing matlab Internet par Computer rent par lena. Tumhe apna server kharidna nahi padta. Tum AWS, Azure ya Google Cloud se server rent par lete ho. Woh tumhara data store karte hain, tumhara code chalate hain. Tumhe sirf use ke hisab se paisa dena hota hai. Jaise bijli ka bill — jitna use karo, utna paisa. Isse chhoti companies bhi badi companies jaisa infrastructure use kar sakti hain — bina zyada paisa kharch kiye. Isliye aaj har startup cloud use karta hai."
+    },
+    {
+      "id": 342,
+      "q": "Cloud ka Real Life Example?",
+      "a": "Cloud ke real life examples: (1) Google Drive — photos aur files internet par store, (2) Dropbox — files cloud me save, (3) AWS — Amazon ka cloud jahan companies apna software chalati hain, (4) Azure — Microsoft ka cloud, (5) Google Cloud — Google ka cloud, (6) iCloud — Apple ka cloud, (7) Netflix — movies cloud se aati hain, (8) WhatsApp — messages cloud se guzarte hain. Jab tum photo Google Drive par upload karte ho, woh tumhare phone me nahi, Google ke server par hoti hai. Wahi cloud hai. Tum kisi bhi device se usse dekh sakte ho."
+    },
+    {
+      "id": 343,
+      "q": "AWS kya hai?",
+      "a": "AWS (Amazon Web Services) Amazon ki Cloud Service hai. Companies AWS se servers, storage, database aur bahut kuch rent par leti hain. Duniya ki bahut si badi companies AWS use karti hain — Netflix, Instagram, Airbnb, NASA. AWS ke bina unhe khud ke server kharidne padte — jo bahut mehenga aur mushkil hota. AWS ne cloud computing ko aasaan bana diya. Isliye aaj AWS duniya ka sabse bada cloud provider hai. AWS ke paas duniya bhar me data centers hain. Tum minutes me naya server le sakte ho."
+    },
+    {
+      "id": 344,
+      "q": "Microsoft Azure kya hai?",
+      "a": "Microsoft Azure Microsoft ka Cloud Platform hai. Yeh AWS ka competitor hai. Companies Azure se servers, storage, AI services aur databases rent par leti hain. Azure Microsoft ke products ke saath achhe se kaam karta hai — Windows, Office, Active Directory. Bahut si companies Azure use karti hain — jaise Samsung, BMW, Walmart. AWS aur Azure duniya ke do sabse bade cloud providers hain. Google Cloud teesra hai. Azure AI aur enterprise solutions me bahut strong hai. Companies jo Microsoft products already use karti hain, woh Azure prefer karti hain."
+    },
+    {
+      "id": 345,
+      "q": "Google Cloud kya hai?",
+      "a": "Google Cloud Google ka Cloud Platform hai. Google apni technology dusri companies ko bhi use karne deta hai. YouTube, Gmail, Google Maps jaise products Google Cloud par chalte hain. Companies Google Cloud se servers, storage, AI, machine learning aur databases rent par leti hain. Google Cloud AI aur data analytics me bahut strong hai. Jaise BigQuery — data analysis ka tool. Google Cloud Kubernetes bhi deta hai — containers manage karne ke liye. Yeh AWS aur Azure ke baad teesra sabse bada cloud provider hai. AI companies Google Cloud prefer karti hain."
+    },
+    {
+      "id": 346,
+      "q": "Ek hi Server kyu use nahi karte?",
+      "a": "Ek hi server isliye use nahi karte kyunki: (1) Agar woh kharab ho gaya to poori website band ho jayegi, (2) Ek server crores users ka load nahi utha sakta, (3) Ek server slow ho jayega jab zyada log aayenge, (4) Maintenance ke waqt website down ho jayegi, (5) Ek server me itna data store nahi ho sakta, (6) Door ke users ko slow speed milegi. Isliye bahut saare servers use hote hain — load baantne ke liye, backup ke liye, aur reliability ke liye. Isse distributed system kehte hain. Google, Facebook, WhatsApp sab distributed systems hain."
+    },
+    {
+      "id": 347,
+      "q": "Distributed System kya hota hai?",
+      "a": "Distributed System matlab bahut saare computers milkar ek hi system ki tarah kaam karte hain. Jaise ek school me bahut se teachers hain, lekin sab milkar school chalate hain. Distributed system me: (1) Kaam baant diya jata hai — har computer alag kaam karta hai, (2) Ek computer fail ho to dusra sambhal leta hai, (3) Load zyada ho to naye computers add kar sakte hain, (4) Data alag-alag jagah store hota hai, (5) Users ko lagta hai ki woh ek hi system use kar rahe hain. Google, Facebook, WhatsApp, Netflix sab distributed systems hain. Isliye woh crores users ko handle kar lete hain."
+    },
+    {
+      "id": 348,
+      "q": "Load Balancer kya karta hai?",
+      "a": "Load Balancer requests ko alag-alag servers me baantta hai. Jaise bank me 100 customers aayein aur 4 counters khule hain — har counter par 25 log. Load Balancer bhi waise hi kaam karta hai. Woh dekhta hai kaunsa server free hai aur request usse bhejta hai. Isse koi server overload nahi hota. Agar ek server down ho jaye to Load Balancer requests dusre servers par bhej deta hai. Isliye website fast aur reliable rehti hai. Load Balancer ke kai types hote hain — Round Robin, Least Connections, IP Hash. Har type alag situation ke liye best hota hai."
+    },
+    {
+      "id": 349,
+      "q": "Server Down ho gaya. Ab?",
+      "a": "Agar ek server down ho gaya to dusra server kaam sambhal leta hai. Isko Redundancy kehte hain. Matlab ek se zyada server hamesha ready rehte hain. Agar primary server fail ho jaye to backup server turant active ho jata hai. User ko pata bhi nahi chalta. Isliye badi companies ek se zyada data centers alag-alag shehron me rakhti hain. Agar ek data center me bijli chali jaye to dusra sambhal leta hai. Agar poora data center fail ho jaye to dusre shehar ka data center kaam sambhal leta hai. Isliye Google, Amazon, Netflix kabhi band nahi hote."
+    },
+    {
+      "id": 350,
+      "q": "Backup Server kyu hota hai?",
+      "a": "Backup Server emergency ke liye hota hai. Jaise hospital me generator hota hai — bijli chali jaye to generator turant chal padta hai. Waise hi agar main server fail ho jaye to backup server kaam sambhal leta hai. Backup server ka data regularly update hota rehta hai. Isse data loss nahi hota. Badi companies ke paas multiple backup servers hote hain — alag-alag shehron me. Agar ek shehar me disaster ho jaye to dusre shehar ka server kaam sambhal leta hai. Isliye unki services kabhi band nahi hoti. Backup ke bina ek disaster poori company ko tabah kar sakta hai."
+    },
+    {
+      "id": 351,
+      "q": "Ek hi Database kyu nahi hota?",
+      "a": "Ek hi database isliye nahi hota kyunki: (1) Crores users ke liye ek database bahut slow ho jayega, (2) Agar woh crash ho gaya to poora system band, (3) Ek server me itna data store nahi ho sakta, (4) Door ke users ko data dhundhne me time lagega, (5) Ek database par bahut zyada load aa jayega. Isliye data ko alag-alag databases me baanta jata hai — region ke hisab se, user ke hisab se, ya data type ke hisab se. Isse speed aur reliability badhti hai. Isko database sharding kehte hain. Har shard alag server par hota hai. Isse system scalable banta hai."
+    },
+    {
+      "id": 352,
+      "q": "Instagram Photo kahan Store hoti hai?",
+      "a": "Instagram me photo files alag storage systems me rakhi jaati hain — jaise Amazon S3 ya similar object storage. Database me sirf photo ki information hoti hai — jaise kisne upload ki, kab upload ki, kaunse users ne like kiya, kitne comments hain, kaunse hashtags hain. Photo ko direct database me nahi rakhte kyunki database text aur numbers ke liye hota hai, badi files ke liye nahi. Isliye photo alag, information alag. Jab tum photo dekhte ho, to Instagram database se information leta hai aur storage se photo. Isse system fast rehta hai. Yeh architecture ka important principle hai — sahi data sahi jagah."
+    },
+    {
+      "id": 353,
+      "q": "YouTube Video Database me hoti hai?",
+      "a": "YouTube me video files alag storage me hoti hain — Google ke data centers me. Database me unki details hoti hain — title, description, upload date, views, likes, comments, channel name, tags. Video ko database me nahi rakhte kyunki woh bahut badi file hoti hai. Database sirf information rakhta hai. Video ko CDN ke through users tak bheja jata hai. Jab tum video dekhte ho, to YouTube database se information leta hai aur CDN se video. Isse YouTube itni fast chalti hai. Yeh architecture ka example hai — har cheez apni sahi jagah."
+    },
+    {
+      "id": 354,
+      "q": "Backup har din kyu lete hain?",
+      "a": "Backup har din isliye lete hain taaki agar data delete ho jaye, corrupt ho jaye, ya koi attack ho jaye, to wapas la sake. Jaise tum apne phone ki photos Google Photos me backup karte ho — agar phone kho jaye to photos safe rehti hain. Badi companies ka data bahut valuable hota hai. Agar ek din ka backup na ho aur data lost ho jaye to crores ka nuksan ho sakta hai. Isliye automatic daily backup hota hai. Backup alag server par, alag shehar me, alag cloud me hota hai. Isse data hamesha safe rehta hai. Backup ke bina company ka wujood khatre me hota hai."
+    },
+    {
+      "id": 355,
+      "q": "MIT Engineer sabse pehle kya sochta hai?",
+      "a": "MIT Engineer sabse pehle ye sochta hai: Agar server toot gaya, Internet slow hai, 10 crore users aa gaye — fir bhi system kaise chalega? Woh failure ke baare me pehle sochta hai, success ke baare me baad me. Woh system aisa design karta hai jo fail hone par bhi kaam kare. Isko 'design for failure' kehte hain. Woh sochta hai: Kya galat ho sakta hai? Kaise bachayenge? Kaise recover karenge? Yahi real engineering hai — sirf happy path nahi, har situation ke liye ready rehna. Yeh thinking usse alag banati hai."
+    },
+    {
+      "id": 356,
+      "q": "Computer me ek saath itne Apps kaise chalte hain?",
+      "a": "Operating System har App ko thoda-thoda CPU time deta hai. Jaise teacher 40 students ko ek saath nahi padhata — woh har student ko thoda-thoda time deta hai. Computer bhi aisa hi karta hai. CPU itni tez hai ki woh har second me lakho instructions execute karta hai. Isliye hume lagta hai ki sab Apps ek saath chal rahe hain. Asal me woh ek ke baad ek chalte hain — bas bahut tez. Isko time slicing kehte hain. Operating System ka scheduler decide karta hai kaunsa App kab chalega. Isliye multitasking possible hoti hai."
+    },
+    {
+      "id": 357,
+      "q": "CPU sirf ek hi kaam karta hai?",
+      "a": "CPU ek samay me bahut kam instructions execute karta hai, lekin bahut hi tez speed se. Modern CPU ek second me billions of instructions kar sakta hai. Isliye hume lagta hai ki sab Apps ek saath chal rahe hain. Asal me CPU ek ke baad ek kaam karta hai — bas itna tez ki hume pata nahi chalta. Isko multitasking kehte hain. Operating System CPU ka time sab Apps me baantta hai. Jaise teacher har student ko thoda time deta hai. CPU ka speed GHz me measure hota hai — 3 GHz matlab 3 billion cycles per second."
+    },
+    {
+      "id": 358,
+      "q": "Agar RAM bhar jaye to kya hota hai?",
+      "a": "Agar RAM bhar jaye to Operating System kuch data ko Storage (SSD/HDD) par temporarily rakh deta hai. Isko Virtual Memory kehte hain. Lekin Storage RAM se bahut slow hota hai. Isliye Computer slow ho jata hai. Jaise table bhar gayi aur ab books zameen par rakhni pad rahi hain. Zameen se uthane me zyada time lagta hai. Isliye RAM kam ho to computer slow ho jata hai. Zyada RAM se computer fast chalta hai. Agar RAM bahut kam ho to computer hang bhi ho sakta hai. Isliye heavy software ke liye zyada RAM chahiye."
+    },
+    {
+      "id": 359,
+      "q": "Restart karne se Computer fast kyu ho jata hai?",
+      "a": "Restart karne se Computer fast ho jata hai kyunki: (1) Temporary memory (RAM) saaf ho jati hai, (2) Background me chal rahe bahut se programs band ho jate hain, (3) Memory leaks clear ho jate hain — jo programs RAM leak kar rahe the woh band ho jate hain, (4) System files refresh hoti hain, (5) Pending updates install ho jate hain, (6) Cache clear ho jata hai, (7) CPU load kam ho jata hai. Isliye jab computer slow lage to restart karna chahiye. Yeh ek simple solution hai jo bahut baar kaam karta hai. Lekin baar-baar restart karna bhi achha nahi — asli problem dhundhni chahiye."
+    },
+    {
+      "id": 360,
+      "q": "Computer Hang kyu hota hai?",
+      "a": "Computer hang hone ke kai reasons ho sakte hain: (1) RAM kam — bahut se programs chal rahe hain, (2) CPU bahut busy — koi heavy task chal raha hai, (3) Software bug — koi program crash ho gaya, (4) Storage issue — hard disk kharab ho raha hai, (5) Virus — malware system slow kar raha hai, (6) Overheating — fan kharab hai ya dust jama hai, (7) Driver problem — purana driver, (8) Too many startup programs. MIT thinking: ek problem ke hamesha kai possible reasons ho sakte hain. Ek-ek karke check karo. Task Manager kholo aur dekho kaunsa program zyada resources use kar raha hai."
+    },
+    {
+      "id": 361,
+      "q": "Compiler kya hota hai?",
+      "a": "Compiler tumhare likhe code ko Computer ki language me badalta hai. Tum Python, Java ya C++ me code likhte ho — woh insaan ke liye aasaan hai. Lekin computer sirf 0 aur 1 samajhta hai. Compiler tumhare code ko machine language me translate karta hai. Jaise tum Hindi bolte ho aur translator English me badal deta hai. Compiler bhi wahi karta hai. Bina compiler ke computer tumhara code nahi chala sakta. Compiler code ko check bhi karta hai — agar koi galti ho to batata hai. Isliye coding me compiler bahut important hai."
+    },
+    {
+      "id": 362,
+      "q": "Computer English samajhta hai?",
+      "a": "Nahi. Computer sirf Machine Language samajhta hai — sirf 0 aur 1. Jab tum English me code likhte ho (jaise print('Hello')), to compiler usse 0 aur 1 me badal deta hai. Computer wahi 0 aur 1 padhta hai aur kaam karta hai. Isliye programming languages banayi gayi — taaki insaan aasani se code likh sake. Computer ke liye sab kuch binary hai — 0 aur 1. Tumhara naam, tumhari photo, tumhara message — sab 0 aur 1 me store hota hai. Computer in patterns ko padhkar samajhta hai. Isliye computer English nahi samajhta — sirf binary samajhta hai."
+    },
+    {
+      "id": 363,
+      "q": "Programming Language kyu banayi gayi?",
+      "a": "Programming Language isliye banayi gayi taaki insaan aasani se program likh sake. Agar hume direct 0 aur 1 me code likhna padta, to bahut mushkil hota. Python, Java, JavaScript, C++ jaise languages English jaise lagte hain. Compiler unhe machine language me badal deta hai. Isse coding aasaan, fast aur readable ho gayi. Alag-alag languages alag kaam ke liye banayi gayi — jaise Python AI aur data science ke liye, JavaScript websites ke liye, C++ games aur systems ke liye, Java Android apps ke liye. Har language ka apna use hai. Sahi language chunna important hai."
+    },
+    {
+      "id": 364,
+      "q": "Binary kya hoti hai?",
+      "a": "Binary Computer ki basic language hai. Isme sirf do digits hote hain — 0 aur 1. Har instruction, har photo, har video, har song — sab 0 aur 1 me store hota hai. Jaise tumhare phone me photo hai — woh asal me crores 0 aur 1 ka pattern hai. Computer in patterns ko padhkar samajhta hai. Binary system base-2 par chalta hai. Hum base-10 use karte hain — 0 se 9. Computer base-2 use karta hai — 0 aur 1. Isliye computer ke liye 0 aur 1 hi sab kuch hain. Binary ke bina computer nahi chal sakta."
+    },
+    {
+      "id": 365,
+      "q": "Sirf 0 aur 1 se Game kaise ban jata hai?",
+      "a": "Sirf 0 aur 1 se Game isliye ban jata hai kyunki: (1) Crores aur arbon 0 aur 1 milkar instructions banate hain, (2) Instructions milkar functions banate hain, (3) Functions milkar features banate hain, (4) Features milkar game banta hai. Jaise eenton se ghar banta hai. Har pixel, har sound, har movement — sab 0 aur 1 ka combination hai. Programmer high-level language me likhta hai, compiler usse 0 aur 1 me badal deta hai. Game me jo bhi dikhta hai — character, background, music — sab 0 aur 1 se bana hai. Yeh sochne me amazing lagta hai — lekin sach hai."
+    },
+    {
+      "id": 366,
+      "q": "AI aur Normal Program me Difference?",
+      "a": "Normal Program me rules pehle se likhe hote hain. Programmer batata hai ki agar yeh ho to yeh karo. AI me examples dekhkar pattern seekhne ki koshish hoti hai. AI ko pehle se rules nahi diye jate — woh data se seekhti hai. Jaise normal program calculator hai — usme rules fixed hain. AI ChatGPT hai — usne crores text se seekha hai. Normal program predictable hota hai — same input, same output. AI thoda unpredictable hoti hai — same input, alag output. Normal program ka code padhkar samajh sakte ho. AI ka behaviour samajhna mushkil hai. Dono ke apne use hain."
+    },
+    {
+      "id": 367,
+      "q": "AI ko Training kyu chahiye?",
+      "a": "AI ko Training isliye chahiye kyunki jaise bachcha examples dekhkar seekhta hai, AI bhi data se seekhti hai. Agar AI ko 10 lakh dogs ki photos dikhao, to woh dog pehchanna seekh jayegi. Training me AI ko bahut saara data dikhaya jata hai. Woh patterns dhundhti hai. Jitna zyada aur achha data, utni intelligent AI. Bina training ke AI kuch nahi kar sakti — woh sirf ek empty brain hai. Training me bahut time lagta hai — hafton ya mahino ka. Training ke liye powerful computers chahiye — GPUs. Training ke baad AI ready hoti hai — jawab dene ke liye."
+    },
+    {
+      "id": 368,
+      "q": "Agar AI ko galat data mile to?",
+      "a": "Agar AI ko galat data mile to AI galat prediction kar sakti hai. Isko 'Garbage In, Garbage Out' kehte hain. Jaise agar AI ko sirf red apples ki photos dikhao, to woh green apple ko apple nahi maanegi. Agar AI ko sirf ek taraf ki news dikhao, to woh biased ho jayegi. Isliye data quality bahut important hai. Companies data ko clean karti hain, check karti hain, aur bias hatati hain. Agar AI ko galat data se train karo to woh galat decisions legi — chahe uska code kitna bhi achha ho. AI ka behaviour uske data par depend karta hai. Isliye data science important hai."
+    },
+    {
+      "id": 369,
+      "q": "Kya AI sab problems solve kar sakti hai?",
+      "a": "Nahi. AI bahut useful hai, lekin har problem ke liye sahi tool nahi hoti. AI achhi hai: pattern recognition, language, images, predictions me. Lekin AI kamzor hai: emotions samajhne, common sense, creativity, aur moral decisions me. Kuch problems ke liye simple program better hai. AI ko har jagah use karna galat hai. Sahi problem ke liye sahi tool chuno — kabhi AI, kabhi simple code, kabhi dono. Jaise simple calculator ke liye AI ki zarurat nahi. Lekin image recognition ke liye AI best hai. Isliye socho — problem kya hai, phir tool chuno."
+    },
+    {
+      "id": 370,
+      "q": "Future me AI Engineers ki demand badhegi?",
+      "a": "Bahut sambhavna hai ki AI Engineers ki demand badhegi. Kyunki AI har industry me enter kar rahi hai — health, education, finance, transport, agriculture. Lekin AI ke saath Programming, Mathematics aur Problem Solving bhi zaroori rahenge. Sirf AI use karna kaafi nahi — usse banana, samajhna aur improve karna zaroori hai. Isliye jo log AI + coding + maths + thinking seekhenge, unki demand bahut zyada hogi. Yeh future ka sabse hot career hoga. Lekin sirf AI nahi — AI ke saath domain knowledge bhi chahiye. Jaise AI + Health, AI + Finance, AI + Education."
+    },
+        {
+      "id": 371,
+      "q": "Hacking sirf Password todna hai?",
+      "a": "Nahi. Hacking sirf password todna nahi hai. Hacking me software, network ya systems ki kamzori dhoondhna bhi shamil hai. Hacker system me ghusne ka rasta dhundhta hai — jaise purana software, weak password, misconfiguration, ya insaan ki galti. Ethical hackers companies ko security improve karne me madad karte hain. Malicious hackers nuksan pahunchate hain. Hacking ek skill hai — uska use achha ya bura ho sakta hai. Companies ethical hackers ko hire karti hain — unhe 'bug bounty' deti hain. Isliye hacking sirf password todna nahi — yeh system ko samajhna hai."
+    },
+    {
+      "id": 372,
+      "q": "Encryption kya hoti hai?",
+      "a": "Encryption data ko secret code me badal dena hai. Sirf sahi key wala hi use padh sakta hai. Jaise tum ek letter likho aur usse special code me badal do — bina code ke koi nahi padh sakta. WhatsApp me messages encrypted hote hain. Bank transactions encrypted hoti hain. Agar koi data chura bhi le, to woh use padh nahi sakta. Encryption internet security ka sabse important tool hai. Iske bina online shopping, banking, chat — sab unsafe hoga. Do types hoti hain — symmetric (ek key) aur asymmetric (do keys — public aur private). HTTPS websites encryption use karti hain."
+    },
+    {
+      "id": 373,
+      "q": "Two-Factor Authentication (2FA) kya hai?",
+      "a": "Two-Factor Authentication matlab login ke liye do alag proofs dene padte hain. Jaise: (1) Password — jo tumhe pata hai, (2) OTP — jo tumhare phone par aata hai. Dono chahiye. Agar kisi ko tumhara password pata bhi chal jaye, to bina OTP ke woh login nahi kar sakta. Isse account bahut safe ho jata hai. 2FA on karna chahiye — Gmail, Instagram, WhatsApp, bank — sab me. 2FA ke kai types hain — SMS OTP, Authenticator app, hardware key (jaise YubiKey). Authenticator app SMS se zyada safe hai. 2FA security ka simple aur powerful tool hai."
+    },
+    {
+      "id": 374,
+      "q": "Hacker se bachne ka best tareeka?",
+      "a": "Hacker se bachne ke liye: (1) Strong Password — lamba, unique, random, (2) 2FA on karo — OTP wala extra layer, (3) Software Update — purane software me holes hote hain, (4) Unknown Links par click mat karo — phishing attacks, (5) Public WiFi se banking mat karo, (6) Antivirus use karo, (7) Password Manager use karo, (8) Suspicious emails delete karo, (9) Apni personal info share mat karo, (10) Bank statements regularly check karo. Yeh sab habits hacker se bachati hain. Security ek habit hai, ek baar ka kaam nahi. Roz thoda careful raho — hacker ka mauka mat do."
+    },
+    {
+      "id": 375,
+      "q": "Companies Security par itna paisa kyu kharch karti hain?",
+      "a": "Companies Security par itna paisa isliye kharch karti hain kyunki data bahut valuable hota hai. Agar data leak ho jaye to: (1) Users ka nuksan — personal info, paisa, photos, (2) Company ka nuksan — reputation kharab, fine, customers chale jayenge, (3) Legal problems — laws hain jo data protect karna mandatory karte hain, (4) Business band ho sakta hai, (5) Stock price gir sakti hai. Isliye companies crores security par kharch karti hain. Ek data breach se poori company tabah ho sakti hai. Jaise Facebook, Equifax, Yahoo — sab ko data breach se bahut nuksan hua. Isliye security investment zaroori hai."
+    },
+    {
+      "id": 376,
+      "q": "Coding seekhna enough hai?",
+      "a": "Nahi. Coding seekhna enough nahi hai. Ek achhe engineer ko ye bhi samajhna chahiye: Users — unhe kya chahiye, Design — app kaisi dikhegi aur kaam karegi, Security — data safe kaise rahega, Performance — app fast kaise chalegi, Testing — bugs kaise pakdenge, Scalability — 10 crore users aa jayein to kya hoga, Communication — team ke saath kaise kaam karein. Sirf coding ek skill hai — engineering ek mindset hai. Dono chahiye. Coding seekhna aasaan hai — engineering thinking seekhna mushkil. Isliye top companies coding se zyada thinking dekhti hain."
+    },
+    {
+      "id": 377,
+      "q": "Google Engineer aur Beginner me Difference?",
+      "a": "Beginner feature bana deta hai aur kehta hai 'ho gaya'. Google Engineer sochta hai: Fast hai? Secure hai? Scalable hai? Maintainable hai? Agar 10 crore users aaye to chalega? Agar server fail ho jaye to? Agar attacker attack kare to? Agar internet slow ho to? Beginner 'kaam kar raha hai' par khush hota hai. Engineer 'kaam kar raha hai, lekin better ho sakta hai' sochta hai. Beginner code likhta hai. Engineer system design karta hai. Yahi difference hai coding aur engineering me. Yahi difference beginner aur expert me hai."
+    },
+    {
+      "id": 378,
+      "q": "Computer Science ka asli goal kya hai?",
+      "a": "Computer Science ka asli goal real-world problems ko technology se solve karna hai. Sirf code likhna nahi — balki samajhna ki kaunsi problem solve karni hai, kaise solve karni hai, aur usse logon ki zindagi kaise better banegi. Google ne search problem solve ki. Uber ne taxi problem solve ki. WhatsApp ne communication problem solve ki. Netflix ne entertainment problem solve ki. Har badi technology ke peeche ek real problem hoti hai. CS ka goal woh problem solve karna hai — technology sirf tool hai. Isliye problem pehle samjho, phir technology chuno."
+    },
+    {
+      "id": 379,
+      "q": "MIT Student roz kya practice karta hai?",
+      "a": "MIT Student roz har cheez par sawal karta hai: Kyu? Kaise? Aur better kaise? Woh kabhi bhi kisi baat ko sirf isliye nahi manta ki kisi ne kaha. Woh khud test karta hai, experiment karta hai, aur evidence dekhta hai. Yeh habit uski thinking ko strong banati hai. Woh answers yaad nahi karta — questions puchna seekhta hai. Woh har problem ko chhote parts me todta hai. Woh dusron se seekhta hai. Woh galtiyon se seekhta hai. Roz thoda-thoda sochna, bada difference banata hai. Yahi habit unhe MIT level tak le jaati hai. Practice se thinking strong hoti hai."
+    },
+    {
+      "id": 380,
+      "q": "Sabse bada Secret kya hai?",
+      "a": "Sabse bada secret hai: Technology se pehle Thinking aati hai. Agar tumhari thinking strong hai to tum: Website bana sakte ho, App bana sakte ho, AI bana sakte ho, Startup bana sakte ho, Duniya badal sakte ho. Code seekhna zaroori hai — lekin sochna usse bhi zyada zaroori hai. Code sirf ek tool hai. Soch woh cheez hai jo tool ko direction deti hai. Isliye pehle socho, phir code likho. Yahi MIT, Stanford aur top engineers ka sabse bada secret hai. Tools badalte rehte hain — thinking hamesha kaam aati hai."
+    },
+    {
+      "id": 381,
+      "q": "Google Search sirf ek Website hai?",
+      "a": "Nahi. Google Search sirf ek website nahi hai. Google hazaron computers (servers) ka ek bahut bada system hai. Jab tum search karte ho, to tumhara request duniya bhar ke servers me se guzarta hai. Woh index se data dhundhte hain, rank karte hain, aur result bhejte hain. Yeh sab 1 second se kam me hota hai. Google ke peeche lakhon engineers, millions of programs, aur bahut bada infrastructure hai. Isliye Google ko samajhna matlab ek pura system samajhna. Sirf website dekhna matlab冰山 ka sirf tip dekhna. Andar bahut kuch chalta hai."
+    },
+    {
+      "id": 382,
+      "q": "Jab tum Google par Search karte ho to pehle kya hota hai?",
+      "a": "Jab tum Google par search karte ho to: (1) Tum search likhte ho, (2) Google Server tak Request jati hai — internet ke through, (3) Server Index me search karta hai — pehle se bana hua, (4) Best results rank karta hai — 200+ signals se, (5) Result wapas bhejta hai — tumhare browser tak. Sab kuch 1 second se bhi kam time me hota hai. Iske peeche lakho servers, smart algorithms, aur years of research hai. Tumhe sirf ek search box dikhta hai — lekin andar bahut complex system chalta hai. Yeh distributed computing ka best example hai."
+    },
+    {
+      "id": 383,
+      "q": "Google ko kaise pata chalta hai ki kaunsi Website pehle dikhani hai?",
+      "a": "Google bahut saare signals dekhta hai: (1) Content kitna useful hai — kya woh tumhare sawal ka jawab deta hai, (2) Website kitni trusted hai — kya woh reliable source hai, (3) Search se kitna related hai — keywords match karte hain ya nahi, (4) Kitne log usse visit karte hain, (5) Kitni baar link kiya gaya hai — backlinks, (6) Page kitna fast hai, (7) Mobile-friendly hai ya nahi, (8) Content kitna fresh hai, (9) Author ki expertise, (10) User experience. In sab signals ko milakar Google rank decide karta hai. Exact algorithm public nahi hai — yeh Google ka secret hai. Isliye SEO experts ise samajhne ki koshish karte hain."
+    },
+    {
+      "id": 384,
+      "q": "Google poora Internet har baar padhta hai?",
+      "a": "Nahi. Google poora internet har baar nahi padhta. Google pehle se information ka ek bada Index banakar rakhta hai. Jaise dictionary me words pehle se arrange hote hain — tumhe poora dictionary nahi padhna padta, seedha word dhundh lete ho. Waise hi Google ka index pehle se ready hota hai. Jab tum search karte ho, to Google index me dekhta hai — poore internet me nahi. Isliye search itni fast hoti hai. Index banane me Google ke crawlers lagatar kaam karte rehte hain. Woh websites visit karte hain, content padhte hain, aur index update karte hain. Yeh process 24/7 chalta rehta hai."
+    },
+    {
+      "id": 385,
+      "q": "Google itna Fast kyu hai?",
+      "a": "Google itna fast isliye hai kyunki: (1) Index bana hua hai — data pehle se organized, (2) Bahut saare Servers hain — lakhon machines, (3) Smart Algorithms hain — efficient search, (4) Data duniya bhar me distribute hai — paas wale server se data aata hai, (5) Cache use hota hai — common searches ka result ready, (6) Parallel processing — kai servers ek saath kaam karte hain, (7) Better Hardware — custom chips, fast storage, (8) Optimized Network — fast cables, better protocols. Yeh sab milkar Google ko 1 second se kam me result dene me madad karte hain. Google ne apne hardware bhi banaye hain — TPU chips. Isliye Google duniya ka sabse fast search engine hai."
+    },
+    {
+      "id": 386,
+      "q": "YouTube Video kaise chalti hai?",
+      "a": "YouTube video is tarah chalti hai: (1) Tum video par click karte ho, (2) Phone internet se request bhejta hai, (3) YouTube Server video ka data bhejta hai, (4) Video chhote parts me aati hai — chunks, (5) Phone usse jodkar play karta hai. Video files duniya bhar ke CDN servers me hoti hain — tumhare paas wale server se data aata hai. Isliye video jaldi load hoti hai. Buffering tab hoti hai jab data slow aata hai. YouTube adaptive streaming use karta hai — woh tumhari internet speed ke hisab se quality adjust karta hai. Isliye video chalti rehti hai — chahe quality kam ho."
+    },
+    {
+      "id": 387,
+      "q": "Video Buffering kya hoti hai?",
+      "a": "Video Buffering tab hoti hai jab video ka kuch hissa pehle download ho jata hai. Isliye video smoothly chalti hai. Jaise tum ek book padhne se pehle kuch pages padh lete ho. Buffer matlab temporary storage. Agar internet slow ho, to buffer khatam ho jata hai aur video ruk jati hai — phir se buffer hoti hai. Isliye buffering ka matlab hai video ka data pehle se aa raha hai taaki play smooth rahe. Jitna fast internet, utni kam buffering. YouTube video ko chhote chunks me store karta hai. Jab ek chunk khatam hota hai, tab dusra load hota hai. Isliye buffering kam hoti hai."
+    },
+    {
+      "id": 388,
+      "q": "Agar Internet Slow ho?",
+      "a": "Agar internet slow ho to video dheere download hogi. Buffering dikh sakti hai. Video quality kam ho sakti hai — YouTube automatically quality kam kar deta hai. Loading time badh jata hai. Agar bahut slow ho to video ruk-ruk kar chalegi. Isliye fast internet zaroori hai. YouTube adaptive streaming use karta hai — woh tumhari internet speed ke hisab se quality adjust karta hai. Isse video chalti rehti hai — chahe quality kam ho. Agar internet bilkul hi slow ho to video load nahi hogi. Isliye 4G ya 5G ya WiFi use karo. YouTube ne 'YouTube Go' bhi banaya tha slow internet ke liye."
+    },
+    {
+      "id": 389,
+      "q": "YouTube ko kaise pata chalta hai ki tumhe kya pasand hai?",
+      "a": "YouTube system dekhta hai: (1) Kaunsi Videos dekhi — history, (2) Kitni der dekhi — jaldi chhod di ya poori dekhi, (3) Kis Topic par zyada time diya, (4) Kaunse videos like, comment, share kiye, (5) Kis channel ko subscribe kiya, (6) Kis time par dekhte ho — subah ya raat, (7) Kis device se dekhte ho — phone ya laptop, (8) Search history, (9) Aapki location, (10) Similar users kya dekh rahe hain. In sab data se YouTube recommendation banata hai. Isliye tumhe woh videos suggest hoti hain jo tumhe pasand aa sakti hain. Yeh machine learning ka example hai. YouTube ka recommendation system bahut powerful hai — duniya ka best."
+    },
+    {
+      "id": 390,
+      "q": "YouTube ek din me kitna Data handle karta hoga?",
+      "a": "YouTube ek din me bahut zyada data handle karta hai. Har second me hazaron videos upload hoti hain. Duniya bhar ke crores log videos dekhte hain. YouTube ke data centers me exabytes data store hai. Har din petabytes naya data add hota hai. Isliye YouTube ko bahut bade infrastructure ki zarurat hoti hai — lakhon servers, CDN, storage systems. Iske bina YouTube chal nahi sakta. Yeh duniya ke sabse bade data systems me se ek hai. YouTube ne apni technology khud banayi hai — Google Cloud aur custom CDN. Isliye YouTube itna bada load handle kar leta hai."
+    },
+    {
+      "id": 391,
+      "q": "WhatsApp Message itni jaldi kaise pahunchta hai?",
+      "a": "WhatsApp message is tarah jaldi pahunchta hai: (1) Tumhara phone message ko encrypt karke server par bhejta hai, (2) WhatsApp Server use turant receive karta hai, (3) Server check karta hai ki receiver online hai ya nahi, (4) Agar online hai to message turant uske phone par bhej deta hai, (5) Agar offline hai to server message ko kuch samay ke liye sambhal kar rakhta hai. Yeh sab milliseconds me hota hai. Isliye message turant pahunchta hai — chahe receiver duniya me kahin bhi ho. WhatsApp ke paas duniya bhar me servers hain. Isliye message kam distance travel karta hai aur jaldi pahunchta hai."
+    },
+    {
+      "id": 392,
+      "q": "Blue Tick kab aata hai?",
+      "a": "Blue Tick ke 3 stages hote hain: (1) Ek Grey Tick — Message tumhare phone se nikla aur WhatsApp Server tak pahunch gaya, (2) Do Grey Tick — Message dusre user ke phone tak pahunch gaya, (3) Blue Tick — Message dusre user ne padh liya (agar read receipts on hain). Agar dusra user read receipts off kar de, to tumhe blue tick nahi dikhega. Group me blue tick tab aata hai jab sab members padh lein. Blue tick ka matlab hai ki message padha gaya. Yeh WhatsApp ki useful feature hai — pata chalta hai ki message pahuncha ya nahi. Lekin kuch log ise privacy issue mante hain — isliye off kar sakte hain."
+    },
+    {
+      "id": 393,
+      "q": "WhatsApp Offline Message kaise bhej deta hai?",
+      "a": "Agar dusra user offline hai, to WhatsApp Server message ko kuch samay ke liye sambhal kar rakhta hai. Yeh messages server par encrypted form me store hote hain. Jab dusra user online aata hai, to server turant usse message deliver kar deta hai. WhatsApp server message ko 30 din tak rakhta hai. Agar 30 din me user online nahi aaya, to message delete ho jata hai. Isliye offline message bhi safely pahunch jata hai — bas thodi der baad. Isliye tum bina internet ke message bhej sakte ho — woh jaayega jab dusra online hoga. WhatsApp ka server message ka queue maintain karta hai."
+    },
+    {
+      "id": 394,
+      "q": "WhatsApp Backup kya hota hai?",
+      "a": "WhatsApp Backup matlab chats ki copy cloud me save karna. Agar phone kharab ho jaye, kho jaye, ya naya phone le lo — to chats wapas mil sakti hain. WhatsApp me Google Drive ya iCloud me backup hota hai. Tum daily, weekly ya monthly backup set kar sakte ho. Backup me messages, photos, videos sab aate hain. Lekin backup bhi encrypted hota hai. Isliye important chats ke liye backup zaroor on rakho. Backup se pehle WhatsApp ko 2FA se protect karo — taaki koi aur tumhara backup access na kar sake. WhatsApp backup ki limit hoti hai — 2 GB free Google Drive me."
+    },
+    {
+      "id": 395,
+      "q": "WhatsApp End-to-End Encryption kya hoti hai?",
+      "a": "WhatsApp End-to-End Encryption matlab message aise lock hota hai ki sirf sender aur receiver hi use padh sakte hain. WhatsApp server bhi message nahi padh sakta. Jaise tum letter ko special lock wale box me bhejo — box ki chaabi sirf tumhare paas aur receiver ke paas. Beech me koi bhi box nahi khol sakta. Isliye WhatsApp messages safe hote hain. Government, hackers, ya WhatsApp khud bhi messages nahi padh sakte. Yeh security ka sabse strong form hai. WhatsApp Signal Protocol use karta hai — duniya ka best encryption protocol. Isliye WhatsApp duniya ka sabse secure messaging app hai."
+    },
+    {
+      "id": 396,
+      "q": "ChatGPT kya karta hai?",
+      "a": "ChatGPT language ko samajhne aur uske hisab se jawab generate karne ki koshish karta hai. Jab tum sawal puchte ho, to woh tumhare words ko samajhta hai. Phir apni training ke patterns ke hisab se jawab banata hai. Woh ek-ek shabd predict karta hai — sabse sambhavit agla shabd. Isliye woh insaan ki tarah jawab deta hai. Lekin woh samajhta nahi — sirf patterns follow karta hai. Woh ek language model hai — ek bahut bada pattern-matching system. Uska model billions of parameters se bana hai. Woh duniya ka sabse advanced chatbot hai — lekin perfect nahi."
+    },
+    {
+      "id": 397,
+      "q": "ChatGPT har jawab copy karta hai?",
+      "a": "Nahi. ChatGPT har jawab copy nahi karta. Har baar naya jawab generate karta hai. Isliye ek hi question ke alag-alag answers mil sakte hain. Woh apni training ke patterns use karta hai — lekin har baar naya combination banata hai. Jaise tum ek hi kahani alag-alag shabdon me suna sakte ho. Waise hi ChatGPT ek hi baat alag-alag tareeke se keh sakta hai. Lekin kabhi-kabhi woh galat bhi ho sakta hai — kyunki woh sirf patterns follow karta hai, sach nahi jaanch sakta. Isliye important information verify karo. ChatGPT ek tool hai — final authority nahi."
+    },
+    {
+      "id": 398,
+      "q": "ChatGPT ko itna sab kaise pata hai?",
+      "a": "ChatGPT ko itna sab isliye pata hai kyunki usne training ke dauran bahut saare text examples se patterns seekhe hain. Usne internet ke books, articles, websites, conversations — sab padha hai. Isse usne language ke patterns, facts, aur reasoning seekhi. Training me crores text use hue. Lekin woh sab yaad nahi rakhta — woh patterns seekhta hai. Isliye woh naye sawalon ka bhi jawab de sakta hai — chahe woh sawal usne pehle dekha na ho. Uska training data 2021 tak ka hai — uske baad ki information usse nahi pata. Lekin woh internet search bhi kar sakta hai — agar feature on ho."
+    },
+    {
+      "id": 399,
+      "q": "Kya ChatGPT hamesha sahi hota hai?",
+      "a": "Nahi. ChatGPT hamesha sahi nahi hota. Kabhi-kabhi galti bhi ho sakti hai. Isko 'hallucination' kehte hain — jab AI confident tareeke se galat jawab deta hai. Kyunki woh sirf patterns follow karta hai, sach nahi jaanch sakta. Isliye important information ko verify karna chahiye. Medical, legal, financial advice ke liye expert se pucho. ChatGPT ek tool hai — final authority nahi. Usse starting point ki tarah use karo, final answer ki tarah nahi. Uske jawab ko cross-check karo — dusre sources se. Woh bahut useful hai — lekin perfect nahi. Har AI tool ki limits hoti hain — unhe samjho."
+    },
+    {
+      "id": 400,
+      "q": "AI aur Google me Difference?",
+      "a": "Google information dhundhta hai — woh tumhe websites ke links deta hai. AI information ko samajhkar jawab banane ki koshish karti hai — woh tumhe seedha jawab deti hai. Google ke paas index hai — woh pages dhundhta hai. AI ke paas patterns hain — woh jawab generate karti hai. Google tumhe sources dikhata hai — tum khud padh sakte ho. AI tumhe summary deti hai — lekin woh galat bhi ho sakti hai. Dono ke apne use hain. Kabhi Google better, kabhi AI better. Best hai dono ko milakar use karna. Google se sources dhundho, AI se summary lo, phir khud verify karo. Dono tools hain — sahi jagah use karo."
+    }
+  ]
+};
+// ============================================
+// ISKE NICHE KUCH MAT BADLO
+// ============================================
+
+const container = document.getElementById('qaContainer');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const searchBox = document.getElementById('searchBox');
+
+document.getElementById('pageTitle').textContent = '📘 ' + qaData.title;
+
+function getDone() {
+  return JSON.parse(localStorage.getItem('qaDone') || '[]');
+}
+
+function saveDone(arr) {
+  localStorage.setItem('qaDone', JSON.stringify(arr));
+}
+
+function render(filter = '') {
+  const done = getDone();
+  container.innerHTML = '';
+  let visibleCount = 0;
+
+  qaData.questions.forEach((item, i) => {
+    const text = (item.q + ' ' + item.a).toLowerCase();
+    if (filter && !text.includes(filter.toLowerCase())) return;
+    visibleCount++;
+
+    const isDone = done.includes(item.id);
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <span class="qnum">Q ${item.id}</span>
+      <div class="question">${item.q}</div>
+      <div class="answer">${item.a}</div>
+      <button class="mark-btn ${isDone ? 'done' : ''}" onclick="toggleDone(${item.id})">
+        ${isDone ? '✅ Padh liya' : '⭕ Mark as read'}
+      </button>
+    `;
+    container.appendChild(card);
+  });
+
+  if (visibleCount === 0) {
+    container.innerHTML = '<p style="text-align:center;color:#94a3b8;">Koi question nahi mila</p>';
+  }
+
+  updateProgress();
+}
+
+function toggleDone(id) {
+  let done = getDone();
+  if (done.includes(id)) {
+    done = done.filter(x => x !== id);
+  } else {
+    done.push(id);
+  }
+  saveDone(done);
+  render(searchBox.value);
+}
+
+function updateProgress() {
+  const done = getDone();
+  const total = qaData.questions.length;
+  const percent = total > 0 ? (done.length / total) * 100 : 0;
+  progressFill.style.width = percent + '%';
+  progressText.textContent = `${done.length} / ${total} padhe`;
+  document.getElementById('footerText').textContent =
+    done.length === total && total > 0 ? '🎉 Sab padh liya!' : `Baaki: ${total - done.length}`;
+}
+
+function resetProgress() {
+  if (confirm('Progress reset karna hai?')) {
+    saveDone([]);
+    render(searchBox.value);
+  }
+}
+
+searchBox.addEventListener('input', (e) => render(e.target.value));
+
+render();
+</script>
+
+</body>
+</html>
