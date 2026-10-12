@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Corporate English · One card · Daily tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #f0f4fa;
+      padding: 16px 12px 30px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+
+    .app-container {
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* header */
+    .header {
+      text-align: center;
+      margin-bottom: 12px;
+      padding: 8px 4px 4px;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #1e2b3c, #0b1a2a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .subhead {
+      font-size: 0.85rem;
+      color: #475569;
+      background: #e9eef3;
+      display: inline-block;
+      padding: 4px 16px;
+      border-radius: 40px;
+      font-weight: 500;
+      margin-top: 6px;
+    }
+
+    /* stats / progress */
+    .stats-bar {
+      background: white;
+      border-radius: 24px;
+      padding: 12px 18px;
+      margin: 10px 0 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+      border: 1px solid #dbe1e9;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #2c3e5c;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .stats-bar span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge {
+      background: #e1f2ed;
+      color: #176b5c;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    /* card */
+    .card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 24px 20px 20px;
+      margin-bottom: 22px;
+      box-shadow: 0 12px 28px -8px rgba(0, 20, 40, 0.12), 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid #e7edf4;
+      transition: opacity 0.2s ease;
+      word-break: break-word;
+      position: relative;
+    }
+
+    .card-read {
+      opacity: 0.65;
+      border-left: 6px solid #1d9e6f;
+    }
+
+    .word-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 8px 12px;
+    }
+
+    .word {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: #0b1e33;
+      letter-spacing: -0.01em;
+      background: #ebf2fa;
+      padding: 4px 20px 4px 16px;
+      border-radius: 50px;
+      display: inline-block;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .hindi {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #176b5c;
+      background: #e1f2ed;
+      padding: 4px 20px 4px 16px;
+      border-radius: 50px;
+      display: inline-block;
+      line-height: 1.3;
+      word-break: break-word;
+      margin-left: auto;
+    }
+
+    .example-list {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .example-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 1rem;
+      color: #1e2a3a;
+      background: #f8fafd;
+      padding: 14px 16px;
+      border-radius: 20px;
+      border-left: 4px solid #3b7cbf;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .example-item .num {
+      font-weight: 700;
+      color: #3b7cbf;
+      min-width: 20px;
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    .example-text {
+      flex: 1;
+    }
+
+    /* read button area */
+    .action-area {
+      display: flex;
+      justify-content: center;
+      margin: 8px 0 10px;
+    }
+
+    .btn-read {
+      background: #1d7e5c;
+      color: white;
+      border: none;
+      border-radius: 60px;
+      padding: 16px 36px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 20px -8px rgba(29, 126, 92, 0.35);
+      transition: all 0.15s ease;
+      cursor: pointer;
+      border: 1px solid #1a6e50;
+      letter-spacing: 0.01em;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .btn-read:active {
+      transform: scale(0.97);
+      box-shadow: 0 4px 12px -4px rgba(29, 126, 92, 0.4);
+      background: #166b4d;
+    }
+
+    .btn-read.read-done {
+      background: #6b8a9e;
+      border-color: #5a7a8c;
+      box-shadow: 0 6px 14px -6px rgba(0,0,0,0.15);
+      cursor: default;
+      opacity: 0.8;
+    }
+
+    .btn-read.read-done:active {
+      transform: none;
+    }
+
+    /* navigation */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 10px 0 8px;
+    }
+
+    .nav-btn {
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 50px;
+      padding: 14px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1e3a5f;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      transition: background 0.1s ease;
+      cursor: pointer;
+    }
+
+    .nav-btn:active {
+      background: #eef4fb;
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+      background: #f1f5f9;
+    }
+
+    /* progress tracker */
+    .tracker-section {
+      background: #ffffffdd;
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 18px 16px;
+      margin-top: 24px;
+      border: 1px solid #d9e2ec;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.02);
+    }
+
+    .tracker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: #1e3a5f;
+      font-size: 1rem;
+    }
+
+    .reset-btn {
+      background: none;
+      border: 1px solid #d0dae8;
+      border-radius: 30px;
+      padding: 6px 16px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #4e6b8c;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .reset-btn:active {
+      background: #eef2f8;
+    }
+
+    .day-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      margin-top: 6px;
+    }
+
+    .day-badge {
+      background: #f1f6fc;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #2b4058;
+      border: 1px solid #d6e2f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .day-badge .count {
+      background: #1d7e5c;
+      color: white;
+      border-radius: 40px;
+      padding: 1px 9px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 0.75rem;
+      color: #6b7f99;
+      padding: 12px;
+      border-top: 1px solid #d0ddee;
+    }
+
+    .no-card-message {
+      background: white;
+      border-radius: 28px;
+      padding: 40px 20px;
+      text-align: center;
+      color: #4f658b;
+      font-weight: 500;
+      border: 1px dashed #b9c8da;
+      margin-bottom: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* small screens */
+    @media (max-width: 400px) {
+      .word {
+        font-size: 1.4rem;
+      }
+      .hindi {
+        font-size: 1rem;
+      }
+      .example-item {
+        font-size: 0.9rem;
+        padding: 12px 12px;
+      }
+      .btn-read {
+        font-size: 1.1rem;
+        padding: 14px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- header -->
+    <div class="header">
+      <h1>Corporate English</h1>
+      <div class="subhead">🇮🇳 Hindi + English · one card at a time</div>
+    </div>
+
+    <!-- stats bar: today's count + total read -->
+    <div class="stats-bar" id="statsBar">
+      <span>📅 Today: <span id="todayCount" class="badge">0</span></span>
+      <span>✅ Total read: <span id="totalReadCount" class="badge">0</span></span>
+    </div>
+
+    <!-- card container -->
+    <div id="cardContainer">
+      <!-- dynamic card will appear here -->
+    </div>
+
+    <!-- navigation + read button -->
+    <div class="action-area">
+      <button class="btn-read" id="readBtn">✅ Mark as read</button>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prevBtn">◀ Previous</button>
+      <button class="nav-btn" id="nextBtn">Next ▶</button>
+    </div>
+
+    <!-- progress tracker per day -->
+    <div class="tracker-section">
+      <div class="tracker-header">
+        <span>📊 Read count by day</span>
+        <button class="reset-btn" id="resetBtn">Reset all</button>
+      </div>
+      <div class="day-list" id="dayList">
+        <!-- day badges will be injected -->
+      </div>
+    </div>
+
+    <div class="footer-note">
+      ✨ Read one card, tap "Mark as read" · progress saved locally
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // -------------------- DATA (same as before, full list) --------------------
+      const allData = [
+        // 1-30 corporate
+        { word: "Feedback", hindi: "सुझाव / राय", examples: [
+          "I appreciate your feedback on my project.",
+          "Your feedback helped us improve the product significantly.",
+          "I appreciate the honest feedback you shared after the presentation.",
+          "We collect customer feedback to understand their needs better.",
+          "The teacher gave constructive feedback on my assignment.",
+          "Please send your feedback once you’ve tested the new feature."
+        ]},
+        { word: "Appraisal", hindi: "वार्षिक मूल्यांकन", examples: [
+          "My annual appraisal is scheduled next week.",
+          "The manager conducted my annual performance appraisal last week.",
+          "Her appraisal highlighted both strengths and areas for improvement.",
+          "The company uses a fair appraisal system for all employees.",
+          "I was happy with the positive appraisal I received this year.",
+          "The appraisal meeting helped me set clear goals for the future."
+        ]},
+        { word: "Promotion", hindi: "तरक्की", examples: [
+          "She got a promotion because of her hard work.",
+          "She received a promotion after years of hard work.",
+          "The company announced his promotion to senior manager.",
+          "Everyone congratulated her on her well-deserved promotion.",
+          "His promotion came with new responsibilities and a higher salary.",
+          "The promotion motivated the team to perform better."
+        ]},
+        { word: "Deadline", hindi: "आखिरी तारीख", examples: [
+          "We must finish the task before the deadline.",
+          "I finished the project before the deadline.",
+          "The team worked late to meet the deadline.",
+          "Missing the deadline could delay the entire plan.",
+          "The manager set a strict deadline for the task.",
+          "We must submit the report by the deadline."
+        ]},
+        { word: "Workload", hindi: "काम का बोझ", examples: [
+          "My workload has increased this month.",
+          "My workload increased after the new project started.",
+          "The manager adjusted the workload to reduce stress on the team.",
+          "A heavy workload can affect productivity.",
+          "She handled her workload efficiently and stayed organized.",
+          "We need more staff to manage the growing workload."
+        ]},
+        { word: "Efficiency", hindi: "कार्यक्षमता", examples: [
+          "He completes tasks with great efficiency.",
+          "Automation improved the efficiency of our workflow.",
+          "The new system increased efficiency across the department.",
+          "Training helped the team work with greater efficiency.",
+          "We measure efficiency to track performance.",
+          "Better planning leads to higher efficiency."
+        ]},
+        { word: "Collaboration", hindi: "मिलकर काम करना", examples: [
+          "Collaboration among teams is key to success.",
+          "The project succeeded because of strong collaboration between teams.",
+          "Collaboration helps generate better ideas and solutions.",
+          "We encourage collaboration in the workplace.",
+          "The app was built through international collaboration.",
+          "Good collaboration improves overall productivity."
+        ]},
+        { word: "Productivity", hindi: "उत्पादकता", examples: [
+          "Music helps me improve my productivity.",
+          "Regular breaks can actually improve productivity.",
+          "The new tools boosted our team’s productivity.",
+          "Good time management increases productivity.",
+          "Remote work has changed how companies measure productivity.",
+          "Healthy habits support long-term productivity."
+        ]},
+        { word: "Team Player", hindi: "टीम में अच्छा सहयोगी", examples: [
+          "He's a great team player and always supports others.",
+          "She is a great team player who always supports her colleagues.",
+          "Being a team player is important in any workplace.",
+          "He proved he’s a strong team player during the project.",
+          "A good team player listens to others’ ideas.",
+          "Managers value employees who are team players."
+        ]},
+        { word: "Ownership", hindi: "जिम्मेदारी लेना", examples: [
+          "Take ownership of your mistakes and fix them.",
+          "She took full ownership of the project from start to finish.",
+          "Good leaders encourage employees to take ownership of their work.",
+          "He showed ownership by fixing the mistake immediately.",
+          "Taking ownership builds trust within a team.",
+          "The company promotes a culture of ownership and accountability."
+        ]},
+        { word: "Accountability", hindi: "जवाबदेही", examples: [
+          "Every employee must show accountability.",
+          "Accountability builds trust in the workplace.",
+          "Managers expect accountability from their teams.",
+          "Taking accountability improves professional growth.",
+          "A culture of accountability leads to better results."
+        ]},
+        { word: "Leadership", hindi: "नेतृत्व क्षमता", examples: [
+          "She has shown strong leadership in this project.",
+          "Good leadership inspires the team.",
+          "Leadership requires clear communication.",
+          "He demonstrated leadership during the crisis.",
+          "Strong leadership drives success."
+        ]},
+        { word: "Micromanagement", hindi: "छोटी-छोटी बातों पर नज़र रखना", examples: [
+          "Micromanagement often kills creativity.",
+          "Employees feel stressed under micromanagement.",
+          "Micromanagement reduces team confidence.",
+          "Too much micromanagement slows progress.",
+          "Leaders should avoid micromanagement."
+        ]},
+        { word: "Deliverables", hindi: "जो देना है (output)", examples: [
+          "Please submit all deliverables by Friday.",
+          "Clear deliverables help avoid confusion.",
+          "The client approved the final deliverables.",
+          "We reviewed the project deliverables together.",
+          "Timely deliverables build client trust."
+        ]},
+        { word: "Bandwidth", hindi: "क्षमता / समय", examples: [
+          "I don't have the bandwidth to take on another task.",
+          "She currently has the bandwidth to help.",
+          "We need more bandwidth to finish this work.",
+          "Check your bandwidth before accepting tasks.",
+          "Limited bandwidth can delay projects."
+        ]},
+        { word: "KPIs", hindi: "प्रदर्शन सूचकांक", examples: [
+          "Meeting KPIs is crucial for our bonus.",
+          "The company tracks KPIs monthly.",
+          "KPIs help measure performance.",
+          "Clear KPIs improve focus.",
+          "We review KPIs during meetings."
+        ]},
+        { word: "Task Ownership", hindi: "कार्य की ज़िम्मेदारी लेना", examples: [
+          "He took full task ownership and delivered great results.",
+          "Task ownership ensures accountability.",
+          "She showed strong task ownership.",
+          "Task ownership improves team reliability.",
+          "Managers appreciate task ownership."
+        ]},
+        { word: "Initiative", hindi: "पहल", examples: [
+          "She took initiative to solve the issue.",
+          "Taking initiative shows leadership.",
+          "Employees with initiative grow faster.",
+          "He took initiative without being asked.",
+          "Initiative creates new opportunities."
+        ]},
+        { word: "Brainstorming", hindi: "नए आइडिया सोचना", examples: [
+          "Let's do a brainstorming session for new features.",
+          "Brainstorming helps teams generate creative ideas.",
+          "We scheduled a brainstorming meeting today.",
+          "Brainstorming encourages open discussion.",
+          "A good brainstorming session leads to innovation."
+        ]},
+        { word: "Escalate", hindi: "ऊपर रिपोर्ट करना", examples: [
+          "If the issue continues, escalate it to your manager.",
+          "Please escalate urgent problems immediately.",
+          "He escalated the complaint to senior management.",
+          "We escalate critical issues quickly.",
+          "Do not hesitate to escalate serious concerns."
+        ]},
+        { word: "Follow-up", hindi: "फिर से संपर्क करना", examples: [
+          "I'll follow up with the client tomorrow.",
+          "She sent a follow-up email after the meeting.",
+          "A follow-up ensures nothing is missed.",
+          "We scheduled a follow-up call.",
+          "Always follow-up on pending tasks."
+        ]},
+        { word: "Conflict Resolution", hindi: "झगड़ा सुलझाना", examples: [
+          "Managers should be skilled in conflict resolution.",
+          "Conflict resolution improves team harmony.",
+          "Training helps with conflict resolution.",
+          "Good conflict resolution prevents escalation.",
+          "Effective conflict resolution builds trust."
+        ]},
+        { word: "Time Management", hindi: "समय का प्रबंधन", examples: [
+          "Good time management increases efficiency.",
+          "Time management is key to productivity.",
+          "She improved her time management skills.",
+          "Poor time management causes delays.",
+          "We teach time management in training."
+        ]},
+        { word: "Onboarding", hindi: "नए कर्मचारी की शुरुआत", examples: [
+          "HR is handling the onboarding of new employees.",
+          "Onboarding helps new staff adjust quickly.",
+          "A smooth onboarding improves retention.",
+          "We updated the onboarding process.",
+          "Onboarding includes training and orientation."
+        ]},
+        { word: "Resignation", hindi: "इस्तीफा", examples: [
+          "He submitted his resignation yesterday.",
+          "Her resignation surprised the team.",
+          "The company accepted his resignation.",
+          "She wrote a formal resignation letter.",
+          "Resignation should be handled professionally."
+        ]},
+        { word: "Notice Period", hindi: "नौकरी छोड़ने की समय-सीमा", examples: [
+          "My notice period is 30 days.",
+          "He is serving his notice period now.",
+          "Employees must complete the notice period.",
+          "The notice period ensures smooth transition.",
+          "She negotiated a shorter notice period."
+        ]},
+        { word: "Work From Home (WFH)", hindi: "घर से काम करना", examples: [
+          "I prefer WFH twice a week for better focus.",
+          "WFH improves work-life balance.",
+          "Many companies support WFH policies.",
+          "WFH saves commuting time.",
+          "The team works efficiently during WFH."
+        ]},
+        { word: "Remote Work", hindi: "दूर से काम करना", examples: [
+          "Remote work is now common in IT companies.",
+          "Remote work allows global collaboration.",
+          "She enjoys the flexibility of remote work.",
+          "Remote work requires discipline.",
+          "Technology supports smooth remote work."
+        ]},
+        { word: "Stand-up Meeting", hindi: "छोटी मीटिंग (Daily sync)", examples: [
+          "We have a stand-up meeting every morning.",
+          "Stand-up meetings keep everyone aligned.",
+          "The stand-up meeting lasts only 15 minutes.",
+          "Teams share updates during stand-up meetings.",
+          "Daily stand-up meetings improve communication."
+        ]},
+        { word: "Constructive Criticism", hindi: "सुधार के लिए आलोचना", examples: [
+          "I value constructive criticism to improve myself.",
+          "Constructive criticism helps personal growth.",
+          "She accepted constructive criticism positively.",
+          "Good managers give constructive criticism.",
+          "Constructive criticism should be respectful."
+        ]},
+        // extras (synergy, client, etc.)
+        { word: "Synergy", hindi: "मिलकर ज़्यादा असर डालना", examples: [
+          "The synergy between the dev and QA teams improved product quality.",
+          "Team synergy leads to better performance.",
+          "Strong synergy boosts productivity.",
+          "We need synergy across departments.",
+          "Synergy creates innovative solutions."
+        ]},
+        { word: "Client", hindi: "ग्राहक", examples: [
+          "We have a client meeting at 3 PM today.",
+          "The client approved the proposal.",
+          "Client satisfaction is our priority.",
+          "We delivered the project to the client.",
+          "Good communication keeps the client happy."
+        ]},
+        { word: "Stakeholder", hindi: "हितधारक", examples: [
+          "We need to update all stakeholders before deployment.",
+          "Stakeholders expect regular updates.",
+          "The meeting included key stakeholders.",
+          "Stakeholders influence project decisions.",
+          "We shared the report with stakeholders."
+        ]},
+        { word: "Timeline", hindi: "समय सीमा", examples: [
+          "The project timeline is very tight.",
+          "We must follow the timeline strictly.",
+          "The timeline was extended by a week.",
+          "Clear timelines improve planning.",
+          "Delays can affect the timeline."
+        ]},
+        { word: "Scope", hindi: "कार्य क्षेत्र / सीमा", examples: [
+          "The new feature is out of this project's scope.",
+          "We defined the project scope clearly.",
+          "Changes in scope require approval.",
+          "The scope determines deliverables.",
+          "Expanding the scope increases workload."
+        ]},
+        { word: "Escalation", hindi: "वरिष्ठ को रिपोर्ट करना", examples: [
+          "If the bug is critical, escalate it to the tech lead.",
+          "Follow the escalation process properly.",
+          "Immediate escalation prevents delays.",
+          "The issue required urgent escalation.",
+          "Escalation helps resolve serious problems."
+        ]},
+        { word: "Roadmap", hindi: "भविष्य की योजना", examples: [
+          "Our product roadmap includes AI integration by Q4.",
+          "The roadmap guides long-term planning.",
+          "We reviewed the roadmap in the meeting.",
+          "A clear roadmap keeps the team focused.",
+          "The roadmap shows upcoming priorities."
+        ]},
+        { word: "Pipeline", hindi: "प्रक्रिया या योजना में चल रही चीज", examples: [
+          "We have 3 big projects in the pipeline.",
+          "Several deals are in the pipeline.",
+          "The sales pipeline looks strong.",
+          "New ideas are entering the pipeline.",
+          "The pipeline ensures continuous work."
+        ]},
+        { word: "Alignment", hindi: "मेल / संतुलन", examples: [
+          "We need better alignment between sales and support teams.",
+          "Alignment improves team efficiency.",
+          "We achieved alignment on project goals.",
+          "Leadership ensures organizational alignment.",
+          "Clear communication creates alignment."
+        ]},
+        { word: "Touch base", hindi: "संपर्क करना", examples: [
+          "Let's touch base next week to review progress.",
+          "I'll touch base with you tomorrow.",
+          "We touched base after the meeting.",
+          "Touch base regularly with the client.",
+          "Let’s touch base before final approval."
+        ]},
+        { word: "Sync up", hindi: "अपडेट / तालमेल करना", examples: [
+          "We should sync up before the client call.",
+          "Let’s sync up later today.",
+          "We synced up on the new plan.",
+          "Sync up with the team for updates.",
+          "Regular sync-ups prevent confusion."
+        ]},
+        { word: "Action items", hindi: "काम जो करना है", examples: [
+          "Let's list the action items from today's meeting.",
+          "We assigned action items clearly.",
+          "Everyone completed their action items.",
+          "Review the action items tomorrow.",
+          "Action items keep meetings productive."
+        ]},
+        { word: "Takeaway", hindi: "मुख्य सीख या बात", examples: [
+          "The main takeaway from the session was to focus on quality.",
+          "My takeaway was teamwork matters.",
+          "Each meeting should have a takeaway.",
+          "The takeaway helped improve strategy.",
+          "Share your takeaway with the group."
+        ]},
+        { word: "Blocker", hindi: "रुकावट", examples: [
+          "A dependency issue is acting as a blocker.",
+          "We must remove the blocker quickly.",
+          "The blocker delayed our progress.",
+          "Report any blocker immediately.",
+          "Every project faces a blocker sometimes."
+        ]},
+        { word: "Follow-through", hindi: "काम पूरा करना", examples: [
+          "He lacks follow-through on assigned tasks.",
+          "Good follow-through builds trust.",
+          "She showed excellent follow-through.",
+          "Follow-through is key to success.",
+          "Managers value strong follow-through."
+        ]},
+        { word: "Rescheduling", hindi: "दोबारा समय तय करना", examples: [
+          "The client requested a rescheduling of the demo.",
+          "We are rescheduling the meeting.",
+          "Rescheduling caused a minor delay.",
+          "Thanks for rescheduling the session.",
+          "Rescheduling helped everyone attend."
+        ]},
+        { word: "Agenda", hindi: "मीटिंग का विषय", examples: [
+          "What's the agenda for today's discussion.",
+          "The agenda was shared in advance.",
+          "Stick to the meeting agenda.",
+          "A clear agenda saves time.",
+          "We finalized the agenda yesterday."
+        ]},
+        { word: "Minutes of Meeting (MoM)", hindi: "मीटिंग का सारांश", examples: [
+          "Please share the MoM after the call.",
+          "The MoM captured key decisions.",
+          "We reviewed the MoM together.",
+          "Accurate MoM prevents confusion.",
+          "The MoM was sent to all members."
+        ]},
+        { word: "Loop in", hindi: "शामिल करना", examples: [
+          "I'll loop in the tech team for clarification.",
+          "Loop me in on future updates.",
+          "She looped in the manager.",
+          "Please loop in all stakeholders.",
+          "Loop in the support team if needed."
+        ]},
+        { word: "Bandwidth Issue", hindi: "समय की कमी", examples: [
+          "I can't take this task right now, bandwidth issue.",
+          "We are facing a bandwidth issue.",
+          "Bandwidth issues delay projects.",
+          "The team reported a bandwidth issue.",
+          "We solved the bandwidth issue by hiring."
+        ]},
+        { word: "Incentive", hindi: "अतिरिक्त इनाम / पैसा", examples: [
+          "Sales team will get incentives for each deal closed.",
+          "Incentives motivate employees.",
+          "The company announced performance incentives.",
+          "He worked hard to earn incentives.",
+          "Incentives boost productivity."
+        ]},
+        { word: "Probation Period", hindi: "परखने का समय", examples: [
+          "I am currently in my 3-month probation period.",
+          "Employees are evaluated during probation period.",
+          "She successfully completed her probation period.",
+          "The probation period helps assess performance.",
+          "He received confirmation after probation period."
+        ]},
+        { word: "KRA (Key Result Areas)", hindi: "मुख्य काम के क्षेत्र", examples: [
+          "Meeting your KRAs is important for promotion.",
+          "KRAs define employee responsibilities.",
+          "Managers review KRAs quarterly.",
+          "Clear KRAs improve performance.",
+          "We updated the KRAs this year."
+        ]},
+        { word: "MIS Report", hindi: "Management ke liye report", examples: [
+          "Submit your weekly MIS report by 6 PM.",
+          "The MIS report shows performance data.",
+          "We discussed the MIS report in the meeting.",
+          "Accurate MIS reports are essential.",
+          "Management relies on MIS reports."
+        ]},
+        { word: "Business Objective", hindi: "व्यापार का लक्ष्य", examples: [
+          "Every sprint must align with our business objectives.",
+          "Business objectives guide strategy.",
+          "We planned according to business objectives.",
+          "Clear business objectives drive growth.",
+          "The team understands our business objectives."
+        ]},
+        { word: "Red Flag", hindi: "चेतावनी संकेत", examples: [
+          "Multiple bugs in production is a red flag.",
+          "This delay is a red flag.",
+          "Ignoring red flags is risky.",
+          "The manager noticed a red flag.",
+          "We must act on red flags quickly."
+        ]},
+        { word: "Resource Allocation", hindi: "टीम या समय का बाँटना", examples: [
+          "Proper resource allocation ensures timely delivery.",
+          "We reviewed resource allocation in the meeting.",
+          "Poor resource allocation causes delays.",
+          "Smart resource allocation saves cost.",
+          "Managers plan resource allocation carefully."
+        ]},
+        { word: "Billable Hours", hindi: "पैसे वाले काम के घंटे", examples: [
+          "I logged 40 billable hours this week.",
+          "Consultants track their billable hours daily.",
+          "Billable hours affect company revenue.",
+          "Accurate billable hours are important.",
+          "We submitted our billable hours report."
+        ]},
+        { word: "Client Retention", hindi: "पुराने ग्राहक बनाए रखना", examples: [
+          "We need to improve client retention through better support.",
+          "Client retention increases profits.",
+          "Strong service improves client retention.",
+          "Client retention is a key metric.",
+          "The company focuses on client retention."
+        ]},
+        { word: "Work-Life Balance", hindi: "काम और ज़िन्दगी का संतुलन", examples: [
+          "This company promotes a healthy work-life balance.",
+          "Work-life balance reduces stress.",
+          "Employees value work-life balance.",
+          "Good policies support work-life balance.",
+          "Remote work improves work-life balance."
+        ]},
+        { word: "Update", hindi: "नया हाल बताना", examples: [
+          "Please update me once the task is done.",
+          "I’ll update you by evening.",
+          "She sent a quick update on the project.",
+          "We need a status update.",
+          "Thanks for the update."
+        ]},
+        { word: "Priority", hindi: "प्राथमिकता", examples: [
+          "This task is my top priority.",
+          "Client issues are high priority.",
+          "We must set clear priorities.",
+          "Safety is our priority.",
+          "Finish priority tasks first."
+        ]},
+        { word: "Delay", hindi: "देरी", examples: [
+          "There is a delay in delivery.",
+          "Sorry for the delay.",
+          "The delay affected the timeline.",
+          "We want to avoid delays.",
+          "Traffic caused a delay."
+        ]},
+        { word: "Approval", hindi: "मंजूरी", examples: [
+          "We need approval from the manager.",
+          "The design got approval.",
+          "Waiting for final approval.",
+          "Approval may take time.",
+          "The budget received approval."
+        ]},
+        { word: "Pending", hindi: "बाकी / अधूरा", examples: [
+          "The task is still pending.",
+          "Two issues are pending.",
+          "Pending work must be completed.",
+          "Approval is pending.",
+          "Nothing is pending now."
+        ]},
+        { word: "Review", hindi: "जांच / देखना", examples: [
+          "Please review the document.",
+          "The manager will review it.",
+          "We reviewed the report.",
+          "Review before submission.",
+          "Thanks for the quick review."
+        ]},
+        { word: "Confirm", hindi: "पक्का करना", examples: [
+          "Please confirm the meeting time.",
+          "I confirm receipt.",
+          "Can you confirm this detail?",
+          "She confirmed the booking.",
+          "Let me confirm with the team."
+        ]},
+        { word: "Support", hindi: "मदद / सहयोग", examples: [
+          "Thanks for your support.",
+          "The support team will help.",
+          "We need technical support.",
+          "She supports the idea.",
+          "Customer support responded quickly."
+        ]},
+        { word: "Schedule", hindi: "समय तय करना", examples: [
+          "Let’s schedule a meeting.",
+          "The demo is scheduled tomorrow.",
+          "Check your schedule.",
+          "We scheduled the call.",
+          "Busy schedule today."
+        ]},
+        { word: "Let’s align", hindi: "एक राय / दिशा में आना", examples: [
+          "Let’s align before presenting to the client.",
+          "We need to align on priorities.",
+          "Let’s align our goals.",
+          "Teams aligned quickly.",
+          "Alignment avoids confusion."
+        ]},
+        { word: "Circle back", hindi: "बाद में फिर बात करना", examples: [
+          "Let’s circle back after lunch.",
+          "We’ll circle back tomorrow.",
+          "Circle back once data is ready.",
+          "She circled back with updates.",
+          "We’ll circle back on this topic."
+        ]},
+        { word: "On the same page", hindi: "एक जैसी समझ होना", examples: [
+          "We are on the same page now.",
+          "Let’s make sure we’re on the same page.",
+          "The team is on the same page.",
+          "Clients and managers are on the same page.",
+          "Being on the same page saves time."
+        ]},
+        { word: "Moving forward", hindi: "आगे से / आगे चलकर", examples: [
+          "Moving forward, we follow this plan.",
+          "Let’s improve moving forward.",
+          "Moving forward, communication must be clear.",
+          "We’ll do better moving forward.",
+          "This will help us moving forward."
+        ]},
+        { word: "Touchpoint", hindi: "संपर्क का बिंदु / छोटा check-in", examples: [
+          "Let’s have a quick touchpoint tomorrow.",
+          "Weekly touchpoints help teams.",
+          "This meeting is just a touchpoint.",
+          "We scheduled a touchpoint call.",
+          "Touchpoints improve clarity."
+        ]},
+        { word: "Deep dive", hindi: "गहराई से देखना", examples: [
+          "Let’s do a deep dive into the issue.",
+          "We need a deep dive analysis.",
+          "The meeting was a deep dive session.",
+          "Deep dive helps find root causes.",
+          "We planned a deep dive review."
+        ]},
+        { word: "Quick win", hindi: "आसान और जल्दी सफलता", examples: [
+          "This task is a quick win.",
+          "We need some quick wins.",
+          "Quick wins boost morale.",
+          "Let’s focus on quick wins first.",
+          "The change was a quick win."
+        ]},
+        { word: "Action plan", hindi: "काम की योजना", examples: [
+          "We need a clear action plan.",
+          "The manager shared an action plan.",
+          "Follow the action plan strictly.",
+          "The action plan solved the issue.",
+          "We updated the action plan."
+        ]},
+        { word: "Take it offline", hindi: "अलग से बात करना", examples: [
+          "Let’s take this offline.",
+          "We’ll take it offline after the meeting.",
+          "This discussion should go offline.",
+          "They took the issue offline.",
+          "Let’s resolve it offline."
+        ]},
+        { word: "Value add", hindi: "अतिरिक्त फायदा देना", examples: [
+          "This feature is a value add.",
+          "We must focus on value add.",
+          "Her work is a value add to the team.",
+          "Clients look for value add.",
+          "Innovation creates value add."
+        ]}
+      ];
+
+      // -------------------- STATE & STORAGE --------------------
+      const STORAGE_KEY = 'corpEng_readTracker_v1';
+      const DAILY_KEY = 'corpEng_dailyCount';
+
+      // state
+      let currentIndex = 0;
+      let readSet = new Set();          // store indices that are marked read (permanent)
+      let dailyCounts = {};            // { '2025-04-07': count, ... }
+
+      // load from localStorage
+      function loadState() {
+        try {
+          const savedRead = localStorage.getItem(STORAGE_KEY);
+          if (savedRead) {
+            readSet = new Set(JSON.parse(savedRead));
+          }
+          const savedDaily = localStorage.getItem(DAILY_KEY);
+          if (savedDaily) {
+            dailyCounts = JSON.parse(savedDaily);
+          } else {
+            dailyCounts = {};
+          }
+        } catch (e) {
+          console.warn('Error loading state', e);
+          readSet = new Set();
+          dailyCounts = {};
+        }
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...readSet]));
+        localStorage.setItem(DAILY_KEY, JSON.stringify(dailyCounts));
+      }
+
+      // get today's date string YYYY-MM-DD
+      function getTodayKey() {
+        const d = new Date();
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
+      // increment today's read count
+      function incrementTodayCount() {
+        const today = getTodayKey();
+        dailyCounts[today] = (dailyCounts[today] || 0) + 1;
+        saveState();
+        updateStatsAndTracker();
+      }
+
+      // mark current card as read
+      function markCurrentRead() {
+        if (readSet.has(currentIndex)) return; // already read
+        readSet.add(currentIndex);
+        incrementTodayCount();
+        saveState();
+        renderCard(currentIndex); // re-render with 'read' style
+        updateStatsAndTracker();
+      }
+
+      // is current card read?
+      function isCurrentRead() {
+        return readSet.has(currentIndex);
+      }
+
+      // -------------------- RENDER --------------------
+      const cardContainer = document.getElementById('cardContainer');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const readBtn = document.getElementById('readBtn');
+      const todayCountSpan = document.getElementById('todayCount');
+      const totalReadCountSpan = document.getElementById('totalReadCount');
+      const dayList = document.getElementById('dayList');
+
+      function renderCard(index) {
+        if (!allData.length) {
+          cardContainer.innerHTML = `<div class="no-card-message">No cards available.</div>`;
+          return;
+        }
+        if (index < 0) index = 0;
+        if (index >= allData.length) index = allData.length - 1;
+        currentIndex = index;
+
+        const item = allData[currentIndex];
+        const isRead = readSet.has(currentIndex);
+        const examplesHtml = item.examples.map((ex, i) => 
+          `<div class="example-item">
+            <span class="num">${i+1}</span>
+            <span class="example-text">${escapeHtml(ex)}</span>
+          </div>`
+        ).join('');
+
+        cardContainer.innerHTML = `
+          <div class="card ${isRead ? 'card-read' : ''}">
+            <div class="word-row">
+              <span class="word">${escapeHtml(item.word)}</span>
+              <span class="hindi">${escapeHtml(item.hindi)}</span>
+            </div>
+            <div class="example-list">
+              ${examplesHtml}
+            </div>
+            ${isRead ? '<div style="margin-top:14px; font-size:0.85rem; color:#1d7e5c; font-weight:600;">✅ Read</div>' : ''}
+          </div>
+        `;
+
+        // update read button state
+        if (isRead) {
+          readBtn.textContent = '✅ Read';
+          readBtn.classList.add('read-done');
+          readBtn.disabled = true;
+        } else {
+          readBtn.textContent = '✅ Mark as read';
+          readBtn.classList.remove('read-done');
+          readBtn.disabled = false;
+        }
+
+        // update nav buttons
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === allData.length - 1;
+
+        // update stats
+        updateStatsAndTracker();
+      }
+
+      function updateStatsAndTracker() {
+        // total read
+        const totalRead = readSet.size;
+        totalReadCountSpan.textContent = totalRead;
+
+        // today's count
+        const today = getTodayKey();
+        const todayCount = dailyCounts[today] || 0;
+        todayCountSpan.textContent = todayCount;
+
+        // day list
+        const days = Object.keys(dailyCounts).sort((a,b) => b.localeCompare(a)); // recent first
+        if (days.length === 0) {
+          dayList.innerHTML = '<span style="color:#6b7f99; font-size:0.85rem;">No reads yet. Tap "Mark as read" to start.</span>';
+        } else {
+          dayList.innerHTML = days.map(day => {
+            const count = dailyCounts[day];
+            const displayDay = formatDate(day);
+            return `<div class="day-badge">${displayDay} <span class="count">${count}</span></div>`;
+          }).join('');
+        }
+      }
+
+      function formatDate(dateStr) {
+        const [y, m, d] = dateStr.split('-');
+        const date = new Date(y, m-1, d);
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+        if (date.toDateString() === today.toDateString()) return 'Today';
+        if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
+        return `${d}/${m}`;
+      }
+
+      // escape helper
+      function escapeHtml(unsafe) {
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // -------------------- NAVIGATION --------------------
+      function goPrev() {
+        if (currentIndex > 0) {
+          renderCard(currentIndex - 1);
+        }
+      }
+
+      function goNext() {
+        if (currentIndex < allData.length - 1) {
+          renderCard(currentIndex + 1);
+        }
+      }
+
+      // reset all data
+      function resetAll() {
+        if (confirm('Reset all read progress and daily counts?')) {
+          readSet.clear();
+          dailyCounts = {};
+          saveState();
+          renderCard(currentIndex); // refresh current
+          updateStatsAndTracker();
+        }
+      }
+
+      // -------------------- INIT --------------------
+      function init() {
+        loadState();
+        // if currentIndex out of bounds, reset
+        if (currentIndex >= allData.length) currentIndex = 0;
+        renderCard(currentIndex);
+        updateStatsAndTracker();
+
+        // event listeners
+        prevBtn.addEventListener('click', goPrev);
+        nextBtn.addEventListener('click', goNext);
+        readBtn.addEventListener('click', markCurrentRead);
+        document.getElementById('resetBtn').addEventListener('click', resetAll);
+
+        // swipe? not necessary, but can be added — keep simple
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
