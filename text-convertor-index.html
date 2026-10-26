@@ -141,6 +141,40 @@
             box-shadow: 0 5px 15px rgba(255, 68, 68, 0.2);
         }
 
+        .replace-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto auto;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .replace-section input[type="text"] {
+            padding: 12px 14px;
+            background: #2d2d44;
+            color: #e0e0e0;
+            border: 2px solid #3d3d50;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .replace-section input[type="text"]:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .match-case {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #a0a0b0;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
         .stats-section {
             background: #2d2d44;
             border-left: 4px solid #00d4ff;
@@ -213,7 +247,17 @@
             }
         }
 
+        @media (max-width: 768px) {
+            .replace-section {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         @media (max-width: 480px) {
+            .replace-section {
+                grid-template-columns: 1fr;
+            }
+
             body {
                 padding: 10px;
             }
@@ -327,6 +371,16 @@
                 <button onclick="convertToTitleCase()">Title Case</button>
                 <button onclick="convertToInverseCase()">InVeRsE CaSe</button>
                 <button onclick="convertToSentenceUnderscore()">Sentence Under Score</button>
+                <button onclick="removeSpace()">Remove Space</button>
+                <button onclick="removeExtraSpace()">Remove Extra Space</button>
+            </div>
+
+            <!-- Replace Text -->
+            <div class="replace-section">
+                <input type="text" id="findInput" placeholder="Find...">
+                <input type="text" id="replaceInput" placeholder="Replace with...">
+                <label class="match-case"><input type="checkbox" id="matchCase"> Match case</label>
+                <button onclick="replaceText()">Replace Text</button>
             </div>
 
             <!-- Action Buttons -->
@@ -496,6 +550,56 @@
             textInput.value = text;
             updateStats();
             showNotification('Converted to snake_case!');
+        }
+
+        /**
+         * Remove all spaces, tabs and newlines
+         * Example: "Sajid Khan" -> "SajidKhan"
+         */
+        function removeSpace() {
+            textInput.value = textInput.value.replace(/\s+/g, '');
+            updateStats();
+            showNotification('All spaces removed!');
+        }
+
+        /**
+         * Collapse repeated spaces into one and trim each line
+         * Line breaks are kept
+         */
+        function removeExtraSpace() {
+            textInput.value = textInput.value
+                .split('\n')
+                .map(line => line.replace(/[ \t]+/g, ' ').trim())
+                .join('\n');
+            updateStats();
+            showNotification('Extra spaces removed!');
+        }
+
+        /**
+         * Replace every occurrence of the "Find" text with the "Replace with" text
+         */
+        function replaceText() {
+            const find = document.getElementById('findInput').value;
+            const replacement = document.getElementById('replaceInput').value;
+            const matchCase = document.getElementById('matchCase').checked;
+
+            if (find === '') {
+                showNotification('Enter text to find!', 'warning');
+                return;
+            }
+
+            const escaped = find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(escaped, matchCase ? 'g' : 'gi');
+            const count = (textInput.value.match(regex) || []).length;
+
+            if (count === 0) {
+                showNotification('No match found!', 'warning');
+                return;
+            }
+
+            textInput.value = textInput.value.replace(regex, () => replacement);
+            updateStats();
+            showNotification(`${count} replaced!`);
         }
 
         // ============================================
